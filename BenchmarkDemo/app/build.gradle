@@ -11,11 +11,6 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-repositories {
-    jcenter()
-    maven { url 'http://maven.bluelinelabs.com' }
-}
-
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
