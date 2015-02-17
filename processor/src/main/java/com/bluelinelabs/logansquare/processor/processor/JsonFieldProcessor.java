@@ -122,7 +122,7 @@ public class JsonFieldProcessor extends Processor {
         }
 
         if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(getGetter(element, elements)) || TextUtils.isEmpty(getSetter(element, elements)))) {
-            error(element, "%s annotation can only be used on private fields if both getter and setter is present.", JsonField.class.getSimpleName());
+            error(element, "%s annotation can only be used on private fields if both getter and setter are present.", JsonField.class.getSimpleName());
             return false;
         }
 
