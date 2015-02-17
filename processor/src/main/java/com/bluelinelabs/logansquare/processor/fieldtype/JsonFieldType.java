@@ -29,8 +29,8 @@ public class JsonFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String variableName, String getter, boolean writeFieldNameForObject) {
-        builder.beginControlFlow("if (object.$L != null)", variableName);
+    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject) {
+        builder.beginControlFlow("if ($L != null)", getter);
 
         if (writeFieldNameForObject) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0]);

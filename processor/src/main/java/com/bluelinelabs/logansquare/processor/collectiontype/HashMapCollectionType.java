@@ -60,7 +60,7 @@ public class HashMapCollectionType extends CollectionType {
                 .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME)
                 .nextControlFlow("else");
 
-        fieldHolder.fieldType.serialize(builder, fieldHolder, variableName, "entry.getValue()", false);
+        fieldHolder.fieldType.serialize(builder, fieldHolder, "entry.getValue()", false);
 
         builder
                 .endControlFlow()

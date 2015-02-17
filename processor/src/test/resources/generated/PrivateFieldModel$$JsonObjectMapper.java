@@ -33,7 +33,9 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
     }
 
     public static void parseField(PrivateFieldModel instance, String fieldName, JsonParser jsonParser) throws IOException {
-        if ("privateString".equals(fieldName)) {
+        if ("privateBoolean".equals(fieldName)) {
+            instance.setPrivateBoolean(jsonParser.getValueAsBoolean());
+        } else if ("privateString".equals(fieldName)){
             instance.setPrivateString(jsonParser.getValueAsString(null));
         } else if ("private_named_string".equals(fieldName)){
             instance.setPrivateNamedString(jsonParser.getValueAsString(null));
@@ -49,6 +51,7 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
+        jsonGenerator.writeBooleanField("privateBoolean", object.isPrivateBoolean());
         jsonGenerator.writeStringField("privateString", object.getPrivateString());
         jsonGenerator.writeStringField("private_named_string", object.getPrivateNamedString());
         if (writeStartAndEnd) {

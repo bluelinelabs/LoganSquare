@@ -30,7 +30,7 @@ public abstract class SingleParameterCollectionType extends CollectionType {
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow("for ($T element : ($T<$T>)$L)", fieldType, getGenericClass(), fieldType, getter);
 
-        fieldHolder.fieldType.serialize(builder, fieldHolder, variableName, "element", false);
+        fieldHolder.fieldType.serialize(builder, fieldHolder, "element", false);
 
         builder
                 .endControlFlow()

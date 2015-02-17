@@ -27,9 +27,9 @@ public class DynamicFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String variableName, String getter, boolean writeFieldNameForObject) {
+    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject) {
         if (!fieldHolder.fieldType.getTypeName().isPrimitive()) {
-            builder.beginControlFlow("if (object.$L != null)", variableName);
+            builder.beginControlFlow("if ($L != null)", getter);
         }
 
         if (writeFieldNameForObject) {

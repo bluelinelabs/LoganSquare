@@ -24,6 +24,6 @@ public class NullCollectionType extends CollectionType {
             getter = "object." + variableName;
         }
 
-        fieldHolder.fieldType.serialize(builder, fieldHolder, variableName, getter, true);
+        fieldHolder.fieldType.serialize(builder, fieldHolder, getter, true);
     }
 }

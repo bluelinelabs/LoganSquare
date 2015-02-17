@@ -14,6 +14,9 @@ public class PrivateFieldModel {
     @JsonField(name = "private_named_string")
     private String privateNamedString;
 
+    @JsonField
+    private boolean privateBoolean;
+
     public String getPrivateString() {
         return privateString;
     }
@@ -28,5 +31,13 @@ public class PrivateFieldModel {
 
     public void setPrivateNamedString(String privateNamedString) {
         this.privateNamedString = privateNamedString;
+    }
+
+    public boolean isPrivateBoolean() {
+        return privateBoolean;
+    }
+
+    public void setPrivateBoolean(boolean privateBoolean) {
+        this.privateBoolean = privateBoolean;
     }
 }
