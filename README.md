@@ -109,6 +109,7 @@ By default, the following types are supported by LoganSquare:
 * long and Long
 * float and Float
 * double and Double
+* boolean and Boolean
 * String
 * Date (if formatted using the ISO 8601 standard: `yyyy-MM-dd'T'HH:mm:ss.SSSZ`)
 
@@ -208,6 +209,12 @@ public class EnumConverter extends StringBasedTypeConverter<TestEnum> {
 ##Why LoganSquare?
 
 We're BlueLine Labs, a mobile app development company based in Chicago. We love this city so much that we named our company after the blue line of the iconic 'L.' And what's one of the most popular stops on the blue line? Well, that would be Logan Square of course. Does it have anything to do with JSON? Nope, but we're okay with that.
+
+##Props
+
+ * [Jackson's streaming API](https://github.com/FasterXML/jackson-core) for being a super-fast, awesome base for this project.
+ * [Instagram's ig-json-parser](https://github.com/Instagram/ig-json-parser) for giving us the idea for this project.
+ * [Jake Wharton's Butterknife](https://github.com/JakeWharton/butterknife) for being a great reference for annotation processing and code generation.
 
 ##License
 
