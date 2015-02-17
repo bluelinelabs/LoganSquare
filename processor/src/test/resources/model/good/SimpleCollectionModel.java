@@ -12,19 +12,19 @@ import java.util.Set;
 @JsonObject
 public class SimpleCollectionModel {
 
-    @JsonField(fieldName = "model_list")
+    @JsonField(name = "model_list")
     public List<ModelForCollection> ModelForCollectionList;
 
-    @JsonField(fieldName = "model_set")
+    @JsonField(name = "model_set")
     public Set<ModelForCollection> ModelForCollectionSet;
 
-    @JsonField(fieldName = "model_queue")
+    @JsonField(name = "model_queue")
     public Queue<ModelForCollection> ModelForCollectionQueue;
 
-    @JsonField(fieldName = "model_deque")
+    @JsonField(name = "model_deque")
     public Deque<ModelForCollection> ModelForCollectionDeque;
 
-    @JsonField(fieldName = "model_map")
+    @JsonField(name = "model_map")
     public Map<String, ModelForCollection> ModelForCollectionMap;
 
     @JsonObject

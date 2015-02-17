@@ -18,6 +18,6 @@ public class Response {
 
     @SerializedName("is_real_json") // Annotation needed for GSON
     @JsonProperty("is_real_json") // Annotation needed for Jackson Databind
-    @JsonField(fieldName = "is_real_json")
+    @JsonField(name = "is_real_json")
     public boolean isRealJson;
 }

@@ -11,7 +11,7 @@ public class PrivateFieldModel {
     @JsonField
     private String privateString;
 
-    @JsonField(fieldName = "private_named_string")
+    @JsonField(name = "private_named_string")
     private String privateNamedString;
 
     public String getPrivateString() {

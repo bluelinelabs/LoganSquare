@@ -93,7 +93,7 @@ public class JsonFieldProcessor extends Processor {
             fieldTypeMirror = TypeUtils.getTypeFromCollection(fieldTypeMirror);
         }
 
-        String[] fieldName = annotation.fieldName();
+        String[] fieldName = annotation.name();
         if (fieldName.length == 0) {
             fieldName = new String[] { element.getSimpleName().toString() };
         }

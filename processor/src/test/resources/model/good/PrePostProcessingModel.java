@@ -8,7 +8,7 @@ import com.bluelinelabs.logansquare.annotation.OnPreJsonSerialize;
 @JsonObject
 public class PrePostProcessingModel {
 
-    @JsonField(fieldName = "unformatted_string")
+    @JsonField(name = "unformatted_string")
     public String unformattedString;
 
     public String formattedString;

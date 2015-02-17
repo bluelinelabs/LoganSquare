@@ -12,7 +12,7 @@ public class User {
 
     @SerializedName("_id") // Annotation needed for GSON
     @JsonProperty("_id")
-    @JsonField(fieldName = "_id")
+    @JsonField(name = "_id")
     public String id;
 
     @JsonField
@@ -23,7 +23,7 @@ public class User {
 
     @SerializedName("is_active") // Annotation needed for GSON
     @JsonProperty("is_active") // Annotation needed for Jackson Databind
-    @JsonField(fieldName = "is_active")
+    @JsonField(name = "is_active")
     public boolean isActive;
 
     @JsonField
@@ -31,7 +31,7 @@ public class User {
 
     @SerializedName("picture") // Annotation needed for GSON
     @JsonProperty("picture") // Annotation needed for Jackson Databind
-    @JsonField(fieldName = "picture")
+    @JsonField(name = "picture")
     public String pictureUrl;
 
     @JsonField
@@ -78,12 +78,12 @@ public class User {
 
     @SerializedName("favorite_fruit") // Annotation needed for GSON
     @JsonProperty("favorite_fruit") // Annotation needed for Jackson Databind
-    @JsonField(fieldName = "favorite_fruit")
+    @JsonField(name = "favorite_fruit")
     public String favoriteFruit;
 
     @SerializedName("eye_color") // Annotation needed for GSON
     @JsonProperty("eye_color") // Annotation needed for Jackson Databind
-    @JsonField(fieldName = "eye_color")
+    @JsonField(name = "eye_color")
     public String eyeColor;
 
     @JsonField

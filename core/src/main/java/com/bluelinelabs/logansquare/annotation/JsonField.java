@@ -9,7 +9,7 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 /**
  * Declare that a variable should be parsed/serialized.
  * <pre><code>
- * {@literal @}JsonField(fieldName = "random_variable_name")
+ * {@literal @}JsonField(name = "random_variable_name")
  * public String randomVariableName;
  * </code></pre>
  */
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 public @interface JsonField {
 
     /** The name(s) of this field in JSON. Use an array if this could be represented by multiple names. */
-    String[] fieldName() default {};
+    String[] name() default {};
 
     /** The TypeConverter that will be used to parse/serialize this variable. */
     Class typeConverter() default void.class;

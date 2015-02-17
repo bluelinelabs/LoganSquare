@@ -16,8 +16,8 @@ Note that Gradle is the only supported build configuration for LoganSquare. To a
   apply plugin: 'com.neenbedankt.android-apt'
 
   dependencies {
-    apt 'com.bluelinelabs:logansquare-compiler:1.0.0'
-    compile 'com.bluelinelabs:logansquare:1.0.0'
+    apt 'com.bluelinelabs:logansquare-compiler:1.0.1'
+    compile 'com.bluelinelabs:logansquare:1.0.1'
   }
 
 ```
@@ -33,7 +33,7 @@ Using LoganSquare is about as easy as it gets. Here are a few examples to get yo
 @JsonObject
 public class Image {
 
-    @JsonField(fieldName = "_id")
+    @JsonField(name = "_id")
     public int imageId;
 
     @JsonField
@@ -45,13 +45,13 @@ public class Image {
     @JsonField
     public String description;
     
-    @JsonField(fieldName = "similar_images")
+    @JsonField(name = "similar_images")
     List<Image> similarImages;
     
 }
 
 ```
-The first thing to note is that your JSON model class has to be annotated with the `@JsonObject` annotation. Next, any fields that you want parsed or serialized have to be annotated as `@JsonField`s. If you pass a `fieldName` into the `@JsonField` annotation, that's the name that LoganSquare will use when parsing and serializing your JSON. If you don't pass in a `fieldName`, it will use the name of your variable. For code clarity, we recommend always passing a `fieldName`, even if it isn't required.
+The first thing to note is that your JSON model class has to be annotated with the `@JsonObject` annotation. Next, any fields that you want parsed or serialized have to be annotated as `@JsonField`s. If you pass a `name` into the `@JsonField` annotation, that's the name that LoganSquare will use when parsing and serializing your JSON. If you don't pass in a `name`, it will use the name of your variable. For code clarity, we recommend always passing a `name`, even if it isn't required.
 
 ###Sample Model with Callbacks
 

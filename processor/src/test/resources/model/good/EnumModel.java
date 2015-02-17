@@ -13,7 +13,7 @@ public abstract class EnumModel {
         VALUE_3
     }
 
-    @JsonField(fieldName = "enum", typeConverter = EnumTypeConverter.class)
+    @JsonField(name = "enum", typeConverter = EnumTypeConverter.class)
     public MyEnum myEnum;
 
     public static class EnumTypeConverter extends StringBasedTypeConverter<MyEnum> {

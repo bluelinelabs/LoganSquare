@@ -14,30 +14,30 @@ public class SimpleModel {
     @JsonField
     public Date date;
 
-    @JsonField(fieldName = "test_int")
+    @JsonField(name = "test_int")
     public int testInt;
 
-    @JsonField(fieldName = "test_long")
+    @JsonField(name = "test_long")
     public long testLong;
 
-    @JsonField(fieldName = "test_float")
+    @JsonField(name = "test_float")
     public float testFloat;
 
-    @JsonField(fieldName = "test_double")
+    @JsonField(name = "test_double")
     public double testDouble;
 
-    @JsonField(fieldName = "test_string")
+    @JsonField(name = "test_string")
     public String testString;
 
-    @JsonField(fieldName = "test_int_obj")
+    @JsonField(name = "test_int_obj")
     public Integer testIntObj;
 
-    @JsonField(fieldName = "test_long_obj")
+    @JsonField(name = "test_long_obj")
     public Long testLongObj;
 
-    @JsonField(fieldName = "test_float_obj")
+    @JsonField(name = "test_float_obj")
     public Float testFloatObj;
 
-    @JsonField(fieldName = "test_double_obj")
+    @JsonField(name = "test_double_obj")
     public Double testDoubleObj;
 }
