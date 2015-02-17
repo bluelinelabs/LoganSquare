@@ -202,8 +202,7 @@ public class JsonFieldProcessor extends Processor {
 
                 if (methodNameLowerCase.equals(expectedMethodName)) {
                     return methodNameString;
-                }
-                if (elementTypeKind == TypeKind.BOOLEAN && methodNameLowerCase.equals(expectedBooleanMethodName)) {
+                } else if (elementTypeKind == TypeKind.BOOLEAN && methodNameLowerCase.equals(expectedBooleanMethodName)) {
                     return methodNameString;
                 }
             }
