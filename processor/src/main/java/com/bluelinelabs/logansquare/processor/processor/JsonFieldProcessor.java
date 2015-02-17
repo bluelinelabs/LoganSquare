@@ -19,6 +19,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
@@ -186,13 +187,25 @@ public class JsonFieldProcessor extends Processor {
     private String getGetter(Element element, Elements elements) {
         TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
 
-        String expectedMethodName = "get" + element.getSimpleName().toString().toLowerCase();
+        String elementNameLowerCase = element.getSimpleName().toString().toLowerCase();
+        String expectedMethodName = "get" + elementNameLowerCase;
+        String expectedBooleanMethodName = "is" + elementNameLowerCase;
+
+        TypeKind elementTypeKind = element.asType().getKind();
 
         List<? extends Element> elementMembers = elements.getAllMembers(enclosingElement);
         List<ExecutableElement> elementMethods = ElementFilter.methodsIn(elementMembers);
         for (ExecutableElement methodElement : elementMethods) {
-            if (methodElement.getParameters().size() == 0 && methodElement.getSimpleName().toString().toLowerCase().equals(expectedMethodName)) {
-                return methodElement.getSimpleName().toString();
+            if (methodElement.getParameters().size() == 0) {
+                String methodNameString = methodElement.getSimpleName().toString();
+                String methodNameLowerCase = methodNameString.toLowerCase();
+
+                if (methodNameLowerCase.equals(expectedMethodName)) {
+                    return methodNameString;
+                }
+                if (elementTypeKind == TypeKind.BOOLEAN && methodNameLowerCase.equals(expectedBooleanMethodName)) {
+                    return methodNameString;
+                }
             }
         }
 
