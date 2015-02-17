@@ -1,3 +1,5 @@
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-LoganSquare-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1550)
+
 #LoganSquare
 
 The fastest JSON parsing and serializing library available for Android. Based on Jackson's streaming API, LoganSquare is able to consistently outperform GSON and Jackson's Databind library by 400% or more. By relying on compile-time annotation processing to generate code, you know that your JSON will parse and serialize faster than any other method available.
@@ -143,8 +145,6 @@ public class ModelObject {
     public Date speciallyConvertedDate;
 }
 ```
-
-If your TypeConverter is global, you can register it at the time your app starts up using `LoganSquare.registerTypeConverter(YourConverter.class)`. If it's only going to be used for a few variables (for example, if you need to handle multiple date formats), you can pass the .class into the `@JsonField`'s `typeConverter` parameter. 
 
 Here are a few examples of common type converters:
 
