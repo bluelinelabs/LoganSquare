@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
+dependencies {
+    compile 'org.apache.commons:commons-lang3:3.2'
+    compile 'com.squareup:javapoet:1.0.0'
+    compile project(':core')
+
+    testCompile files("${System.properties['java.home']}/../lib/tools.jar")
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.testing.compile:compile-testing:0.6'
+}

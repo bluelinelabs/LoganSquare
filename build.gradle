@@ -1,0 +1,102 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+allprojects {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
+publishing {
+    publications {
+        processor(MavenPublication) {
+            groupId 'com.bluelinelabs'
+            artifactId 'logansquare-compiler'
+            version '1.0.0'
+
+            artifact processorJar
+            artifact processorSourcesJar
+            artifact source: processorSourcesJar, classifier: 'src', extension: 'zip'
+
+            //TODO: why isn't it picking up these dependencies automatically?
+            pom.withXml {
+                def dependencies = asNode().appendNode('dependencies')
+                def commonsDependency = dependencies.appendNode('dependency')
+                commonsDependency.appendNode('groupId', 'org.apache.commons')
+                commonsDependency.appendNode('artifactId', 'commons-lang3')
+                commonsDependency.appendNode('version', '3.3.2')
+
+                def jacksonDependency = dependencies.appendNode('dependency')
+                jacksonDependency.appendNode('groupId', 'com.fasterxml.jackson.core')
+                jacksonDependency.appendNode('artifactId', 'jackson-core')
+                jacksonDependency.appendNode('version', '2.5.1')
+
+                def javaPoetDependency = dependencies.appendNode('dependency')
+                javaPoetDependency.appendNode('groupId', 'com.squareup')
+                javaPoetDependency.appendNode('artifactId', 'javapoet')
+                javaPoetDependency.appendNode('version', '1.0.0')
+            }
+        }
+        core(MavenPublication) {
+            groupId 'com.bluelinelabs'
+            artifactId 'logansquare'
+            version '1.0.0'
+
+            artifact coreJar
+            artifact coreSourcesJar
+            artifact source: coreSourcesJar, classifier: 'src', extension: 'zip'
+
+            //TODO: why isn't it picking up these dependencies automatically?
+            pom.withXml {
+                def dependency = asNode().appendNode('dependencies').appendNode('dependency')
+                dependency.appendNode('groupId', 'com.fasterxml.jackson.core')
+                dependency.appendNode('artifactId', 'jackson-core')
+                dependency.appendNode('version', '2.5.1')
+            }
+        }
+    }
+}
+
+task processorJar(type: Jar, dependsOn:["core:build","processor:build"]) {
+    from files( { project(':core').sourceSets.main.output.classesDir } )
+    from files( { project(':processor').sourceSets.main.output.classesDir } )
+    from ('./processor/src/main/resources') {
+        include 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    baseName 'processor'
+}
+
+task processorSourcesJar(type: Jar) {
+    classifier = 'sources'
+    baseName 'processor'
+    from files( { project(':core').sourceSets.main.allSource } )
+    from files( { project(':processor').sourceSets.main.allSource } )
+
+    from ('./processor/src/main/resources') {
+        include 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+task coreJar(type: Jar, dependsOn: "core:build") {
+    from files( { project(':core').sourceSets.main.output.classesDir } )
+    baseName 'core'
+}
+
+task coreSourcesJar(type: Jar) {
+    classifier = 'sources'
+    baseName 'core'
+    from files( { project(':core').sourceSets.main.allSource } )
+}
+
+artifacts {
+    archives processorJar
+    archives processorSourcesJar
+    archives coreJar
+    archives coreSourcesJar
+}

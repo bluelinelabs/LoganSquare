@@ -1,0 +1,25 @@
+# IntelliJ IDEA
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+
+# Gradle
+.gradle
+build
+gradle.properties
+
+# Maven
+target
+release.properties
+pom.xml.*
+
+# Java class files
+*.class
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+*.prefs
