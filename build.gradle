@@ -11,7 +11,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'com.bluelinelabs'
-    version = '1.0.2'
+    version = '1.0.3'
 }
 
 subprojects {
@@ -47,6 +47,33 @@ subprojects {
                 artifact sourcesJar
                 artifact javadocJar
                 artifactId project.ext.artifactId
+
+                pom.withXml {
+                    def node = asNode()
+                    node.appendNode('name', 'LoganSquare')
+                    node.appendNode('description', 'Screaming fast JSON parsing and serialization library for Android.')
+                    node.appendNode('url', 'https://github.com/bluelinelabs/LoganSquare')
+
+                    def organizationNode = node.appendNode('organization')
+                    organizationNode.appendNode('name', 'BlueLine Labs')
+                    organizationNode.appendNode('url', 'http://bluelinelabs.com')
+
+                    def scmNode = node.appendNode('scm')
+                    scmNode.appendNode('connection', 'scm:git:https://git.bluelinelabs.com/bluelinelabs/LoganSquare')
+                    scmNode.appendNode('developerConnection', 'scm:git:https://git.bluelinelabs.com/bluelinelabs/LoganSquare')
+                    scmNode.appendNode('url', 'https://git.bluelinelabs.com/bluelinelabs/LoganSquare')
+
+                    def developersNode = node.appendNode('developers')
+                    def ericNode = developersNode.appendNode('developer')
+                    ericNode.appendNode('id', 'erickuck')
+                    ericNode.appendNode('name', 'Eric Kuck')
+
+                    def licensesNode = node.appendNode('licenses')
+                    def licenseNode = licensesNode.appendNode('license')
+                    licenseNode.appendNode('name', 'Apache 2.0')
+                    licenseNode.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+
+                }
             }
         }
     }
