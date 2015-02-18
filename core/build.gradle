@@ -1,8 +1,7 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+ext.artifactId = 'logansquare'
 
 dependencies {
-  compile 'com.fasterxml.jackson.core:jackson-core:2.5.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.1'
 }

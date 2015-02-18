@@ -1,13 +1,10 @@
 apply plugin: 'java'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
-allprojects {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
-}
+ext.artifactId = 'logansquare-compiler'
 
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.2'

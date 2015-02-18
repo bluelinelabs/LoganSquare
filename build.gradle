@@ -1,102 +1,92 @@
-apply plugin: 'groovy'
-apply plugin: 'maven-publish'
-
-subprojects {
+buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
 
 allprojects {
+    apply plugin: 'idea'
+
+    group = 'com.bluelinelabs'
+    version = '1.0.2'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
+
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-}
 
-publishing {
-    publications {
-        processor(MavenPublication) {
-            groupId 'com.bluelinelabs'
-            artifactId 'logansquare-compiler'
-            version '1.0.2'
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
-            artifact processorJar
-            artifact processorSourcesJar
-            artifact source: processorSourcesJar, classifier: 'src', extension: 'zip'
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
 
-            //TODO: why isn't it picking up these dependencies automatically?
-            pom.withXml {
-                def dependencies = asNode().appendNode('dependencies')
-                def commonsDependency = dependencies.appendNode('dependency')
-                commonsDependency.appendNode('groupId', 'org.apache.commons')
-                commonsDependency.appendNode('artifactId', 'commons-lang3')
-                commonsDependency.appendNode('version', '3.3.2')
+    artifacts {
+        archives sourcesJar, javadocJar
+    }
 
-                def jacksonDependency = dependencies.appendNode('dependency')
-                jacksonDependency.appendNode('groupId', 'com.fasterxml.jackson.core')
-                jacksonDependency.appendNode('artifactId', 'jackson-core')
-                jacksonDependency.appendNode('version', '2.5.1')
+    repositories {
+        jcenter()
+    }
 
-                def javaPoetDependency = dependencies.appendNode('dependency')
-                javaPoetDependency.appendNode('groupId', 'com.squareup')
-                javaPoetDependency.appendNode('artifactId', 'javapoet')
-                javaPoetDependency.appendNode('version', '1.0.0')
-            }
-        }
-        core(MavenPublication) {
-            groupId 'com.bluelinelabs'
-            artifactId 'logansquare'
-            version '1.0.2'
-
-            artifact coreJar
-            artifact coreSourcesJar
-            artifact source: coreSourcesJar, classifier: 'src', extension: 'zip'
-
-            //TODO: why isn't it picking up these dependencies automatically?
-            pom.withXml {
-                def dependency = asNode().appendNode('dependencies').appendNode('dependency')
-                dependency.appendNode('groupId', 'com.fasterxml.jackson.core')
-                dependency.appendNode('artifactId', 'jackson-core')
-                dependency.appendNode('version', '2.5.1')
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                artifactId project.ext.artifactId
             }
         }
     }
-}
 
-task processorJar(type: Jar, dependsOn:["core:build","processor:build"]) {
-    from files( { project(':core').sourceSets.main.output.classesDir } )
-    from files( { project(':processor').sourceSets.main.output.classesDir } )
-    from ('./processor/src/main/resources') {
-        include 'META-INF/services/javax.annotation.processing.Processor'
+    bintray {
+        user = bintray_username
+        key = bintray_api_key
+        publications = ['mavenJava']
+
+        dryRun = false
+        publish = false
+
+        pkg {
+            repo = 'bluelinelabs'
+            userOrg = 'bluelinelabs'
+            name = 'LoganSquare'
+            desc = 'Screaming fast JSON parsing and serialization library for Android.'
+            websiteUrl = 'https://github.com/bluelinelabs/LoganSquare'
+            issueTrackerUrl = 'https://github.com/bluelinelabs/LoganSquare/issues'
+            vcsUrl = 'https://github.com/bluelinelabs/LoganSquare'
+            licenses = ['Apache-2.0']
+            labels = ['json', 'android', 'parser', 'serializer', 'jackson']
+            publicDownloadNumbers = true
+            version {
+                name = project.version
+                gpg {
+                    sign = true
+                    passphrase = bintray_gpg_passphrase
+                }
+                mavenCentralSync {
+                    sync = false
+                    user = maven_central_username
+                    password = maven_central_password
+                    close = '1'
+                }
+            }
+        }
     }
-
-    baseName 'processor'
 }
 
-task processorSourcesJar(type: Jar) {
-    classifier = 'sources'
-    baseName 'processor'
-    from files( { project(':core').sourceSets.main.allSource } )
-    from files( { project(':processor').sourceSets.main.allSource } )
-
-    from ('./processor/src/main/resources') {
-        include 'META-INF/services/javax.annotation.processing.Processor'
-    }
-}
-
-task coreJar(type: Jar, dependsOn: "core:build") {
-    from files( { project(':core').sourceSets.main.output.classesDir } )
-    baseName 'core'
-}
-
-task coreSourcesJar(type: Jar) {
-    classifier = 'sources'
-    baseName 'core'
-    from files( { project(':core').sourceSets.main.allSource } )
-}
-
-artifacts {
-    archives processorJar
-    archives processorSourcesJar
-    archives coreJar
-    archives coreSourcesJar
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
 }
