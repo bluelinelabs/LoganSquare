@@ -44,7 +44,7 @@ public class ObjectMapperInjector {
         Set<ClassName> typeConvertersUsed = new HashSet<>();
         for (JsonFieldHolder fieldHolder : mJsonObjectHolder.fieldMap.values()) {
             if (fieldHolder.fieldType instanceof TypeConverterFieldType) {
-                typeConvertersUsed.add(((TypeConverterFieldType) fieldHolder.fieldType).getTypeConverterClassName());
+                typeConvertersUsed.add(((TypeConverterFieldType)fieldHolder.fieldType).getTypeConverterClassName());
             }
         }
         for (ClassName typeConverter : typeConvertersUsed) {

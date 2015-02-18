@@ -27,7 +27,7 @@ public abstract class IntBasedTypeConverter<T> implements TypeConverter<T> {
     }
 
     @Override
-    public void serialize(T object, String fieldName, JsonGenerator jsonGenerator) throws IOException {
+    public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeNumberField(fieldName, convertToInt(object));
     }
 

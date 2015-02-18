@@ -29,7 +29,7 @@ public abstract class DateTypeConverter implements TypeConverter<Date> {
     }
 
     @Override
-    public void serialize(Date object, String fieldName, JsonGenerator jsonGenerator) throws IOException {
+    public void serialize(Date object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
         // DateFormat is not thread-safe, so this has to be synchronized
         synchronized (FORMATTER_LOCK) {
             jsonGenerator.writeStringField(fieldName, getDateFormat().format(object));

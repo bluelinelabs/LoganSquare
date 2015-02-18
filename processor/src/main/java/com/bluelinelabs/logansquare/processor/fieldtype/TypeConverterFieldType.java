@@ -39,11 +39,7 @@ public class TypeConverterFieldType extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        if (writeFieldNameForObject) {
-            builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0]);
-        }
-
-        builder.addStatement("$L.serialize($L, $S, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldHolder.fieldName[0], JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldHolder.fieldName[0], writeFieldNameForObject, JSON_GENERATOR_VARIABLE_NAME);
 
         if (!fieldHolder.fieldType.getTypeName().isPrimitive()) {
             builder.endControlFlow();

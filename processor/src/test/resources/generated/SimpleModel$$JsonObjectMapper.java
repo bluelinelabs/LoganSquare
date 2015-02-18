@@ -78,8 +78,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         jsonGenerator.writeNumberField("test_int", object.testInt);
         jsonGenerator.writeStringField("string", object.string);
         if (object.date != null) {
-            jsonGenerator.writeFieldName("date");
-            LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", jsonGenerator);
+            LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
         }
         jsonGenerator.writeNumberField("test_float", object.testFloat);
         jsonGenerator.writeNumberField("test_long", object.testLong);

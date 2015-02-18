@@ -19,8 +19,7 @@ public final class EnumModel$$JsonObjectMapper {
             jsonGenerator.writeStartObject();
         }
         if (object.myEnum != null) {
-            jsonGenerator.writeFieldName("enum");
-            ENUM_TYPE_CONVERTER.serialize(object.myEnum, "enum", jsonGenerator);
+            ENUM_TYPE_CONVERTER.serialize(object.myEnum, "enum", true, jsonGenerator);
         }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();

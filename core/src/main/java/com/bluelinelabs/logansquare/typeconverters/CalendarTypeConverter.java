@@ -31,7 +31,7 @@ public abstract class CalendarTypeConverter implements TypeConverter<Calendar> {
     }
 
     @Override
-    public void serialize(Calendar object, String fieldName, JsonGenerator jsonGenerator) throws IOException {
+    public void serialize(Calendar object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
         // DateFormat is not thread-safe, so this has to be synchronized
         synchronized (FORMATTER_LOCK) {
             jsonGenerator.writeStringField(fieldName, getDateFormat().format(object.getTimeInMillis()));
