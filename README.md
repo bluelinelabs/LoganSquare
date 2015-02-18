@@ -206,6 +206,14 @@ public class EnumConverter extends StringBasedTypeConverter<TestEnum> {
 }
 ```
 
+##Proguard
+Like all libraries that generate dynamic code, Proguard might think some classes are unused and remove them. To revent this, the following lines can be added to your proguard config file.
+
+```
+-keep class com.bluelinelabs.logansquare.** { *; }
+-keep class **$$JsonObjectMapper { *; }
+```
+
 ##Why LoganSquare?
 
 We're BlueLine Labs, a mobile app development company based in Chicago. We love this city so much that we named our company after the blue line of the iconic 'L.' And what's one of the most popular stops on the blue line? Well, that would be Logan Square of course. Does it have anything to do with JSON? Nope, but we're okay with that.
