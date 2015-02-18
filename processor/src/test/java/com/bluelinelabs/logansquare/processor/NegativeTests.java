@@ -19,7 +19,7 @@ public class NegativeTests {
     @Test
     public void privateField() {
         ASSERT.about(javaSource())
-                .that(JavaFileObjects.forResource("model/bad/PrivateFieldModel.java"))
+                .that(JavaFileObjects.forResource("model/bad/PrivateFieldModelWithoutAccessors.java"))
                 .processedWith(new JsonAnnotationProcessor())
                 .failsToCompile();
     }

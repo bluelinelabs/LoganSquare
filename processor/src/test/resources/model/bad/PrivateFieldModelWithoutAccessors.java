@@ -4,7 +4,7 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 @JsonObject
-public class PrivateFieldModel {
+public class PrivateFieldModelWithoutAccessors {
 
     @JsonField
     private String string;

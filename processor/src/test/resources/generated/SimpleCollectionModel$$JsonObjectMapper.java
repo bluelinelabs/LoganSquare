@@ -111,10 +111,11 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        if (object.modelForCollectionMap != null) {
+        Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionMap = object.modelForCollectionMap;
+        if (lslocalmodelForCollectionMap != null) {
             jsonGenerator.writeFieldName("model_map");
             jsonGenerator.writeStartObject();
-            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry : object.modelForCollectionMap.entrySet()) {
+            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry : lslocalmodelForCollectionMap.entrySet()) {
                 jsonGenerator.writeFieldName(entry.getKey().toString());
                 if (entry.getValue() == null) {
                     jsonGenerator.writeNull();
@@ -126,40 +127,44 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndObject();
         }
-        if (object.modelForCollectionDeque != null) {
+        Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionDeque = object.modelForCollectionDeque;
+        if (lslocalmodelForCollectionDeque != null) {
             jsonGenerator.writeFieldName("model_deque");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : (Queue<SimpleCollectionModel.ModelForCollection>)object.modelForCollectionDeque) {
+            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionDeque) {
                 if (element != null) {
                     SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        if (object.modelForCollectionList != null) {
+        List<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionList = object.modelForCollectionList;
+        if (lslocalmodelForCollectionList != null) {
             jsonGenerator.writeFieldName("model_list");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : (List<SimpleCollectionModel.ModelForCollection>)object.modelForCollectionList) {
+            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionList) {
                 if (element != null) {
                     SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        if (object.modelForCollectionSet != null) {
+        Set<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionSet = object.modelForCollectionSet;
+        if (lslocalmodelForCollectionSet != null) {
             jsonGenerator.writeFieldName("model_set");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : (Set<SimpleCollectionModel.ModelForCollection>)object.modelForCollectionSet) {
+            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionSet) {
                 if (element != null) {
                     SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        if (object.modelForCollectionQueue != null) {
+        Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionQueue = object.modelForCollectionQueue;
+        if (lslocalmodelForCollectionQueue != null) {
             jsonGenerator.writeFieldName("model_queue");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : (Queue<SimpleCollectionModel.ModelForCollection>)object.modelForCollectionQueue) {
+            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionQueue) {
                 if (element != null) {
                     SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
                 }

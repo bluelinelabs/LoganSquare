@@ -48,7 +48,7 @@ public class ObjectMapperInjector {
             }
         }
         for (ClassName typeConverter : typeConvertersUsed) {
-            builder.addField(FieldSpec.builder(typeConverter, TypeUtils.getConstantVariableName(typeConverter.simpleName()))
+            builder.addField(FieldSpec.builder(typeConverter, TextUtils.toUpperCaseWithUnderscores(typeConverter.simpleName()))
                     .addModifiers(Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)
                     .initializer("new $T()", typeConverter)
                     .build());

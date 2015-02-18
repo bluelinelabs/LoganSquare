@@ -24,11 +24,13 @@ public abstract class SingleParameterCollectionType extends CollectionType {
         }
 
         TypeName fieldType = fieldHolder.fieldType.getTypeName();
+        String collectionVariableName = "lslocal" + variableName;
         builder
-                .beginControlFlow("if (object.$L != null)", variableName)
+                .addStatement("$T<$T> $L = $L", getGenericClass(), fieldType, collectionVariableName, getter)
+                .beginControlFlow("if ($L != null)", collectionVariableName)
                 .addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0])
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
-                .beginControlFlow("for ($T element : ($T<$T>)$L)", fieldType, getGenericClass(), fieldType, getter);
+                .beginControlFlow("for ($T element : $L)", fieldType, collectionVariableName);
 
         fieldHolder.fieldType.serialize(builder, fieldHolder, "element", false);
 

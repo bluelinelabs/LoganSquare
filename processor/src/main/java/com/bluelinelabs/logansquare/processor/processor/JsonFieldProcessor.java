@@ -2,14 +2,11 @@ package com.bluelinelabs.logansquare.processor.processor;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
-import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
 import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
-import com.bluelinelabs.logansquare.processor.collectiontype.CollectionType;
-import com.bluelinelabs.logansquare.processor.collectiontype.NullCollectionType;
-import com.bluelinelabs.logansquare.processor.fieldtype.FieldType;
+import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -19,9 +16,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.io.PrintWriter;
@@ -62,7 +57,7 @@ public class JsonFieldProcessor extends Processor {
             return;
         }
 
-        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+        TypeElement enclosingElement = (TypeElement)element.getEnclosingElement();
 
         JsonObjectHolder objectHolder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(enclosingElement, elements));
         JsonFieldHolder fieldHolder = objectHolder.fieldMap.get(element.getSimpleName().toString());
@@ -74,9 +69,6 @@ public class JsonFieldProcessor extends Processor {
 
         JsonField annotation = element.getAnnotation(JsonField.class);
 
-        TypeMirror fieldTypeMirror;
-        TypeMirror genericClassTypeMirror;
-
         TypeMirror typeConverterType;
         try {
             typeConverterType = mProcessingEnv.getElementUtils().getTypeElement(annotation.typeConverter().getCanonicalName()).asType();
@@ -87,28 +79,11 @@ public class JsonFieldProcessor extends Processor {
             return;
         }
 
-        fieldTypeMirror = element.asType();
-        genericClassTypeMirror = types.erasure(fieldTypeMirror);
-
-        if (!(CollectionType.typeFor(genericClassTypeMirror) instanceof NullCollectionType)) {
-            fieldTypeMirror = TypeUtils.getTypeFromCollection(fieldTypeMirror);
-        }
-
         String[] fieldName = annotation.name();
-        if (fieldName.length == 0) {
-            fieldName = new String[] { element.getSimpleName().toString() };
-        }
 
-        fieldHolder.fieldName = fieldName;
-        fieldHolder.setterMethod = getSetter(element, elements);
-        fieldHolder.getterMethod = getGetter(element, elements);
-        fieldHolder.collectionType = CollectionType.typeFor(genericClassTypeMirror);
-        fieldHolder.fieldType = FieldType.typeFor(fieldTypeMirror, typeConverterType, elements, types);
-
-        if (fieldHolder.fieldType == null) {
-            if (!fieldHolder.hasGetter() || !fieldHolder.hasSetter()) {
-                error(element, "%s: unsupported classes must have a type converter specified", enclosingElement);
-            }
+        String error = fieldHolder.fill(element, elements, types, fieldName, typeConverterType, objectHolder);
+        if (!TextUtils.isEmpty(error)) {
+            error(element, error);
         }
     }
 
@@ -121,7 +96,7 @@ public class JsonFieldProcessor extends Processor {
             return false;
         }
 
-        if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(getGetter(element, elements)) || TextUtils.isEmpty(getSetter(element, elements)))) {
+        if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(JsonFieldHolder.getGetter(element, elements)) || TextUtils.isEmpty(JsonFieldHolder.getSetter(element, elements)))) {
             error(element, "%s annotation can only be used on private fields if both getter and setter are present.", JsonField.class.getSimpleName());
             return false;
         }
@@ -184,48 +159,4 @@ public class JsonFieldProcessor extends Processor {
         return true;
     }
 
-    private String getGetter(Element element, Elements elements) {
-        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-
-        String elementNameLowerCase = element.getSimpleName().toString().toLowerCase();
-        String expectedMethodName = "get" + elementNameLowerCase;
-        String expectedBooleanMethodName = "is" + elementNameLowerCase;
-
-        TypeKind elementTypeKind = element.asType().getKind();
-
-        List<? extends Element> elementMembers = elements.getAllMembers(enclosingElement);
-        List<ExecutableElement> elementMethods = ElementFilter.methodsIn(elementMembers);
-        for (ExecutableElement methodElement : elementMethods) {
-            if (methodElement.getParameters().size() == 0) {
-                String methodNameString = methodElement.getSimpleName().toString();
-                String methodNameLowerCase = methodNameString.toLowerCase();
-
-                if (methodNameLowerCase.equals(expectedMethodName)) {
-                    return methodNameString;
-                } else if (elementTypeKind == TypeKind.BOOLEAN && methodNameLowerCase.equals(expectedBooleanMethodName)) {
-                    return methodNameString;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private String getSetter(Element element, Elements elements) {
-        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-
-        String expectedMethodName = "set" + element.getSimpleName().toString().toLowerCase();
-
-        List<? extends Element> elementMembers = elements.getAllMembers(enclosingElement);
-        List<ExecutableElement> elementMethods = ElementFilter.methodsIn(elementMembers);
-        for (ExecutableElement methodElement : elementMethods) {
-            if (methodElement.getParameters().size() == 1 && methodElement.getSimpleName().toString().toLowerCase().equals(expectedMethodName)) {
-                if (methodElement.getParameters().get(0).getSimpleName().toString().equals(element.getSimpleName().toString())) {
-                    return methodElement.getSimpleName().toString();
-                }
-            }
-        }
-
-        return null;
-    }
 }

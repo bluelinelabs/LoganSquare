@@ -10,19 +10,6 @@ import java.util.List;
 
 public class TypeUtils {
 
-    public static String getConstantVariableName(String className) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : className.toCharArray()) {
-            if (c >= 'A' && c <= 'Z' && sb.length() > 0) {
-                sb.append('_').append(c);
-            } else {
-                sb.append(Character.toUpperCase(c));
-            }
-        }
-
-        return sb.toString();
-    }
-
     public static String getSimpleClassName(TypeElement type, String packageName) {
         return type.getQualifiedName().toString().substring(packageName.length() + 1).replace('.', '$');
     }

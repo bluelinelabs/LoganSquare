@@ -17,7 +17,10 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Retention(CLASS)
 public @interface JsonField {
 
-    /** The name(s) of this field in JSON. Use an array if this could be represented by multiple names. */
+    /**
+     * The name(s) of this field in JSON. Use an array if this could be represented by multiple names.
+     * Note that using this field will override the enclosing JsonObject's fieldNamingPolicy.
+     */
     String[] name() default {};
 
     /** The TypeConverter that will be used to parse/serialize this variable. */

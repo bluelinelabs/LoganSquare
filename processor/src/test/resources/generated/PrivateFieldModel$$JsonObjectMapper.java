@@ -7,6 +7,10 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<PrivateFieldModel> {
     @Override
@@ -35,6 +39,33 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
     public static void parseField(PrivateFieldModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("privateBoolean".equals(fieldName)) {
             instance.setPrivateBoolean(jsonParser.getValueAsBoolean());
+        } else if ("privateMap".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map.put(key, null);
+                    } else{
+                        map.put(key, jsonParser.getValueAsString(null));
+                    }
+                }
+                instance.setPrivateMap(map);
+            }
+        } else if ("privateList".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                ArrayList<String> collection = new ArrayList<String>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    String value = jsonParser.getValueAsString(null);
+                    if (value != null) {
+                        collection.add(value);
+                    }
+                }
+                instance.setPrivateList(collection);
+            }
+        } else if ("string_to_test_m_vars".equals(fieldName)){
+            instance.setStringThatStartsWithM(jsonParser.getValueAsString(null));
         } else if ("privateString".equals(fieldName)){
             instance.setPrivateString(jsonParser.getValueAsString(null));
         } else if ("private_named_string".equals(fieldName)){
@@ -52,6 +83,30 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             jsonGenerator.writeStartObject();
         }
         jsonGenerator.writeBooleanField("privateBoolean", object.isPrivateBoolean());
+        Map<String, String> lslocalprivateMap = object.getPrivateMap();
+        if (lslocalprivateMap != null) {
+            jsonGenerator.writeFieldName("privateMap");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, String> entry : lslocalprivateMap.entrySet()) {
+                jsonGenerator.writeFieldName(entry.getKey().toString());
+                if (entry.getValue() == null) {
+                    jsonGenerator.writeNull();
+                } else{
+                    jsonGenerator.writeString(entry.getValue());
+                }
+            }
+            jsonGenerator.writeEndObject();
+        }
+        List<String> lslocalprivateList = object.getPrivateList();
+        if (lslocalprivateList != null) {
+            jsonGenerator.writeFieldName("privateList");
+            jsonGenerator.writeStartArray();
+            for (String element : lslocalprivateList) {
+                jsonGenerator.writeString(element);
+            }
+            jsonGenerator.writeEndArray();
+        }
+        jsonGenerator.writeStringField("string_to_test_m_vars", object.getStringThatStartsWithM());
         jsonGenerator.writeStringField("privateString", object.getPrivateString());
         jsonGenerator.writeStringField("private_named_string", object.getPrivateNamedString());
         if (writeStartAndEnd) {

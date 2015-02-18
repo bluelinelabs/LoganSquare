@@ -24,7 +24,7 @@ public abstract class FieldType {
 
     public static FieldType typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         if (typeMirror != null) {
-            if (!typeConverterType.toString().equals("void")) {
+            if (typeConverterType != null && !"void".equals(typeConverterType.toString())) {
                 return new TypeConverterFieldType(TypeName.get(typeMirror), ClassName.bestGuess(typeConverterType.toString()));
             } else if (typeMirror.getKind() == TypeKind.BOOLEAN) {
                 return new BooleanFieldType(true);

@@ -50,11 +50,13 @@ public class HashMapCollectionType extends CollectionType {
             getter = "object." + variableName;
         }
 
+        String mapVariableName = "lslocal" + variableName;
         builder
-                .beginControlFlow("if (object.$L != null)", variableName)
+                .addStatement("$T<$T, $T> $L = $L", Map.class, String.class, valueType, mapVariableName, getter)
+                .beginControlFlow("if ($L != null)", mapVariableName)
                 .addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0])
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
-                .beginControlFlow("for ($T<$T, $T> entry : $L.entrySet())", Map.Entry.class, String.class, valueType, getter)
+                .beginControlFlow("for ($T<$T, $T> entry : $L.entrySet())", Map.Entry.class, String.class, valueType, mapVariableName)
                 .addStatement("$L.writeFieldName(entry.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow("if (entry.getValue() == null)")
                 .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME)
