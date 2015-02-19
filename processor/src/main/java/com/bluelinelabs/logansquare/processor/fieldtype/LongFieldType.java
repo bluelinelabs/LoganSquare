@@ -18,6 +18,11 @@ public class LongFieldType extends NumberFieldType {
     }
 
     @Override
+    public TypeName getNonPrimitiveTypeName() {
+        return ClassName.get(Long.class);
+    }
+
+    @Override
     public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
         if (isPrimitive) {
             return String.format("%s.getValueAsLong()", JSON_PARSER_VARIABLE_NAME);

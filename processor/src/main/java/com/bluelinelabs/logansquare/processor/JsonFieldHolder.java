@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.processor;
 
+import com.bluelinelabs.logansquare.processor.collectiontype.ArrayCollectionType;
 import com.bluelinelabs.logansquare.processor.collectiontype.CollectionType;
 import com.bluelinelabs.logansquare.processor.collectiontype.NullCollectionType;
 import com.bluelinelabs.logansquare.processor.fieldtype.FieldType;
@@ -7,6 +8,7 @@ import com.bluelinelabs.logansquare.processor.fieldtype.FieldType;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -33,8 +35,12 @@ public class JsonFieldHolder {
         fieldTypeMirror = element.asType();
         genericClassTypeMirror = types.erasure(fieldTypeMirror);
 
-        if (!(CollectionType.typeFor(genericClassTypeMirror) instanceof NullCollectionType)) {
+        collectionType = CollectionType.typeFor(genericClassTypeMirror);
+        if (!(collectionType instanceof NullCollectionType)) {
             fieldTypeMirror = TypeUtils.getTypeFromCollection(fieldTypeMirror);
+        } else if (fieldTypeMirror instanceof ArrayType) {
+            fieldTypeMirror = ((ArrayType)fieldTypeMirror).getComponentType();
+            collectionType = new ArrayCollectionType();
         }
 
         if (fieldNames == null || fieldNames.length == 0) {
@@ -48,13 +54,12 @@ public class JsonFieldHolder {
 
             fieldNames = new String[] { defaultFieldName };
         }
-
         fieldName = fieldNames;
+
         setterMethod = getSetter(element, elements);
         getterMethod = getGetter(element, elements);
-        collectionType = CollectionType.typeFor(genericClassTypeMirror);
-        fieldType = FieldType.typeFor(fieldTypeMirror, typeConverterType, elements, types);
 
+        fieldType = FieldType.typeFor(fieldTypeMirror, typeConverterType, elements, types);
         if (fieldType == null) {
             if (!hasGetter() || !hasSetter()) {
                 return enclosingElement + ": unsupported classes must have a type converter specified";

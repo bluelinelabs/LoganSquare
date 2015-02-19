@@ -24,6 +24,11 @@ public class TypeConverterFieldType extends FieldType {
         return mTypeName;
     }
 
+    @Override
+    public TypeName getNonPrimitiveTypeName() {
+        return mTypeName;
+    }
+
     public ClassName getTypeConverterClassName() {
         return mTypeConverter;
     }

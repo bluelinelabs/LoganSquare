@@ -21,6 +21,7 @@ public abstract class FieldType {
     public abstract String getJsonParserGetter(JsonFieldHolder fieldHolder);
     public abstract void serialize(MethodSpec.Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject);
     public abstract TypeName getTypeName();
+    public abstract TypeName getNonPrimitiveTypeName();
 
     public static FieldType typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         if (typeMirror != null) {

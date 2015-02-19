@@ -12,6 +12,9 @@ import java.util.Set;
 @JsonObject
 public class SimpleCollectionModel {
 
+    @JsonField(name = "primitive_array")
+    public int[] primitiveArray;
+
     @JsonField(name = "model_list")
     public List<ModelForCollection> modelForCollectionList;
 
@@ -26,6 +29,9 @@ public class SimpleCollectionModel {
 
     @JsonField(name = "model_map")
     public Map<String, ModelForCollection> modelForCollectionMap;
+
+    @JsonField(name = "model_array")
+    public ModelForCollection[] modelForCollectionArray;
 
     @JsonObject
     public static class ModelForCollection {

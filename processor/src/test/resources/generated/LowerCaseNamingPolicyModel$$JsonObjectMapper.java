@@ -60,7 +60,7 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        List<String> lslocalcamelCaseList = object.camelCaseList;
+        final List<String> lslocalcamelCaseList = object.camelCaseList;
         if (lslocalcamelCaseList != null) {
             jsonGenerator.writeFieldName("camel_case_list");
             jsonGenerator.writeStartArray();

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
+import java.lang.Integer;
 import java.lang.Override;
 import java.lang.String;
 import java.util.ArrayDeque;
@@ -41,7 +42,32 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
     }
 
     public static void parseField(SimpleCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
-        if ("model_map".equals(fieldName)) {
+        if ("primitive_array".equals(fieldName)) {
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                List<Integer> list = new ArrayList<Integer>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    list.add(jsonParser.getValueAsInt());
+                }
+                int[] array = new int[list.size()];
+                int i = 0;
+                for (int value : list) {
+                    array[i++] = value;
+                }
+                instance.primitiveArray = array;
+            }
+        } else if ("model_array".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                List<SimpleCollectionModel.ModelForCollection> list = new ArrayList<SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value != null) {
+                        list.add(value);
+                    }
+                }
+                SimpleCollectionModel.ModelForCollection[] array = list.toArray(new SimpleCollectionModel.ModelForCollection[list.size()]);
+                instance.modelForCollectionArray = array;
+            }
+        } else if ("model_map".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
                 HashMap<String, SimpleCollectionModel.ModelForCollection> map = new HashMap<String, SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
@@ -111,7 +137,27 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionMap = object.modelForCollectionMap;
+        final int[] lslocalprimitiveArray = object.primitiveArray;
+        if (lslocalprimitiveArray != null) {
+            jsonGenerator.writeFieldName("primitive_array");
+            jsonGenerator.writeStartArray();
+            for (int element : lslocalprimitiveArray) {
+                jsonGenerator.writeNumber(element);
+            }
+            jsonGenerator.writeEndArray();
+        }
+        final SimpleCollectionModel.ModelForCollection[] lslocalmodelForCollectionArray = object.modelForCollectionArray;
+        if (lslocalmodelForCollectionArray != null) {
+            jsonGenerator.writeFieldName("model_array");
+            jsonGenerator.writeStartArray();
+            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionArray) {
+                if (element != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+                }
+            }
+            jsonGenerator.writeEndArray();
+        }
+        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionMap = object.modelForCollectionMap;
         if (lslocalmodelForCollectionMap != null) {
             jsonGenerator.writeFieldName("model_map");
             jsonGenerator.writeStartObject();
@@ -127,7 +173,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndObject();
         }
-        Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionDeque = object.modelForCollectionDeque;
+        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionDeque = object.modelForCollectionDeque;
         if (lslocalmodelForCollectionDeque != null) {
             jsonGenerator.writeFieldName("model_deque");
             jsonGenerator.writeStartArray();
@@ -138,7 +184,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndArray();
         }
-        List<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionList = object.modelForCollectionList;
+        final List<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionList = object.modelForCollectionList;
         if (lslocalmodelForCollectionList != null) {
             jsonGenerator.writeFieldName("model_list");
             jsonGenerator.writeStartArray();
@@ -149,7 +195,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndArray();
         }
-        Set<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionSet = object.modelForCollectionSet;
+        final Set<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionSet = object.modelForCollectionSet;
         if (lslocalmodelForCollectionSet != null) {
             jsonGenerator.writeFieldName("model_set");
             jsonGenerator.writeStartArray();
@@ -160,7 +206,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndArray();
         }
-        Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionQueue = object.modelForCollectionQueue;
+        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionQueue = object.modelForCollectionQueue;
         if (lslocalmodelForCollectionQueue != null) {
             jsonGenerator.writeFieldName("model_queue");
             jsonGenerator.writeStartArray();
@@ -175,4 +221,5 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeEndObject();
         }
     }
+
 }

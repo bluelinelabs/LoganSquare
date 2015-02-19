@@ -18,6 +18,11 @@ public class IntegerFieldType extends NumberFieldType {
     }
 
     @Override
+    public TypeName getNonPrimitiveTypeName() {
+        return ClassName.get(Integer.class);
+    }
+
+    @Override
     public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
         if (isPrimitive) {
             return String.format("%s.getValueAsInt()", JSON_PARSER_VARIABLE_NAME);

@@ -77,7 +77,7 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
         jsonGenerator.writeNumberField("privateTransientIntToInclude", object.getPrivateTransientIntToInclude());
         jsonGenerator.writeNumberField("nonAnnotatedPrivateInt", object.getNonAnnotatedPrivateInt());
         jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);
-        List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
+        final List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
             jsonGenerator.writeStartArray();

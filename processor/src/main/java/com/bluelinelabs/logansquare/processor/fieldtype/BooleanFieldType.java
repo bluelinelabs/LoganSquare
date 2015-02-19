@@ -22,6 +22,11 @@ public class BooleanFieldType extends FieldType {
     }
 
     @Override
+    public TypeName getNonPrimitiveTypeName() {
+        return ClassName.get(Boolean.class);
+    }
+
+    @Override
     public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
         if (isPrimitive) {
             return String.format("%s.getValueAsBoolean()", JSON_PARSER_VARIABLE_NAME);

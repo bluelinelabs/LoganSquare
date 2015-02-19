@@ -16,6 +16,11 @@ public class StringFieldType extends FieldType {
     }
 
     @Override
+    public TypeName getNonPrimitiveTypeName() {
+        return ClassName.get(String.class);
+    }
+
+    @Override
     public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
         return String.format("%s.getValueAsString(null)", JSON_PARSER_VARIABLE_NAME);
     }

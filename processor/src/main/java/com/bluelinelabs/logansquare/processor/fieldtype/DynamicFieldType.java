@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor.fieldtype;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
@@ -18,6 +19,11 @@ public class DynamicFieldType extends FieldType {
 
     @Override
     public TypeName getTypeName() {
+        return mTypeName;
+    }
+
+    @Override
+    public TypeName getNonPrimitiveTypeName() {
         return mTypeName;
     }
 

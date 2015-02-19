@@ -83,7 +83,7 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             jsonGenerator.writeStartObject();
         }
         jsonGenerator.writeBooleanField("privateBoolean", object.isPrivateBoolean());
-        Map<String, String> lslocalprivateMap = object.getPrivateMap();
+        final Map<String, String> lslocalprivateMap = object.getPrivateMap();
         if (lslocalprivateMap != null) {
             jsonGenerator.writeFieldName("privateMap");
             jsonGenerator.writeStartObject();
@@ -97,7 +97,7 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             }
             jsonGenerator.writeEndObject();
         }
-        List<String> lslocalprivateList = object.getPrivateList();
+        final final List<String> lslocalprivateList = object.getPrivateList();
         if (lslocalprivateList != null) {
             jsonGenerator.writeFieldName("privateList");
             jsonGenerator.writeStartArray();

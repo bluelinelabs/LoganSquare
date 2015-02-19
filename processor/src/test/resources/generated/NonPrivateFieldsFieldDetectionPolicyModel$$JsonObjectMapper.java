@@ -69,7 +69,7 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
         jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
         jsonGenerator.writeStringField("annotated_string", object.annotatedString);
         jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);
-        List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
+        final List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
             jsonGenerator.writeStartArray();

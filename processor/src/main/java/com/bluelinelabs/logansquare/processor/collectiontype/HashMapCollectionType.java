@@ -52,7 +52,7 @@ public class HashMapCollectionType extends CollectionType {
 
         String mapVariableName = "lslocal" + variableName;
         builder
-                .addStatement("$T<$T, $T> $L = $L", Map.class, String.class, valueType, mapVariableName, getter)
+                .addStatement("final $T<$T, $T> $L = $L", Map.class, String.class, valueType, mapVariableName, getter)
                 .beginControlFlow("if ($L != null)", mapVariableName)
                 .addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0])
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
