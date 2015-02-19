@@ -15,8 +15,6 @@ public class ArrayCollectionType extends CollectionType {
 
     @Override
     public void serialize(Builder builder, JsonFieldHolder fieldHolder, String variableName) {
-        System.out.println("serialize");
-
         String getter;
         if (fieldHolder.hasGetter()) {
             getter = "object." + fieldHolder.getterMethod + "()";
@@ -80,7 +78,5 @@ public class ArrayCollectionType extends CollectionType {
         }
 
         builder.endControlFlow();
-
-        System.out.println("done parsing");
     }
 }

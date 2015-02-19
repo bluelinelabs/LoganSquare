@@ -19,7 +19,7 @@ public abstract class MethodProcessor extends Processor {
         TypeElement enclosingElement = (TypeElement)element.getEnclosingElement();
 
         if (enclosingElement.getAnnotation(JsonObject.class) == null) {
-            error(enclosingElement, "%s: @%s methods can only be in classes annotated with %s.", enclosingElement.getQualifiedName(), annotationName, JsonObject.class.getSimpleName());
+            error(enclosingElement, "%s: @%s methods can only be in classes annotated with @%s.", enclosingElement.getQualifiedName(), annotationName, JsonObject.class.getSimpleName());
             return false;
         }
 

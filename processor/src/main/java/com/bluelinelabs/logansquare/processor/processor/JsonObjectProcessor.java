@@ -61,7 +61,8 @@ public class JsonObjectProcessor extends Processor {
 
         if (element.getModifiers().contains(PRIVATE)) {
             error(element, "%s: %s annotation can't be used on private classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
-            return;
+        } else if (typeElement.getTypeParameters().size() > 0) {
+            error(element, "%s: @%s annotation can't be used on generic classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
         }
 
         JsonObjectHolder holder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(typeElement, elements));

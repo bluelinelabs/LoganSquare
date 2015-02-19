@@ -75,9 +75,6 @@ public class JsonFieldProcessor extends Processor {
         } catch (MirroredTypeException mte) {
             typeConverterType = mte.getTypeMirror();
         }
-        if (!isTypeConverterClassValid(typeConverterType, elements, types)) {
-            return;
-        }
 
         String[] fieldName = annotation.name();
 
@@ -85,6 +82,8 @@ public class JsonFieldProcessor extends Processor {
         if (!TextUtils.isEmpty(error)) {
             error(element, error);
         }
+
+        ensureTypeConverterClassValid(typeConverterType, elements, types);
     }
 
     private boolean isJsonFieldFieldAnnotationValid(Element element, Elements elements) {
@@ -92,19 +91,19 @@ public class JsonFieldProcessor extends Processor {
 
         Annotation objectAnnotation = enclosingElement.getAnnotation(JsonObject.class);
         if (objectAnnotation == null) {
-            error(enclosingElement, "%s: %s fields can only be in classes annotated with %s.", enclosingElement.getQualifiedName(), JsonField.class.getSimpleName(), JsonObject.class.getSimpleName());
+            error(enclosingElement, "%s: @%s fields can only be in classes annotated with @%s.", enclosingElement.getQualifiedName(), JsonField.class.getSimpleName(), JsonObject.class.getSimpleName());
             return false;
         }
 
         if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(JsonFieldHolder.getGetter(element, elements)) || TextUtils.isEmpty(JsonFieldHolder.getSetter(element, elements)))) {
-            error(element, "%s annotation can only be used on private fields if both getter and setter are present.", JsonField.class.getSimpleName());
+            error(element, "@%s annotation can only be used on private fields if both getter and setter are present.", JsonField.class.getSimpleName());
             return false;
         }
 
         return true;
     }
 
-    private boolean isTypeConverterClassValid(TypeMirror typeConverterClassMirror, Elements elements, Types types) {
+    private boolean ensureTypeConverterClassValid(TypeMirror typeConverterClassMirror, Elements elements, Types types) {
         TypeElement typeConverterElement = elements.getTypeElement(typeConverterClassMirror.toString());
 
         if (typeConverterElement != null) {
@@ -129,7 +128,7 @@ public class JsonFieldProcessor extends Processor {
             }
 
             if (!isTypeConverterType) {
-                error(element, "typeConverter elements must implement the TypeConverter interface or extend from one of the convenience helpers (ie StringBasedTypeConverter or DateTypeConverter).");
+                error(element, "TypeConverter elements must implement the TypeConverter interface or extend from one of the convenience helpers (ie StringBasedTypeConverter or DateTypeConverter).");
                 return false;
             }
 

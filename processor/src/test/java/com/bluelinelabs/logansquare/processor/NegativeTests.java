@@ -13,7 +13,17 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/FieldWithoutObjectModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("@JsonField fields can only be in classes annotated with @JsonObject.");
+    }
+
+    @Test
+    public void genericObject() {
+        ASSERT.about(javaSource())
+                .that(JavaFileObjects.forResource("model/bad/GenericModel.java"))
+                .processedWith(new JsonAnnotationProcessor())
+                .failsToCompile()
+                .withErrorContaining("@JsonObject annotation can't be used on generic classes.");
     }
 
     @Test
@@ -21,7 +31,8 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/PrivateFieldModelWithoutAccessors.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("@JsonField annotation can only be used on private fields if both getter and setter are present.");
     }
 
     @Test
@@ -29,7 +40,8 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/InvalidTypeConverterModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("TypeConverter elements must implement the TypeConverter interface or extend from one of the convenience helpers");
     }
 
     @Test
@@ -37,7 +49,8 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/MethodWithoutObjectModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("@OnJsonParseComplete methods can only be in classes annotated with @JsonObject.");
     }
 
     @Test
@@ -45,7 +58,8 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/MethodWithArgsModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("@OnJsonParseComplete methods must not take any parameters.");
     }
 
     @Test
@@ -53,6 +67,7 @@ public class NegativeTests {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/MultipleMethodsModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile();
+                .failsToCompile()
+                .withErrorContaining("There can only be one @OnJsonParseComplete method per class");
     }
 }
