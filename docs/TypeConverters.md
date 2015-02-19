@@ -20,6 +20,7 @@ Additionally, the following collections are supported:
 * Queue
 * Deque
 * Map (with Strings as keys)
+* Array (Not technically a Collection, but still supported. Note that Lists are preferred to arrays when possible.)
 
 ###Support for Additional Types
 

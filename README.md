@@ -18,8 +18,8 @@ Note that Gradle is the only supported build configuration for LoganSquare. To a
   apply plugin: 'com.neenbedankt.android-apt'
 
   dependencies {
-    apt 'com.bluelinelabs:logansquare-compiler:1.0.3'
-    compile 'com.bluelinelabs:logansquare:1.0.3'
+    apt 'com.bluelinelabs:logansquare-compiler:1.0.4'
+    compile 'com.bluelinelabs:logansquare:1.0.4'
   }
 
 ```
