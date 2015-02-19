@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.demo.model;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 
@@ -17,6 +18,9 @@ public class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel {
 
     @JsonField(name = "annotated_string")
     public String annotatedString;
+
+    @JsonIgnore
+    public int intToIgnore;
 
     public int getNonAnnotatedPrivateInt() {
         return nonAnnotatedPrivateInt;

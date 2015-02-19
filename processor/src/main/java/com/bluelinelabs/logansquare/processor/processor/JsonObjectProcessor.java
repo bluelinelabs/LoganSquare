@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor.processor;
 
 import com.bluelinelabs.logansquare.Constants;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
@@ -131,12 +132,14 @@ public class JsonObjectProcessor extends Processor {
     }
 
     private void createOrUpdateFieldHolder(Element element, Elements elements, Types types, JsonObjectHolder objectHolder) {
-        JsonFieldHolder fieldHolder = objectHolder.fieldMap.get(element.getSimpleName().toString());
-        if (fieldHolder == null) {
-            fieldHolder = new JsonFieldHolder();
-            objectHolder.fieldMap.put(element.getSimpleName().toString(), fieldHolder);
-        }
+        if (element.getAnnotation(JsonIgnore.class) == null) {
+            JsonFieldHolder fieldHolder = objectHolder.fieldMap.get(element.getSimpleName().toString());
+            if (fieldHolder == null) {
+                fieldHolder = new JsonFieldHolder();
+                objectHolder.fieldMap.put(element.getSimpleName().toString(), fieldHolder);
+            }
 
-        fieldHolder.fill(element, elements, types, null, null, objectHolder);
+            fieldHolder.fill(element, elements, types, null, null, objectHolder);
+        }
     }
 }
