@@ -8,7 +8,7 @@ By using this library, you'll be able to utilize the power of Jackson's streamin
 
 Don't believe it could improve upon Jackson Databind's or GSON's performance that much? Well, then check out the nifty graphs below for yourself. Not convinced? Feel free to build and run the BenchmarkDemo app included in this repository.
 
-![Benchmarks](images/benchmarks.jpg)
+![Benchmarks](docs/benchmarks.jpg)
 
 ##Download
 
@@ -27,187 +27,15 @@ For the curious, the first line adds the [apt plugin](https://bitbucket.org/hvis
 
 ##Usage
 
-Using LoganSquare is about as easy as it gets. Here are a few examples to get you started:
+Using LoganSquare is about as easy as it gets. Here are a few docs to get you started:
 
-###Sample Model
-
-```java
-@JsonObject
-public class Image {
-
-    @JsonField(name = "_id")
-    public int imageId;
-
-    @JsonField
-    public String format;
-
-    @JsonField
-    public String url;
-
-    @JsonField
-    public String description;
-    
-    @JsonField(name = "similar_images")
-    List<Image> similarImages;
-    
-}
-
-```
-The first thing to note is that your JSON model class has to be annotated with the `@JsonObject` annotation. Next, any fields that you want parsed or serialized have to be annotated as `@JsonField`s. If you pass a `name` into the `@JsonField` annotation, that's the name that LoganSquare will use when parsing and serializing your JSON. If you don't pass in a `name`, it will use the name of your variable. For code clarity, we recommend always passing a `name`, even if it isn't required.
-
-###Sample Model with Callbacks
-
-LoganSquare can notify you when your model is done parsing or when it's about to serialize. This can be useful if you need to ensure some variables are in the correct state. Here's an example:
-
-```java
-@JsonObject
-public class ModelWithCallbacks {
-
-    //@JsonField annotated variables here...
-    
-    @OnJsonParseComplete void onParseComplete() {
-        // Do some fancy post-processing stuff after parsing here
-    }
-    
-    @OnPreJsonSerialize void onPreSerialize() {
-        // Do some fancy pre-processing stuff before serializing here
-    }
-}
-```
-
-###Parsing JSON
-
-JSON can be parsed from an `InputStream` or a `String`. If you're getting your JSON directly from your networking library, you should be able to use an `InputStream` to avoid converting it to a String for no reason. Here's a sample:
-
-```java
-    // Parse from an InputStream
-    InputStream is = ...;
-    Image imageFromInputStream = LoganSquare.parse(is, Image.class);
-    
-    // Parse from a String
-    String jsonString = ...;
-    Image imageFromString = LoganSquare.parse(jsonString, Image.class); 
-```
-
-###Serializing JSON
-
-LoganSquare can serialize objects to an `OutputStream` or a `String`. Here's a sample:
-
-```java
-    // Serialize it to an OutputStream
-    OutputStream os = ...;
-    LoganSquare.serialize(image, os);
-    
-    // Serialize it to a String
-    String jsonString = LoganSquare.serialize(image);
-```
-
-###Types with Built-in Support
-
-By default, the following types are supported by LoganSquare:
-
-* any object using the `@JsonObject` annotation
-* int and Integer
-* long and Long
-* float and Float
-* double and Double
-* boolean and Boolean
-* String
-* Date (if formatted using the ISO 8601 standard: `yyyy-MM-dd'T'HH:mm:ss.SSSZ`)
-
-Additionally, the following collections are supported:
-
-* List
-* Set
-* Queue
-* Deque
-* Map (with Strings as keys)
-
-###Support for Additional Types
-
-Any Java object can be supported by LoganSquare, even if they don't fall into the above categories. To add support for your own types, you'll need to extend one of the built-in `TypeConverter` classes. You can register your custom type converters using one of the two following ways:
-
-```java
-// If your TypeConverter should be used globally, register 
-// your type converter when your app starts up like so:
-
-LoganSquare.registerTypeConverter(Date.class, YourConverter.class)
-```
-
-```java
-// If your TypeConverter should only be used for certain 
-// variables (for example, if you need to handle multiple 
-// date formats), only declare it for individual fields
-
-@JsonObject
-public class ModelObject {
-    @JsonField(typeConverter = YourConverter.class)
-    public Date speciallyConvertedDate;
-}
-```
-
-Here are a few examples of common type converters:
-
-####TypeConverter for a custom date format
-
-```java
-public class TimeOnlyDateConverter extends DateTypeConverter {
-
-    private DateFormat mDateFormat;
-
-    public DefaultDateConverter() {
-        mDateFormat = new SimpleDateFormat("HH:mm");
-    }
-
-    public DateFormat getDateFormat() {
-        return mDateFormat;
-    }
-
-}
-```
-
-####TypeConverter for an Enum, where the JSON contains an int
-
-```java
-public enum TestEnum {
-    VALUE_1, VALUE_2, VALUE_3
-}
-    
-public class TimeOnlyDateConverter extends IntBasedTypeConverter<TestEnum> {
-    @Override
-    public TestEnum getFromInt(int i) {
-        return TestEnum.values()[i];
-    }
-    
-    public int convertToInt(TestEnum object) {
-        return Arrays.asList(TestEnum.values()).indexOf(TestEnum.VALUE_1);
-    }
-
-}
-```
-
-####TypeConverter for an Enum, where the JSON contains a String
-
-```java
-public enum TestEnum {
-    VALUE_1, VALUE_2, VALUE_3
-}
-
-public class EnumConverter extends StringBasedTypeConverter<TestEnum> {
-    @Override
-    public TestEnum getFromString(String s) {
-        TestEnum.valueOf(s);
-    }
-    
-    public String convertToString(TestEnum object) {
-        return object.toString();
-    }
-
-}
-```
+ * [Creating your models](docs/Models.md)
+ * [Parsing from JSON](docs/Parsing.md)
+ * [Serializing to JSON](docs/Serializing.md)
+ * [Supporting custom types](docs/TypeConverters.md)
 
 ##Proguard
-Like all libraries that generate dynamic code, Proguard might think some classes are unused and remove them. To revent this, the following lines can be added to your proguard config file.
+Like all libraries that generate dynamic code, Proguard might think some classes are unused and remove them. To prevent this, the following lines can be added to your proguard config file.
 
 ```
 -keep class com.bluelinelabs.logansquare.** { *; }

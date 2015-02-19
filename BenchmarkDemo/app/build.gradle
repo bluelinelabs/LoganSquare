@@ -11,10 +11,10 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-repositories {
-    jcenter()
-    mavenLocal()
-}
+//repositories {
+//    jcenter()
+//    mavenLocal()
+//}
 
 android {
     compileSdkVersion 21
@@ -41,7 +41,7 @@ android {
 
 dependencies {
     // LoganSquare annotation processor
-    apt 'com.bluelinelabs:logansquare-compiler:1.0.2'
+    apt 'com.bluelinelabs:logansquare-compiler:1.0.3'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
