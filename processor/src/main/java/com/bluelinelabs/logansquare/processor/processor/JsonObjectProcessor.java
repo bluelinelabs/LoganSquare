@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -106,7 +107,8 @@ public class JsonObjectProcessor extends Processor {
         for (Element enclosedElement : enclosedElements) {
             ElementKind enclosedElementKind = enclosedElement.getKind();
             if (enclosedElementKind == ElementKind.FIELD) {
-                if (!enclosedElement.getModifiers().contains(Modifier.PRIVATE) || enclosedElement.getModifiers().contains(Modifier.PROTECTED)) {
+                Set<Modifier> modifiers = enclosedElement.getModifiers();
+                if (!modifiers.contains(Modifier.PRIVATE) && !modifiers.contains(Modifier.PROTECTED) && !modifiers.contains(Modifier.TRANSIENT) && !modifiers.contains(Modifier.STATIC)) {
                     createOrUpdateFieldHolder(enclosedElement, elements, types, objectHolder);
                 }
             }
@@ -118,7 +120,9 @@ public class JsonObjectProcessor extends Processor {
         for (Element enclosedElement : enclosedElements) {
             ElementKind enclosedElementKind = enclosedElement.getKind();
             if (enclosedElementKind == ElementKind.FIELD) {
-                if (enclosedElement.getModifiers().contains(Modifier.PRIVATE)) {
+                Set<Modifier> modifiers = enclosedElement.getModifiers();
+
+                if (modifiers.contains(Modifier.PRIVATE) && !modifiers.contains(Modifier.TRANSIENT) && !modifiers.contains(Modifier.STATIC)) {
 
                     String getter = JsonFieldHolder.getGetter(enclosedElement, elements);
                     String setter = JsonFieldHolder.getSetter(enclosedElement, elements);

@@ -22,6 +22,16 @@ public class NonPrivateFieldsFieldDetectionPolicyModel {
     @JsonIgnore
     public int intToIgnore;
 
+    public transient int transientIntToIgnore;
+
+    public static int staticIntToIgnore;
+
+    @JsonField
+    public transient int transientIntToInclude;
+
+    @JsonField
+    public static int staticIntToInclude;
+
     public int getNonAnnotatedPrivateInt() {
         return nonAnnotatedPrivateInt;
     }

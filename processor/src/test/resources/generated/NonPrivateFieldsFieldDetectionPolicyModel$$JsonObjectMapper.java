@@ -39,6 +39,8 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
             instance.nonAnnotatedString = jsonParser.getValueAsString(null);
         } else if ("annotated_string".equals(fieldName)){
             instance.annotatedString = jsonParser.getValueAsString(null);
+        } else if ("staticIntToInclude".equals(fieldName)){
+            instance.staticIntToInclude = jsonParser.getValueAsInt();
         } else if ("nonAnnotatedList".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<String> collection = new ArrayList<String>();
@@ -50,6 +52,8 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
                 }
                 instance.nonAnnotatedList = collection;
             }
+        } else if ("transientIntToInclude".equals(fieldName)){
+            instance.transientIntToInclude = jsonParser.getValueAsInt();
         }
     }
 
@@ -64,6 +68,7 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
         }
         jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
         jsonGenerator.writeStringField("annotated_string", object.annotatedString);
+        jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);
         List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
@@ -73,6 +78,7 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
             }
             jsonGenerator.writeEndArray();
         }
+        jsonGenerator.writeNumberField("transientIntToInclude", object.transientIntToInclude);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

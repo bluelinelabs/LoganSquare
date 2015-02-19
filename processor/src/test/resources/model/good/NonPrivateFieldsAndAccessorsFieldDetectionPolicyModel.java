@@ -22,11 +22,43 @@ public class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel {
     @JsonIgnore
     public int intToIgnore;
 
+    public transient int transientIntToIgnore;
+
+    public static int staticIntToIgnore;
+
+    @JsonField
+    public transient int transientIntToInclude;
+
+    @JsonField
+    public static int staticIntToInclude;
+
+    @JsonField
+    private transient int privateTransientIntToInclude;
+
+    @JsonField
+    private static int privateStaticIntToInclude;
+
     public int getNonAnnotatedPrivateInt() {
         return nonAnnotatedPrivateInt;
     }
 
     public void setNonAnnotatedPrivateInt(int nonAnnotatedPrivateInt) {
         this.nonAnnotatedPrivateInt = nonAnnotatedPrivateInt;
+    }
+
+    public int getPrivateTransientIntToInclude() {
+        return privateTransientIntToInclude;
+    }
+
+    public void setPrivateTransientIntToInclude(int privateTransientIntToInclude) {
+        this.privateTransientIntToInclude = privateTransientIntToInclude;
+    }
+
+    public static int getPrivateStaticIntToInclude() {
+        return privateStaticIntToInclude;
+    }
+
+    public static void setPrivateStaticIntToInclude(int privateStaticIntToInclude) {
+        NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel.privateStaticIntToInclude = privateStaticIntToInclude;
     }
 }
