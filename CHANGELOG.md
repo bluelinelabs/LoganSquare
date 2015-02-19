@@ -1,3 +1,8 @@
+## 1.0.4
+
+* Added support for parsing arrays
+* Squashed some more bugs
+
 ## 1.0.3
 
 * Added support for naming policies, which alleviate the need to add `name` parameters to all of your `@JsonField` annotations if your API follows a certain naming scheme.
