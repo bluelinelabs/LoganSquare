@@ -2,13 +2,14 @@
 
 #LoganSquare
 
-The fastest JSON parsing and serializing library available for Android. Based on Jackson's streaming API, LoganSquare is able to consistently outperform GSON and Jackson's Databind library by 400% or more. By relying on compile-time annotation processing to generate code, you know that your JSON will parse and serialize faster than any other method available.
+The fastest JSON parsing and serializing library available for Android. Based on Jackson's streaming API, LoganSquare is able to consistently outperform GSON and Jackson's Databind library by 400% or more<sup>[1](#1)</sup>. By relying on compile-time annotation processing to generate code, you know that your JSON will parse and serialize faster than any other method available.
 
 By using this library, you'll be able to utilize the power of Jackson's streaming API without having to code tedius, low-level code involving `JsonParser`s or `JsonGenerator`s. Instead, just annotate your model objects as a `@JsonObject` and your fields as `@JsonField`s and we'll do the heavy lifting for you.
 
 Don't believe it could improve upon Jackson Databind's or GSON's performance that much? Well, then check out the nifty graphs below for yourself. Not convinced? Feel free to build and run the BenchmarkDemo app included in this repository.
 
-*Note: Our "400% or more" performance improvement metric was determined using ART. It seems as though things are much closer on Dalvik, although LoganSquare still comes out on top.*
+<a name="1"></a>
+*<sup>1</sup> Note: Our "400% or more" performance improvement metric was determined using ART. It seems as though things are much closer on Dalvik, although LoganSquare still comes out on top. The benchmarks shown are actual screenshots taken from a 2nd gen Moto X.*
 
 ![Benchmarks](docs/benchmarks.jpg)
 
