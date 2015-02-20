@@ -9,7 +9,7 @@ By using this library, you'll be able to utilize the power of Jackson's streamin
 Don't believe it could improve upon Jackson Databind's or GSON's performance that much? Well, then check out the nifty graphs below for yourself. Not convinced? Feel free to build and run the BenchmarkDemo app included in this repository.
 
 <a name="1"></a>
-*<sup>1</sup> Note: Our "400% or more" performance improvement metric was determined using ART. It seems as though things are much closer on Dalvik, although LoganSquare still comes out on top. The benchmarks shown are actual screenshots taken from a 2nd gen Moto X.*
+*<sup>1</sup> <sub>Note: Our "400% or more" performance improvement metric was determined using ART. It seems as though things are much closer on Dalvik, although LoganSquare still comes out on top. The benchmarks shown are actual screenshots taken from a 2nd gen Moto X.<sub>*
 
 ![Benchmarks](docs/benchmarks.jpg)
 
