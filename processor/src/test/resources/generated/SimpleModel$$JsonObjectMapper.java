@@ -35,28 +35,28 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
     }
 
     public static void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
-        if ("test_double".equals(fieldName)) {
-            instance.testDouble = jsonParser.getValueAsDouble();
-        } else if ("test_long_obj".equals(fieldName)){
-            instance.testLongObj = Long.valueOf(jsonParser.getValueAsLong());
-        } else if ("test_int_obj".equals(fieldName)){
-            instance.testIntObj = Integer.valueOf(jsonParser.getValueAsInt());
-        } else if ("test_string".equals(fieldName)){
-            instance.testString = jsonParser.getValueAsString(null);
-        } else if ("test_float_obj".equals(fieldName)){
-            instance.testFloatObj = new Float(jsonParser.getValueAsDouble());
-        } else if ("test_double_obj".equals(fieldName)){
-            instance.testDoubleObj = Double.valueOf(jsonParser.getValueAsDouble());
-        } else if ("test_int".equals(fieldName)){
-            instance.testInt = jsonParser.getValueAsInt();
+        if ("date".equals(fieldName)) {
+            instance.date = LoganSquare.typeConverterFor(java.util.Date.class).parse(jsonParser);
         } else if ("string".equals(fieldName)){
             instance.string = jsonParser.getValueAsString(null);
-        } else if ("date".equals(fieldName)){
-            instance.date = LoganSquare.typeConverterFor(java.util.Date.class).parse(jsonParser);
+        } else if ("test_double".equals(fieldName)){
+            instance.testDouble = jsonParser.getValueAsDouble();
+        } else if ("test_double_obj".equals(fieldName)){
+            instance.testDoubleObj = Double.valueOf(jsonParser.getValueAsDouble());
         } else if ("test_float".equals(fieldName)){
             instance.testFloat = (float)jsonParser.getValueAsDouble();
+        } else if ("test_float_obj".equals(fieldName)){
+            instance.testFloatObj = new Float(jsonParser.getValueAsDouble());
+        } else if ("test_int".equals(fieldName)){
+            instance.testInt = jsonParser.getValueAsInt();
+        } else if ("test_int_obj".equals(fieldName)){
+            instance.testIntObj = Integer.valueOf(jsonParser.getValueAsInt());
         } else if ("test_long".equals(fieldName)){
             instance.testLong = jsonParser.getValueAsLong();
+        } else if ("test_long_obj".equals(fieldName)){
+            instance.testLongObj = Long.valueOf(jsonParser.getValueAsLong());
+        } else if ("test_string".equals(fieldName)){
+            instance.testString = jsonParser.getValueAsString(null);
         }
     }
 
@@ -69,19 +69,19 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        jsonGenerator.writeNumberField("test_double", object.testDouble);
-        jsonGenerator.writeNumberField("test_long_obj", object.testLongObj);
-        jsonGenerator.writeNumberField("test_int_obj", object.testIntObj);
-        jsonGenerator.writeStringField("test_string", object.testString);
-        jsonGenerator.writeNumberField("test_float_obj", object.testFloatObj);
-        jsonGenerator.writeNumberField("test_double_obj", object.testDoubleObj);
-        jsonGenerator.writeNumberField("test_int", object.testInt);
-        jsonGenerator.writeStringField("string", object.string);
         if (object.date != null) {
             LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
         }
+        jsonGenerator.writeStringField("string", object.string);
+        jsonGenerator.writeNumberField("test_double", object.testDouble);
+        jsonGenerator.writeNumberField("test_double_obj", object.testDoubleObj);
         jsonGenerator.writeNumberField("test_float", object.testFloat);
+        jsonGenerator.writeNumberField("test_float_obj", object.testFloatObj);
+        jsonGenerator.writeNumberField("test_int", object.testInt);
+        jsonGenerator.writeNumberField("test_int_obj", object.testIntObj);
         jsonGenerator.writeNumberField("test_long", object.testLong);
+        jsonGenerator.writeNumberField("test_long_obj", object.testLongObj);
+        jsonGenerator.writeStringField("test_string", object.testString);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

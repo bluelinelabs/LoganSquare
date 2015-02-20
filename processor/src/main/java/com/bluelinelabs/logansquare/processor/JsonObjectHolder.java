@@ -6,6 +6,7 @@ import com.squareup.javapoet.TypeName;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class JsonObjectHolder {
 
@@ -19,7 +20,9 @@ public class JsonObjectHolder {
     public String onCompleteCallback;
     public String preSerializeCallback;
 
-    public final Map<String, JsonFieldHolder> fieldMap = new HashMap<>();
+    // Using a TreeMap now to keep the entries sorted. This ensures that code is
+    // always written the exact same way, no matter which JDK you're using.
+    public final Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
     public boolean fileCreated;
 
     public JsonObjectHolder(String packageName, String injectedClassName, TypeName objectTypeName, boolean isAbstractClass, TypeName parentInjectedTypeName, FieldDetectionPolicy fieldDetectionPolicy, FieldNamingPolicy fieldNamingPolicy) {

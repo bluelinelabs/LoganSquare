@@ -35,14 +35,14 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
     public static void parseField(MultipleFieldNamesModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("possible_double_name_1".equals(fieldName) || "possible_double_name_2".equals(fieldName)) {
             instance.testDouble = jsonParser.getValueAsDouble();
-        } else if ("possible_string_name_1".equals(fieldName) || "possible_string_name_2".equals(fieldName)){
-            instance.testString = jsonParser.getValueAsString(null);
-        } else if ("possible_int_name_1".equals(fieldName) || "possible_int_name_2".equals(fieldName)){
-            instance.testInt = jsonParser.getValueAsInt();
         } else if ("possible_float_name_1".equals(fieldName) || "possible_float_name_2".equals(fieldName)){
             instance.testFloat = (float)jsonParser.getValueAsDouble();
+        } else if ("possible_int_name_1".equals(fieldName) || "possible_int_name_2".equals(fieldName)){
+            instance.testInt = jsonParser.getValueAsInt();
         } else if ("possible_long_name_1".equals(fieldName) || "possible_long_name_2".equals(fieldName)){
             instance.testLong = jsonParser.getValueAsLong();
+        } else if ("possible_string_name_1".equals(fieldName) || "possible_string_name_2".equals(fieldName)){
+            instance.testString = jsonParser.getValueAsString(null);
         }
     }
 
@@ -56,10 +56,10 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
             jsonGenerator.writeStartObject();
         }
         jsonGenerator.writeNumberField("possible_double_name_1", object.testDouble);
-        jsonGenerator.writeStringField("possible_string_name_1", object.testString);
-        jsonGenerator.writeNumberField("possible_int_name_1", object.testInt);
         jsonGenerator.writeNumberField("possible_float_name_1", object.testFloat);
+        jsonGenerator.writeNumberField("possible_int_name_1", object.testInt);
         jsonGenerator.writeNumberField("possible_long_name_1", object.testLong);
+        jsonGenerator.writeStringField("possible_string_name_1", object.testString);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

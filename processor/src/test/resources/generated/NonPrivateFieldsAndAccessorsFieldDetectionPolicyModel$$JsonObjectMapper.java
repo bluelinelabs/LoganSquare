@@ -35,16 +35,8 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
     }
 
     public static void parseField(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
-        if ("nonAnnotatedString".equals(fieldName)) {
-            instance.nonAnnotatedString = jsonParser.getValueAsString(null);
-        } else if ("annotated_string".equals(fieldName)){
+        if ("annotated_string".equals(fieldName)) {
             instance.annotatedString = jsonParser.getValueAsString(null);
-        } else if ("privateTransientIntToInclude".equals(fieldName)){
-            instance.setPrivateTransientIntToInclude(jsonParser.getValueAsInt());
-        } else if ("nonAnnotatedPrivateInt".equals(fieldName)){
-            instance.setNonAnnotatedPrivateInt(jsonParser.getValueAsInt());
-        } else if ("staticIntToInclude".equals(fieldName)){
-            instance.staticIntToInclude = jsonParser.getValueAsInt();
         } else if ("nonAnnotatedList".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<String> collection = new ArrayList<String>();
@@ -56,8 +48,16 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
                 }
                 instance.nonAnnotatedList = collection;
             }
+        } else if ("nonAnnotatedPrivateInt".equals(fieldName)){
+            instance.setNonAnnotatedPrivateInt(jsonParser.getValueAsInt());
+        } else if ("nonAnnotatedString".equals(fieldName)){
+            instance.nonAnnotatedString = jsonParser.getValueAsString(null);
         } else if ("privateStaticIntToInclude".equals(fieldName)){
             instance.setPrivateStaticIntToInclude(jsonParser.getValueAsInt());
+        } else if ("privateTransientIntToInclude".equals(fieldName)){
+            instance.setPrivateTransientIntToInclude(jsonParser.getValueAsInt());
+        } else if ("staticIntToInclude".equals(fieldName)){
+            instance.staticIntToInclude = jsonParser.getValueAsInt();
         } else if ("transientIntToInclude".equals(fieldName)){
             instance.transientIntToInclude = jsonParser.getValueAsInt();
         }
@@ -72,11 +72,7 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
         jsonGenerator.writeStringField("annotated_string", object.annotatedString);
-        jsonGenerator.writeNumberField("privateTransientIntToInclude", object.getPrivateTransientIntToInclude());
-        jsonGenerator.writeNumberField("nonAnnotatedPrivateInt", object.getNonAnnotatedPrivateInt());
-        jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);
         final List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
@@ -86,7 +82,11 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
             }
             jsonGenerator.writeEndArray();
         }
+        jsonGenerator.writeNumberField("nonAnnotatedPrivateInt", object.getNonAnnotatedPrivateInt());
+        jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
         jsonGenerator.writeNumberField("privateStaticIntToInclude", object.getPrivateStaticIntToInclude());
+        jsonGenerator.writeNumberField("privateTransientIntToInclude", object.getPrivateTransientIntToInclude());
+        jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);
         jsonGenerator.writeNumberField("transientIntToInclude", object.transientIntToInclude);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
