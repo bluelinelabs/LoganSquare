@@ -21,7 +21,7 @@ import java.util.Map;
 public class LoganSquare {
 
     private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new HashMap<Class, JsonMapper>();
-    private static final Map<Class, TypeConverter> TYPE_CONVERTERS = new HashMap<>();
+    private static final Map<Class, TypeConverter> TYPE_CONVERTERS = new HashMap<Class, TypeConverter>();
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());
         registerTypeConverter(Calendar.class, new DefaultCalendarConverter());
@@ -71,6 +71,26 @@ public class LoganSquare {
     }
 
     /**
+     * Parse a map of objects from an InputStream.
+     *
+     * @param is The inputStream, most likely from your networking library.
+     * @param jsonObjectClass The @JsonObject class to parse the InputStream into
+     */
+    public static <E> Map<String, E> parseMap(InputStream is, Class<E> jsonObjectClass) throws IOException {
+        return mapperFor(jsonObjectClass).parseMap(is);
+    }
+
+    /**
+     * Parse a map of objects from a String. Note: parsing from an InputStream should be preferred over parsing from a String if possible.
+     *
+     * @param jsonString The JSON string being parsed.
+     * @param jsonObjectClass The @JsonObject class to parse the InputStream into
+     */
+    public static <E> Map<String, E> parseMap(String jsonString, Class<E> jsonObjectClass) throws IOException {
+        return mapperFor(jsonObjectClass).parseMap(jsonString);
+    }
+
+    /**
      * Serialize an object to a JSON String.
      *
      * @param object The object to serialize.
@@ -110,6 +130,27 @@ public class LoganSquare {
      */
     public static <E> void serialize(List<E> list, OutputStream os, Class<E> jsonObjectClass) throws IOException {
         mapperFor(jsonObjectClass).serialize(list, os);
+    }
+
+    /**
+     * Serialize a map of objects to a JSON String.
+     *
+     * @param map The map of objects to serialize.
+     * @param jsonObjectClass The @JsonObject class of the list elements
+     */
+    public static <E> String serialize(Map<String, E> map, Class<E> jsonObjectClass) throws IOException {
+        return mapperFor(jsonObjectClass).serialize(map);
+    }
+
+    /**
+     * Serialize a map of objects to an OutputStream.
+     *
+     * @param map The map of objects to serialize.
+     * @param os The OutputStream to which the list should be serialized
+     * @param jsonObjectClass The @JsonObject class of the list elements
+     */
+    public static <E> void serialize(Map<String, E> map, OutputStream os, Class<E> jsonObjectClass) throws IOException {
+        mapperFor(jsonObjectClass).serialize(map, os);
     }
 
     /**

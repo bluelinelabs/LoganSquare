@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** The class that handles all parsing and serialization of @JsonObject's */
 public abstract class JsonMapper<T> {
@@ -93,6 +95,47 @@ public abstract class JsonMapper<T> {
     }
 
     /**
+     * Parse a map of objects from an InputStream.
+     *
+     * @param is The inputStream, most likely from your networking library.
+     */
+    public Map<String, T> parseMap(InputStream is) throws IOException {
+        JsonParser jsonParser = LoganSquare.JSON_FACTORY.createParser(is);
+        jsonParser.nextToken();
+        return parseMap(jsonParser);
+    }
+
+    /**
+     * Parse a map of objects from a String. Note: parsing from an InputStream should be preferred over parsing from a String if possible.
+     *
+     * @param jsonString The JSON string being parsed.
+     */
+    public Map<String, T> parseMap(String jsonString) throws IOException {
+        JsonParser jsonParser = LoganSquare.JSON_FACTORY.createParser(jsonString);
+        jsonParser.nextToken();
+        return parseMap(jsonParser);
+    }
+
+    /**
+     * Parse a map of objects from a JsonParser.
+     *
+     * @param jsonParser The JsonParser, preconfigured to be at the START_ARRAY token.
+     */
+    public Map<String, T> parseMap(JsonParser jsonParser) throws IOException {
+        HashMap<String, T> map = new HashMap<String, T>();
+        while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+            String key = jsonParser.getText();
+            jsonParser.nextToken();
+            if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                map.put(key, null);
+            } else{
+                map.put(key, parse(jsonParser));
+            }
+        }
+        return map;
+    }
+
+    /**
      * Serialize an object to a JSON String.
      *
      * @param object The object to serialize.
@@ -154,5 +197,49 @@ public abstract class JsonMapper<T> {
             serialize(object, jsonGenerator, true);
         }
         jsonGenerator.writeEndArray();
+    }
+
+    /**
+     * Serialize a list of objects to a JSON String.
+     *
+     * @param map The map of objects to serialize.
+     */
+    public String serialize(Map<String, T> map) throws IOException {
+        StringWriter sw = new StringWriter();
+        JsonGenerator jsonGenerator = LoganSquare.JSON_FACTORY.createGenerator(sw);
+        serialize(map, jsonGenerator);
+        jsonGenerator.close();
+        return sw.toString();
+    }
+
+    /**
+     * Serialize a list of objects to an OutputStream.
+     *
+     * @param map The map of objects to serialize.
+     * @param os The OutputStream to which the list should be serialized
+     */
+    public void serialize(Map<String, T> map, OutputStream os) throws IOException {
+        JsonGenerator jsonGenerator = LoganSquare.JSON_FACTORY.createGenerator(os);
+        serialize(map, jsonGenerator);
+        jsonGenerator.close();
+    }
+
+    /**
+     * Serialize a list of objects to a JsonGenerator.
+     *
+     * @param map The map of objects to serialize.
+     * @param jsonGenerator The JsonGenerator to which the list should be serialized
+     */
+    public void serialize(Map<String, T> map, JsonGenerator jsonGenerator) throws IOException {
+        jsonGenerator.writeStartObject();
+        for (Map.Entry<String, T> entry : map.entrySet()) {
+            jsonGenerator.writeFieldName(entry.getKey());
+            if (entry.getValue() == null) {
+                jsonGenerator.writeNull();
+            } else {
+                serialize(entry.getValue(), jsonGenerator, true);
+            }
+        }
+        jsonGenerator.writeEndObject();
     }
 }
