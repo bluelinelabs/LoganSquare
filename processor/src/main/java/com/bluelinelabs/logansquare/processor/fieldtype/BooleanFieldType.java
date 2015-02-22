@@ -31,7 +31,7 @@ public class BooleanFieldType extends FieldType {
         if (isPrimitive) {
             return String.format("%s.getValueAsBoolean()", JSON_PARSER_VARIABLE_NAME);
         } else {
-            return String.format("Boolean.valueOf(%s.getValueAsBoolean())", JSON_PARSER_VARIABLE_NAME);
+            return String.format("%s.getCurrentToken() == JsonToken.VALUE_NULL ? null : Boolean.valueOf(%s.getValueAsBoolean())", JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME);
         }
     }
 
