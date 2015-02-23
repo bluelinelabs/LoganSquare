@@ -26,7 +26,12 @@ public class HashMapCollectionType extends CollectionType {
                 .beginControlFlow("if ($L.getCurrentToken() == $T.VALUE_NULL)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
                 .addStatement("map.put(key, null)")
                 .nextControlFlow("else")
-                .addStatement("map.put(key, $L)", fieldHolder.fieldType.getJsonParserGetter(fieldHolder))
+                .addCode("map.put(key, ");
+
+        fieldHolder.fieldType.parse(builder, fieldHolder);
+
+        builder
+                .addCode(");\n")
                 .endControlFlow()
                 .endControlFlow();
 

@@ -36,25 +36,25 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
 
     public static void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("date".equals(fieldName)) {
-            instance.date = LoganSquare.typeConverterFor(java.util.Date.class).parse(jsonParser);
+            instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
         } else if ("string".equals(fieldName)){
             instance.string = jsonParser.getValueAsString(null);
         } else if ("test_double".equals(fieldName)){
             instance.testDouble = jsonParser.getValueAsDouble();
         } else if ("test_double_obj".equals(fieldName)){
-            instance.testDoubleObj = Double.valueOf(jsonParser.getValueAsDouble());
+            instance.testDoubleObj = jsonParser.getCurrentToken() == JsonToken.VALUE_NULL ? null : Double.valueOf(jsonParser.getValueAsDouble());
         } else if ("test_float".equals(fieldName)){
             instance.testFloat = (float)jsonParser.getValueAsDouble();
         } else if ("test_float_obj".equals(fieldName)){
-            instance.testFloatObj = new Float(jsonParser.getValueAsDouble());
+            instance.testFloatObj = jsonParser.getCurrentToken() == JsonToken.VALUE_NULL ? null : new Float(jsonParser.getValueAsDouble());
         } else if ("test_int".equals(fieldName)){
             instance.testInt = jsonParser.getValueAsInt();
         } else if ("test_int_obj".equals(fieldName)){
-            instance.testIntObj = Integer.valueOf(jsonParser.getValueAsInt());
+            instance.testIntObj = jsonParser.getCurrentToken() == JsonToken.VALUE_NULL ? null : Integer.valueOf(jsonParser.getValueAsInt());
         } else if ("test_long".equals(fieldName)){
             instance.testLong = jsonParser.getValueAsLong();
         } else if ("test_long_obj".equals(fieldName)){
-            instance.testLongObj = Long.valueOf(jsonParser.getValueAsLong());
+            instance.testLongObj = jsonParser.getCurrentToken() == JsonToken.VALUE_NULL ? null : Long.valueOf(jsonParser.getValueAsLong());
         } else if ("test_string".equals(fieldName)){
             instance.testString = jsonParser.getValueAsString(null);
         }

@@ -9,9 +9,13 @@ public class NullCollectionType extends CollectionType {
     @Override
     public void parse(MethodSpec.Builder builder, String objectName, String variableName, JsonFieldHolder fieldHolder) {
         if (fieldHolder.hasSetter()) {
-            builder.addStatement("instance.$L($L)", fieldHolder.setterMethod, fieldHolder.fieldType.getJsonParserGetter(fieldHolder));
+            builder.addCode("instance.$L(", fieldHolder.setterMethod);
+            fieldHolder.fieldType.parse(builder, fieldHolder);
+            builder.addCode(");\n");
         } else {
-            builder.addStatement("instance.$L = $L", variableName, fieldHolder.fieldType.getJsonParserGetter(fieldHolder));
+            builder.addCode("instance.$L = ", variableName);
+            fieldHolder.fieldType.parse(builder, fieldHolder);
+            builder.addCode(";\n");
         }
     }
 

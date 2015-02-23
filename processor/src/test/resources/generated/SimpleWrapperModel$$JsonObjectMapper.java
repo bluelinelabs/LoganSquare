@@ -34,7 +34,7 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
 
     public static void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("wrappedObject".equals(fieldName)) {
-            instance.wrappedObject = com.bluelinelabs.logansquare.processor.SimpleWrapperModel$WrappedClass$$JsonObjectMapper._parse(jsonParser);
+            instance.wrappedObject = SimpleWrapperModel$WrappedClass$$JsonObjectMapper._parse(jsonParser);
         }
     }
 

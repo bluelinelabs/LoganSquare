@@ -47,7 +47,12 @@ public abstract class SingleParameterCollectionType extends CollectionType {
         builder.beginControlFlow("if ($L.getCurrentToken() == $T.START_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
                 .addStatement("$T<$T> collection = new $T<$T>()", getConcreteClass(), fieldType, getConcreteClass(), fieldType)
                 .beginControlFlow("while ($L.nextToken() != $T.END_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
-                .addStatement("$T value = $L", fieldType, fieldHolder.fieldType.getJsonParserGetter(fieldHolder))
+                .addCode("$T value = ", fieldType);
+
+        fieldHolder.fieldType.parse(builder, fieldHolder);
+
+        builder
+                .addCode(";\n")
                 .beginControlFlow("if (value != null)")
                 .addStatement("collection.add(value)")
                 .endControlFlow()

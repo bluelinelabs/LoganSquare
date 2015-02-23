@@ -21,8 +21,8 @@ public class StringFieldType extends FieldType {
     }
 
     @Override
-    public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
-        return String.format("%s.getValueAsString(null)", JSON_PARSER_VARIABLE_NAME);
+    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
+        builder.addCode("$L.getValueAsString(null)", JSON_PARSER_VARIABLE_NAME);
     }
 
     @Override

@@ -49,13 +49,19 @@ public class ArrayCollectionType extends CollectionType {
                 .beginControlFlow("while ($L.nextToken() != $T.END_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class);
 
         if (!fieldType.isPrimitive()) {
+            builder.addCode("$T value = ", fieldType);
+
+            fieldHolder.fieldType.parse(builder, fieldHolder);
+
             builder
-                    .addStatement("$T value = $L", fieldType, fieldHolder.fieldType.getJsonParserGetter(fieldHolder))
+                    .addCode(";\n")
                     .beginControlFlow("if (value != null)")
                     .addStatement("list.add(value)")
                     .endControlFlow();
         } else {
-            builder.addStatement("list.add($L)", fieldHolder.fieldType.getJsonParserGetter(fieldHolder));
+            builder.addCode("list.add(");
+            fieldHolder.fieldType.parse(builder, fieldHolder);
+            builder.addCode(");\n");
         }
 
         builder.endControlFlow();

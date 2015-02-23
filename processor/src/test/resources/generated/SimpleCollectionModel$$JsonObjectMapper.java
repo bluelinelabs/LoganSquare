@@ -46,7 +46,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 List<SimpleCollectionModel.ModelForCollection> list = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value != null) {
                         list.add(value);
                     }
@@ -58,7 +58,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayDeque<SimpleCollectionModel.ModelForCollection> collection = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value != null) {
                         collection.add(value);
                     }
@@ -69,7 +69,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<SimpleCollectionModel.ModelForCollection> collection = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value != null) {
                         collection.add(value);
                     }
@@ -85,7 +85,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map.put(key, null);
                     } else{
-                        map.put(key, com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map.put(key, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionMap = map;
@@ -94,7 +94,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayDeque<SimpleCollectionModel.ModelForCollection> collection = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value != null) {
                         collection.add(value);
                     }
@@ -105,7 +105,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 HashSet<SimpleCollectionModel.ModelForCollection> collection = new HashSet<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = com.bluelinelabs.logansquare.processor.SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value != null) {
                         collection.add(value);
                     }

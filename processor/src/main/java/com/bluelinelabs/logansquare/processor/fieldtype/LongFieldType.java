@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor.fieldtype;
 
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -23,11 +24,11 @@ public class LongFieldType extends NumberFieldType {
     }
 
     @Override
-    public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
+    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
         if (isPrimitive) {
-            return String.format("%s.getValueAsLong()", JSON_PARSER_VARIABLE_NAME);
+            builder.addCode("$L.getValueAsLong()", JSON_PARSER_VARIABLE_NAME);
         } else {
-            return String.format("Long.valueOf(%s.getValueAsLong())", JSON_PARSER_VARIABLE_NAME);
+            builder.addCode("$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Long.valueOf($L.getValueAsLong())", JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME);
         }
     }
 }

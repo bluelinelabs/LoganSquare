@@ -18,7 +18,7 @@ import java.lang.annotation.Annotation;
 
 public abstract class FieldType {
 
-    public abstract String getJsonParserGetter(JsonFieldHolder fieldHolder);
+    public abstract void parse(MethodSpec.Builder builder, JsonFieldHolder fieldHolder);
     public abstract void serialize(MethodSpec.Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject);
     public abstract TypeName getTypeName();
     public abstract TypeName getNonPrimitiveTypeName();

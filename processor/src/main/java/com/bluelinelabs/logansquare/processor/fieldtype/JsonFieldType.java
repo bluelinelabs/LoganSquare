@@ -29,8 +29,8 @@ public class JsonFieldType extends FieldType {
     }
 
     @Override
-    public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
-        return String.format("%s._parse(%s)", mMapperClassName.toString(), JSON_PARSER_VARIABLE_NAME);
+    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
+        builder.addCode("$T._parse($L)", mMapperClassName, JSON_PARSER_VARIABLE_NAME);
     }
 
     @Override

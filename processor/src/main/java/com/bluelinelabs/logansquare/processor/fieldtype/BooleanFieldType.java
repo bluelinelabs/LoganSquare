@@ -27,11 +27,11 @@ public class BooleanFieldType extends FieldType {
     }
 
     @Override
-    public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
+    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
         if (isPrimitive) {
-            return String.format("%s.getValueAsBoolean()", JSON_PARSER_VARIABLE_NAME);
+            builder.addCode("$L.getValueAsBoolean()", JSON_PARSER_VARIABLE_NAME);
         } else {
-            return String.format("Boolean.valueOf(%s.getValueAsBoolean())", JSON_PARSER_VARIABLE_NAME);
+            builder.addCode("$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Boolean.valueOf(%s.getValueAsBoolean())", JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME);
         }
     }
 

@@ -28,8 +28,8 @@ public class DynamicFieldType extends FieldType {
     }
 
     @Override
-    public String getJsonParserGetter(JsonFieldHolder fieldHolder) {
-        return String.format("LoganSquare.typeConverterFor(%s.class).parse(%s)", mTypeName.toString(), JSON_PARSER_VARIABLE_NAME);
+    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
+        builder.addCode("LoganSquare.typeConverterFor($T.class).parse($L)", mTypeName, JSON_PARSER_VARIABLE_NAME);
     }
 
     @Override
