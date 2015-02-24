@@ -76,8 +76,13 @@ public class MapContainerType extends ContainerType {
 
         builder
                 .addStatement(instanceCreator, instanceCreatorArgs)
-                .beginControlFlow("if ($L != null)", mapVariableName)
-                .addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName)
+                .beginControlFlow("if ($L != null)", mapVariableName);
+
+        if (writeFieldName) {
+            builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+        }
+
+        builder
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs)
                 .addStatement("$L.writeFieldName($L.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME, entryVariableName)

@@ -52,8 +52,13 @@ public abstract class SingleParameterCollectionType extends ContainerType {
 
         builder
                 .addStatement(instanceCreator, instanceCreatorArgs)
-                .beginControlFlow("if ($L != null)", collectionVariableName)
-                .addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName)
+                .beginControlFlow("if ($L != null)", collectionVariableName);
+
+        if (writeFieldName) {
+            builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+        }
+
+        builder
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs);
 
