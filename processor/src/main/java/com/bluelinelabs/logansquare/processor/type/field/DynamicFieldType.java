@@ -1,8 +1,6 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
-import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
@@ -30,7 +28,7 @@ public class DynamicFieldType extends FieldType {
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         setter = replaceLastLiteral(setter, "LoganSquare.typeConverterFor($T.class).parse($L)");
-        builder.addStatement(setter, addStringArgs(setterFormatArgs, mTypeName, JSON_PARSER_VARIABLE_NAME));
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, mTypeName, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override

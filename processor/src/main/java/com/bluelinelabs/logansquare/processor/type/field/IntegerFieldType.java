@@ -26,10 +26,10 @@ public class IntegerFieldType extends NumberFieldType {
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         if (isPrimitive) {
             setter = replaceLastLiteral(setter, "$L.getValueAsInt()");
-            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
+            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
         } else {
             setter = replaceLastLiteral(setter, "$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Integer.valueOf($L.getValueAsInt())");
-            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
+            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
         }
     }
 }

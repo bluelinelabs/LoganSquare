@@ -65,6 +65,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     }
                 }
                 instance.modelForCollectionDeque = collection1;
+            } else{
+                instance.modelForCollectionDeque = null;
             }
         } else if ("model_list".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -77,20 +79,24 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     }
                 }
                 instance.modelForCollectionList = collection1;
+            } else{
+                instance.modelForCollectionList = null;
             }
         } else if ("model_map".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
                 HashMap<String, SimpleCollectionModel.ModelForCollection> map1 = new HashMap<String, SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                    String key = jsonParser.getText();
+                    String key1 = jsonParser.getText();
                     jsonParser.nextToken();
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
-                        map1.put(key, null);
+                        map1.put(key1, null);
                     } else{
-                        map1.put(key, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionMap = map1;
+            } else{
+                instance.modelForCollectionMap = null;
             }
         } else if ("model_queue".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -103,6 +109,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     }
                 }
                 instance.modelForCollectionQueue = collection1;
+            } else{
+                instance.modelForCollectionQueue = null;
             }
         } else if ("model_set".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -115,6 +123,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     }
                 }
                 instance.modelForCollectionSet = collection1;
+            } else{
+                instance.modelForCollectionSet = null;
             }
         } else if ("primitive_array".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {

@@ -26,10 +26,10 @@ public class FloatFieldType extends NumberFieldType {
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         if (isPrimitive) {
             setter = replaceLastLiteral(setter, "(float)$L.getValueAsDouble()");
-            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
+            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
         } else {
             setter = replaceLastLiteral(setter, "$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : new Float($L.getValueAsDouble())");
-            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
+            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
         }
     }
 }

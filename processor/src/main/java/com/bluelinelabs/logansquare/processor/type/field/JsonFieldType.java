@@ -30,7 +30,7 @@ public class JsonFieldType extends FieldType {
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         setter = replaceLastLiteral(setter, "$T._parse($L)");
-        builder.addStatement(setter, addStringArgs(setterFormatArgs, mMapperClassName, JSON_PARSER_VARIABLE_NAME));
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, mMapperClassName, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override

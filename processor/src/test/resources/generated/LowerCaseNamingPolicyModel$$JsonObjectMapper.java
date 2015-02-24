@@ -46,6 +46,8 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
                     }
                 }
                 instance.camelCaseList = collection1;
+            } else{
+                instance.camelCaseList = null;
             }
         } else if ("camel_case_string".equals(fieldName)){
             instance.camelCaseString = jsonParser.getValueAsString(null);

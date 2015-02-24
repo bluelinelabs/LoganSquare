@@ -21,6 +21,16 @@ public abstract class FieldType extends Type {
 
     public abstract TypeName getNonPrimitiveTypeName();
 
+    @Override
+    public String getParameterizedTypeString() {
+        return "$T";
+    }
+
+    @Override
+    public Object[] getParameterizedTypeStringArgs() {
+        return new Object[] { getNonPrimitiveTypeName() };
+    }
+
     public static FieldType fieldTypeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         if (typeMirror != null) {
             if (typeConverterType != null && !"void".equals(typeConverterType.toString())) {

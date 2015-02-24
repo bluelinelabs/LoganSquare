@@ -22,7 +22,7 @@ public class StringFieldType extends FieldType {
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         setter = replaceLastLiteral(setter, "$L.getValueAsString(null)");
-        builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override

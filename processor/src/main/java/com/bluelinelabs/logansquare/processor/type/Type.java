@@ -10,10 +10,15 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Type {
 
     public abstract TypeName getTypeName();
+    public abstract String getParameterizedTypeString();
+    public abstract Object[] getParameterizedTypeStringArgs();
     public abstract void parse(MethodSpec.Builder builder, int depth, String setter, Object... setterFormatArgs);
     public abstract void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean writeFieldName);
 
@@ -30,10 +35,16 @@ public abstract class Type {
         }
     }
 
-    protected Object[] addStringArgs(Object[] initialArgs, Object... newArgs) {
-        Object[] args = new Object[initialArgs.length + newArgs.length];
-        System.arraycopy(initialArgs, 0, args, 0, initialArgs.length);
-        System.arraycopy(newArgs, 0, args, initialArgs.length, newArgs.length);
-        return args;
+    protected Object[] expandStringArgs(Object... args) {
+        List<Object> argList = new ArrayList<>();
+        for (Object arg : args) {
+            if (arg instanceof Object[]) {
+                Collections.addAll(argList, (Object[])arg);
+            } else {
+                argList.add(arg);
+            }
+        }
+
+        return argList.toArray(new Object[argList.size()]);
     }
 }

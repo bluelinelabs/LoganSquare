@@ -52,20 +52,24 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
                     }
                 }
                 instance.setPrivateList(collection1);
+            } else {
+                instance.setPrivateList(null);
             }
         } else if ("privateMap".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
                 HashMap<String, String> map1 = new HashMap<String, String>();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                    String key = jsonParser.getText();
+                    String key1 = jsonParser.getText();
                     jsonParser.nextToken();
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
-                        map1.put(key, null);
+                        map1.put(key1, null);
                     } else{
-                        map1.put(key, jsonParser.getValueAsString(null));
+                        map1.put(key1, jsonParser.getValueAsString(null));
                     }
                 }
                 instance.setPrivateMap(map1);
+            } else {
+                instance.setPrivateMap(null);
             }
         } else if ("private_named_string".equals(fieldName)){
             instance.setPrivateNamedString(jsonParser.getValueAsString(null));

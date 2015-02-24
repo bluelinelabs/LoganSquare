@@ -48,6 +48,8 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
                     }
                 }
                 instance.nonAnnotatedList = collection1;
+            } else {
+                instance.nonAnnotatedList = null;
             }
         } else if ("nonAnnotatedPrivateInt".equals(fieldName)){
             instance.setNonAnnotatedPrivateInt(jsonParser.getValueAsInt());

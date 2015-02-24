@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor.type.container;
 
 import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.bluelinelabs.logansquare.processor.type.Type;
+import com.squareup.javapoet.ClassName;
 
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.TypeMirror;
@@ -17,20 +18,20 @@ public abstract class ContainerType extends Type {
         switch (genericClassTypeMirror.toString()) {
             case "java.util.List":
             case "java.util.ArrayList":
-                containerType = new ArrayListCollectionType();
+                containerType = new ListContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
             case "java.util.Map":
             case "java.util.HashMap":
-                containerType = new HashMapCollectionType();
+                containerType = new MapContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
             case "java.util.Set":
             case "java.util.HashSet":
-                containerType = new HashSetCollectionType();
+                containerType = new SetContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
             case "java.util.Queue":
             case "java.util.Deque":
             case "java.util.ArrayDeque":
-                containerType = new ArrayDequeCollectionType();
+                containerType = new QueueContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
         }
 
