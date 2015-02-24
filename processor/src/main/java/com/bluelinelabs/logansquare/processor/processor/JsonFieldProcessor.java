@@ -112,7 +112,7 @@ public class JsonFieldProcessor extends Processor {
 
             while (!isTypeConverterType && element != null) {
                 for (TypeMirror iface : element.getInterfaces()) {
-                    if (iface.toString().equals(TypeConverter.class.getCanonicalName() + "<T>")) {
+                    if (types.erasure(iface).toString().equals(TypeConverter.class.getCanonicalName())) {
                         isTypeConverterType = true;
                     }
                 }

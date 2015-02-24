@@ -21,10 +21,6 @@ public class JsonFieldHolder {
     public Type type;
 
     public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder) {
-        TypeElement enclosingElement = (TypeElement)element.getEnclosingElement();
-
-        TypeMirror fieldTypeMirror = element.asType();
-
         if (fieldNames == null || fieldNames.length == 0) {
             String defaultFieldName = element.getSimpleName().toString();
 
