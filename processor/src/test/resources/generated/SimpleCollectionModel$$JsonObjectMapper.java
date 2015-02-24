@@ -46,13 +46,16 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 List<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
                     if (value1 != null) {
                         collection1.add(value1);
                     }
                 }
                 SimpleCollectionModel.ModelForCollection[] array = collection1.toArray(new SimpleCollectionModel.ModelForCollection[collection1.size()]);
                 instance.modelForCollectionArray = array;
+            } else {
+                instance.modelForCollectionArray = null;
             }
         } else if ("model_deque".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -138,6 +141,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     array[i++] = value;
                 }
                 instance.primitiveArray = array;
+            } else {
+                instance.primitiveArray = null;
             }
         }
     }

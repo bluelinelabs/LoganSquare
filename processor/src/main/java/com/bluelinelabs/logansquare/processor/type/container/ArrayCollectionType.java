@@ -35,17 +35,18 @@ public class ArrayCollectionType extends ContainerType {
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         TypeName fieldType = subType.getTypeName();
         final String collectionVarName = "collection" + depth;
-        final String valueVarName = "value" + depth;
 
         final String instanceCreator = String.format("$T<%s> $L = new $T<%s>()", subType.getParameterizedTypeString(), subType.getParameterizedTypeString());
         final Object[] instanceCreatorArgs = expandStringArgs(List.class, subType.getParameterizedTypeStringArgs(), collectionVarName, ArrayList.class, subType.getParameterizedTypeStringArgs());
 
         builder.beginControlFlow("if ($L.getCurrentToken() == $T.START_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
                 .addStatement(instanceCreator, instanceCreatorArgs)
-                .beginControlFlow("while ($L.nextToken() != $T.END_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
-                .addStatement("$T $L", subType.getTypeName(), valueVarName);
+                .beginControlFlow("while ($L.nextToken() != $T.END_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class);
 
         if (!fieldType.isPrimitive()) {
+            final String valueVarName = "value" + depth;
+
+            builder.addStatement("$T $L", subType.getTypeName(), valueVarName);
             subType.parse(builder, depth + 1, "$L = $L", valueVarName);
 
             builder
@@ -81,11 +82,21 @@ public class ArrayCollectionType extends ContainerType {
         String collectionVariableName = "lslocal" + fieldName;
         final String elementVarName = "element" + depth;
 
-        final String instanceCreator = String.format("final %s[] $L = $L", subType.getParameterizedTypeString());
-        final Object[] instanceCreatorArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), collectionVariableName, getter);
-
-        final String forLine = String.format("for (%s $L : $L)", subType.getParameterizedTypeString());
-        final Object[] forLineArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), elementVarName, collectionVariableName);
+        final String instanceCreator;
+        final Object[] instanceCreatorArgs;
+        final String forLine;
+        final Object[] forLineArgs;
+        if (subType.getTypeName().isPrimitive()) {
+            instanceCreator = "final $T[] $L = $L";
+            instanceCreatorArgs = expandStringArgs(subType.getTypeName(), collectionVariableName, getter);
+            forLine = "for ($T $L : $L)";
+            forLineArgs = expandStringArgs(subType.getTypeName(), elementVarName, collectionVariableName);
+        } else {
+            instanceCreator = String.format("final %s[] $L = $L", subType.getParameterizedTypeString());
+            instanceCreatorArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), collectionVariableName, getter);
+            forLine = String.format("for (%s $L : $L)", subType.getParameterizedTypeString());
+            forLineArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), elementVarName, collectionVariableName);
+        }
 
         builder
                 .addStatement(instanceCreator, instanceCreatorArgs)
