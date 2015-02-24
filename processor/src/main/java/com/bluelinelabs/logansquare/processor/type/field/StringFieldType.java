@@ -1,6 +1,5 @@
-package com.bluelinelabs.logansquare.processor.fieldtype;
+package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -21,14 +20,15 @@ public class StringFieldType extends FieldType {
     }
 
     @Override
-    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
-        builder.addCode("$L.getValueAsString(null)", JSON_PARSER_VARIABLE_NAME);
+    public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
+        setter = replaceLastLiteral(setter, "$L.getValueAsString(null)");
+        builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
-    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject) {
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
         if (writeFieldNameForObject) {
-            builder.addStatement("$L.writeStringField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0], getter);
+            builder.addStatement("$L.writeStringField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldName, getter);
         } else {
             builder.addStatement("$L.writeString($L)", JSON_GENERATOR_VARIABLE_NAME, getter);
         }

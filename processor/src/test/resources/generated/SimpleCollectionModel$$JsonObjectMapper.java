@@ -44,83 +44,87 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
     public static void parseField(SimpleCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("model_array".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                List<SimpleCollectionModel.ModelForCollection> list = new ArrayList<SimpleCollectionModel.ModelForCollection>();
+                List<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value != null) {
-                        list.add(value);
+                    SimpleCollectionModel.ModelForCollection value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                SimpleCollectionModel.ModelForCollection[] array = list.toArray(new SimpleCollectionModel.ModelForCollection[list.size()]);
+                SimpleCollectionModel.ModelForCollection[] array = collection1.toArray(new SimpleCollectionModel.ModelForCollection[collection1.size()]);
                 instance.modelForCollectionArray = array;
             }
         } else if ("model_deque".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayDeque<SimpleCollectionModel.ModelForCollection> collection = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
+                ArrayDeque<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value != null) {
-                        collection.add(value);
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.modelForCollectionDeque = collection;
+                instance.modelForCollectionDeque = collection1;
             }
         } else if ("model_list".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayList<SimpleCollectionModel.ModelForCollection> collection = new ArrayList<SimpleCollectionModel.ModelForCollection>();
+                ArrayList<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value != null) {
-                        collection.add(value);
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.modelForCollectionList = collection;
+                instance.modelForCollectionList = collection1;
             }
         } else if ("model_map".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
-                HashMap<String, SimpleCollectionModel.ModelForCollection> map = new HashMap<String, SimpleCollectionModel.ModelForCollection>();
+                HashMap<String, SimpleCollectionModel.ModelForCollection> map1 = new HashMap<String, SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                     String key = jsonParser.getText();
                     jsonParser.nextToken();
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
-                        map.put(key, null);
+                        map1.put(key, null);
                     } else{
-                        map.put(key, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
                     }
                 }
-                instance.modelForCollectionMap = map;
+                instance.modelForCollectionMap = map1;
             }
         } else if ("model_queue".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayDeque<SimpleCollectionModel.ModelForCollection> collection = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
+                ArrayDeque<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value != null) {
-                        collection.add(value);
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.modelForCollectionQueue = collection;
+                instance.modelForCollectionQueue = collection1;
             }
         } else if ("model_set".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                HashSet<SimpleCollectionModel.ModelForCollection> collection = new HashSet<SimpleCollectionModel.ModelForCollection>();
+                HashSet<SimpleCollectionModel.ModelForCollection> collection1 = new HashSet<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    SimpleCollectionModel.ModelForCollection value = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value != null) {
-                        collection.add(value);
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.modelForCollectionSet = collection;
+                instance.modelForCollectionSet = collection1;
             }
         } else if ("primitive_array".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                List<Integer> list = new ArrayList<Integer>();
+                List<Integer> collection1 = new ArrayList<Integer>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    list.add(jsonParser.getValueAsInt());
+                    collection1.add(jsonParser.getValueAsInt());
                 }
-                int[] array = new int[list.size()];
+                int[] array = new int[collection1.size()];
                 int i = 0;
-                for (int value : list) {
+                for (int value : collection1) {
                     array[i++] = value;
                 }
                 instance.primitiveArray = array;
@@ -137,83 +141,83 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        final SimpleCollectionModel.ModelForCollection[] lslocalmodelForCollectionArray = object.modelForCollectionArray;
-        if (lslocalmodelForCollectionArray != null) {
+        final SimpleCollectionModel.ModelForCollection[] lslocalmodel_array = object.modelForCollectionArray;
+        if (lslocalmodel_array != null) {
             jsonGenerator.writeFieldName("model_array");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionArray) {
-                if (element != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_array) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionDeque = object.modelForCollectionDeque;
-        if (lslocalmodelForCollectionDeque != null) {
+        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodel_deque = object.modelForCollectionDeque;
+        if (lslocalmodel_deque != null) {
             jsonGenerator.writeFieldName("model_deque");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionDeque) {
-                if (element != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_deque) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        final List<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionList = object.modelForCollectionList;
-        if (lslocalmodelForCollectionList != null) {
+        final List<SimpleCollectionModel.ModelForCollection> lslocalmodel_list = object.modelForCollectionList;
+        if (lslocalmodel_list != null) {
             jsonGenerator.writeFieldName("model_list");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionList) {
-                if (element != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_list) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionMap = object.modelForCollectionMap;
-        if (lslocalmodelForCollectionMap != null) {
+        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodel_map = object.modelForCollectionMap;
+        if (lslocalmodel_map != null) {
             jsonGenerator.writeFieldName("model_map");
             jsonGenerator.writeStartObject();
-            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry : lslocalmodelForCollectionMap.entrySet()) {
-                jsonGenerator.writeFieldName(entry.getKey().toString());
-                if (entry.getValue() == null) {
+            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() == null) {
                     jsonGenerator.writeNull();
                 } else{
-                    if (entry.getValue() != null) {
-                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry.getValue(), jsonGenerator, true);
+                    if (entry1.getValue() != null) {
+                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
                     }
                 }
             }
             jsonGenerator.writeEndObject();
         }
-        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionQueue = object.modelForCollectionQueue;
-        if (lslocalmodelForCollectionQueue != null) {
+        final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodel_queue = object.modelForCollectionQueue;
+        if (lslocalmodel_queue != null) {
             jsonGenerator.writeFieldName("model_queue");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionQueue) {
-                if (element != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_queue) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        final Set<SimpleCollectionModel.ModelForCollection> lslocalmodelForCollectionSet = object.modelForCollectionSet;
-        if (lslocalmodelForCollectionSet != null) {
+        final Set<SimpleCollectionModel.ModelForCollection> lslocalmodel_set = object.modelForCollectionSet;
+        if (lslocalmodel_set != null) {
             jsonGenerator.writeFieldName("model_set");
             jsonGenerator.writeStartArray();
-            for (SimpleCollectionModel.ModelForCollection element : lslocalmodelForCollectionSet) {
-                if (element != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element, jsonGenerator, true);
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_set) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
         }
-        final int[] lslocalprimitiveArray = object.primitiveArray;
-        if (lslocalprimitiveArray != null) {
+        final int[] lslocalprimitive_array = object.primitiveArray;
+        if (lslocalprimitive_array != null) {
             jsonGenerator.writeFieldName("primitive_array");
             jsonGenerator.writeStartArray();
-            for (int element : lslocalprimitiveArray) {
-                jsonGenerator.writeNumber(element);
+            for (int element1 : lslocalprimitive_array) {
+                jsonGenerator.writeNumber(element1);
             }
             jsonGenerator.writeEndArray();
         }

@@ -1,6 +1,5 @@
-package com.bluelinelabs.logansquare.processor.fieldtype;
+package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
@@ -34,19 +33,20 @@ public class TypeConverterFieldType extends FieldType {
     }
 
     @Override
-    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
-        builder.addCode("$L.parse($L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), JSON_PARSER_VARIABLE_NAME);
+    public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
+        setter = replaceLastLiteral(setter, "$L.parse($L)");
+        builder.addStatement(setter, addStringArgs(setterFormatArgs, TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
-    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject) {
-        if (!fieldHolder.fieldType.getTypeName().isPrimitive()) {
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
+        if (!mTypeName.isPrimitive()) {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldHolder.fieldName[0], writeFieldNameForObject, JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldName, writeFieldNameForObject, JSON_GENERATOR_VARIABLE_NAME);
 
-        if (!fieldHolder.fieldType.getTypeName().isPrimitive()) {
+        if (!mTypeName.isPrimitive()) {
             builder.endControlFlow();
         }
     }

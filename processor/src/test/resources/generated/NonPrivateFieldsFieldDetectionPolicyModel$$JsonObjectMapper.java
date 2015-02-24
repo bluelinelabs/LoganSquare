@@ -39,14 +39,15 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
             instance.annotatedString = jsonParser.getValueAsString(null);
         } else if ("nonAnnotatedList".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayList<String> collection = new ArrayList<String>();
+                ArrayList<String> collection1 = new ArrayList<String>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    String value = jsonParser.getValueAsString(null);
-                    if (value != null) {
-                        collection.add(value);
+                    String value1;
+                    value1 = jsonParser.getValueAsString(null);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.nonAnnotatedList = collection;
+                instance.nonAnnotatedList = collection1;
             }
         } else if ("nonAnnotatedString".equals(fieldName)){
             instance.nonAnnotatedString = jsonParser.getValueAsString(null);
@@ -71,8 +72,8 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
             jsonGenerator.writeStartArray();
-            for (String element : lslocalnonAnnotatedList) {
-                jsonGenerator.writeString(element);
+            for (String element1 : lslocalnonAnnotatedList) {
+                jsonGenerator.writeString(element1);
             }
             jsonGenerator.writeEndArray();
         }

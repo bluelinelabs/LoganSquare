@@ -1,7 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
-import com.bluelinelabs.logansquare.processor.fieldtype.TypeConverterFieldType;
+import com.bluelinelabs.logansquare.processor.type.field.TypeConverterFieldType;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -30,7 +30,12 @@ public class ObjectMapperInjector {
     }
 
     public String getJavaClassFile() {
-        return JavaFile.builder(mJsonObjectHolder.packageName, getTypeSpec()).build().toString();
+        try {
+            return JavaFile.builder(mJsonObjectHolder.packageName, getTypeSpec()).build().toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private TypeSpec getTypeSpec() {
@@ -43,8 +48,8 @@ public class ObjectMapperInjector {
         // TypeConverters could be expensive to create, so just use one per class
         Set<ClassName> typeConvertersUsed = new HashSet<>();
         for (JsonFieldHolder fieldHolder : mJsonObjectHolder.fieldMap.values()) {
-            if (fieldHolder.fieldType instanceof TypeConverterFieldType) {
-                typeConvertersUsed.add(((TypeConverterFieldType)fieldHolder.fieldType).getTypeConverterClassName());
+            if (fieldHolder.type instanceof TypeConverterFieldType) {
+                typeConvertersUsed.add(((TypeConverterFieldType)fieldHolder.type).getTypeConverterClassName());
             }
         }
         for (ClassName typeConverter : typeConvertersUsed) {
@@ -125,6 +130,7 @@ public class ObjectMapperInjector {
             if (parseFieldLines > 0) {
                 builder.nextControlFlow("else");
             }
+
             builder.addStatement("$T.parseField(instance, fieldName, $L)", mJsonObjectHolder.parentInjectedTypeName, JSON_PARSER_VARIABLE_NAME);
         }
 
@@ -166,7 +172,15 @@ public class ObjectMapperInjector {
 
         for (Map.Entry<String, JsonFieldHolder> entry : mJsonObjectHolder.fieldMap.entrySet()) {
             JsonFieldHolder fieldHolder = entry.getValue();
-            fieldHolder.collectionType.serialize(builder, fieldHolder, entry.getKey());
+
+            String getter;
+            if (fieldHolder.hasGetter()) {
+                getter = "object." + fieldHolder.getterMethod + "()";
+            } else {
+                getter = "object." + entry.getKey();
+            }
+
+            fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true);
         }
 
         if (mJsonObjectHolder.parentInjectedTypeName != null) {
@@ -192,7 +206,17 @@ public class ObjectMapperInjector {
                 builder.nextControlFlow("else if (" + getParseFieldIfStatement(fieldHolder) + ")");
             }
 
-            fieldHolder.collectionType.parse(builder, "instance", entry.getKey(), fieldHolder);
+            String setter;
+            Object[] stringFormatArgs;
+            if (fieldHolder.hasSetter()) {
+                setter = "instance.$L($L)";
+                stringFormatArgs = new Object[] { fieldHolder.setterMethod };
+            } else {
+                setter = "instance.$L = $L";
+                stringFormatArgs = new Object[] { entry.getKey() };
+            }
+
+            fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
 
             entryCount++;
         }

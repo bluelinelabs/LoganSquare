@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.processor.fieldtype;
+package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.squareup.javapoet.ClassName;
@@ -27,18 +27,20 @@ public class BooleanFieldType extends FieldType {
     }
 
     @Override
-    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
+    public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         if (isPrimitive) {
-            builder.addCode("$L.getValueAsBoolean()", JSON_PARSER_VARIABLE_NAME);
+            setter = replaceLastLiteral(setter, "$L.getValueAsBoolean()");
+            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
         } else {
-            builder.addCode("$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Boolean.valueOf($L.getValueAsBoolean())", JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME);
+            setter = replaceLastLiteral(setter, "$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Boolean.valueOf($L.getValueAsBoolean())");
+            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
         }
     }
 
     @Override
-    public void serialize(Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject) {
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
         if (writeFieldNameForObject) {
-            builder.addStatement("$L.writeBooleanField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldHolder.fieldName[0], getter);
+            builder.addStatement("$L.writeBooleanField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldName, getter);
         } else {
             builder.addStatement("$L.writeBoolean($L)", JSON_GENERATOR_VARIABLE_NAME, getter);
         }

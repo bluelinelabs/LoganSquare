@@ -1,9 +1,10 @@
-package com.bluelinelabs.logansquare.processor.fieldtype;
+package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
+import com.bluelinelabs.logansquare.processor.type.Type;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -16,14 +17,11 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.lang.annotation.Annotation;
 
-public abstract class FieldType {
+public abstract class FieldType extends Type {
 
-    public abstract void parse(MethodSpec.Builder builder, JsonFieldHolder fieldHolder);
-    public abstract void serialize(MethodSpec.Builder builder, JsonFieldHolder fieldHolder, String getter, boolean writeFieldNameForObject);
-    public abstract TypeName getTypeName();
     public abstract TypeName getNonPrimitiveTypeName();
 
-    public static FieldType typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
+    public static FieldType fieldTypeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         if (typeMirror != null) {
             if (typeConverterType != null && !"void".equals(typeConverterType.toString())) {
                 return new TypeConverterFieldType(TypeName.get(typeMirror), ClassName.bestGuess(typeConverterType.toString()));
@@ -67,6 +65,17 @@ public abstract class FieldType {
             return new DynamicFieldType(TypeName.get(typeMirror));
         } else {
             return null;
+        }
+    }
+
+    protected static String replaceLastLiteral(String string, String replacement) {
+        int pos = string.lastIndexOf("$L");
+        if (pos > -1) {
+            return string.substring(0, pos)
+                    + replacement
+                    + string.substring(pos + 2, string.length());
+        } else {
+            return string;
         }
     }
 }

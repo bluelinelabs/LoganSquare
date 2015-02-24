@@ -27,6 +27,7 @@ public class TypeUtils {
 
         DeclaredType declaredType = (DeclaredType)typeMirror;
         List<TypeMirror> genericTypes = (List<TypeMirror>)declaredType.getTypeArguments();
+
         if (genericTypes.size() > 0) {
             String genericClassName = declaredType.toString().substring(0, declaredType.toString().indexOf('<'));
 

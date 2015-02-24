@@ -37,14 +37,15 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
     public static void parseField(LowerCaseNamingPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("camel_case_list".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayList<String> collection = new ArrayList<String>();
+                ArrayList<String> collection1 = new ArrayList<String>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    String value = jsonParser.getValueAsString(null);
-                    if (value != null) {
-                        collection.add(value);
+                    String value1;
+                    value1 = jsonParser.getValueAsString(null);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.camelCaseList = collection;
+                instance.camelCaseList = collection1;
             }
         } else if ("camel_case_string".equals(fieldName)){
             instance.camelCaseString = jsonParser.getValueAsString(null);
@@ -60,12 +61,12 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        final List<String> lslocalcamelCaseList = object.camelCaseList;
-        if (lslocalcamelCaseList != null) {
+        final List<String> lslocalcamel_case_list = object.camelCaseList;
+        if (lslocalcamel_case_list != null) {
             jsonGenerator.writeFieldName("camel_case_list");
             jsonGenerator.writeStartArray();
-            for (String element : lslocalcamelCaseList) {
-                jsonGenerator.writeString(element);
+            for (String element1 : lslocalcamel_case_list) {
+                jsonGenerator.writeString(element1);
             }
             jsonGenerator.writeEndArray();
         }

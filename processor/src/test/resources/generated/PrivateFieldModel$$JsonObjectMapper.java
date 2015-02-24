@@ -43,28 +43,29 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             instance.setPrivateBoolean(jsonParser.getValueAsBoolean());
         } else if ("privateList".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
-                ArrayList<String> collection = new ArrayList<String>();
+                ArrayList<String> collection1 = new ArrayList<String>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                    String value = jsonParser.getValueAsString(null);
-                    if (value != null) {
-                        collection.add(value);
+                    String value1;
+                    value1 = jsonParser.getValueAsString(null);
+                    if (value1 != null) {
+                        collection1.add(value1);
                     }
                 }
-                instance.setPrivateList(collection);
+                instance.setPrivateList(collection1);
             }
         } else if ("privateMap".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map1 = new HashMap<String, String>();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                     String key = jsonParser.getText();
                     jsonParser.nextToken();
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
-                        map.put(key, null);
+                        map1.put(key, null);
                     } else{
-                        map.put(key, jsonParser.getValueAsString(null));
+                        map1.put(key, jsonParser.getValueAsString(null));
                     }
                 }
-                instance.setPrivateMap(map);
+                instance.setPrivateMap(map1);
             }
         } else if ("private_named_string".equals(fieldName)){
             instance.setPrivateNamedString(jsonParser.getValueAsString(null));
@@ -88,8 +89,8 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         if (lslocalprivateList != null) {
             jsonGenerator.writeFieldName("privateList");
             jsonGenerator.writeStartArray();
-            for (String element : lslocalprivateList) {
-                jsonGenerator.writeString(element);
+            for (String element1 : lslocalprivateList) {
+                jsonGenerator.writeString(element1);
             }
             jsonGenerator.writeEndArray();
         }
@@ -97,12 +98,12 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         if (lslocalprivateMap != null) {
             jsonGenerator.writeFieldName("privateMap");
             jsonGenerator.writeStartObject();
-            for (Map.Entry<String, String> entry : lslocalprivateMap.entrySet()) {
-                jsonGenerator.writeFieldName(entry.getKey().toString());
-                if (entry.getValue() == null) {
+            for (Map.Entry<String, String> entry1 : lslocalprivateMap.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() == null) {
                     jsonGenerator.writeNull();
                 } else{
-                    jsonGenerator.writeString(entry.getValue());
+                    jsonGenerator.writeString(entry1.getValue());
                 }
             }
             jsonGenerator.writeEndObject();

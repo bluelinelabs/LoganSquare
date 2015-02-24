@@ -1,6 +1,5 @@
-package com.bluelinelabs.logansquare.processor.fieldtype;
+package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -24,11 +23,13 @@ public class IntegerFieldType extends NumberFieldType {
     }
 
     @Override
-    public void parse(Builder builder, JsonFieldHolder fieldHolder) {
+    public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         if (isPrimitive) {
-            builder.addCode("$L.getValueAsInt()", JSON_PARSER_VARIABLE_NAME);
+            setter = replaceLastLiteral(setter, "$L.getValueAsInt()");
+            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
         } else {
-            builder.addCode("$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Integer.valueOf($L.getValueAsInt())", JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME);
+            setter = replaceLastLiteral(setter, "$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Integer.valueOf($L.getValueAsInt())");
+            builder.addStatement(setter, addStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
         }
     }
 }
