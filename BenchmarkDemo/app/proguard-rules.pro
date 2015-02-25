@@ -1,4 +1,4 @@
 # LoganSquare
--keep class com.bluelinelabs.logansquare.annotation.**
+-keep class com.bluelinelabs.logansquare.** { *; }
 -keep @com.bluelinelabs.logansquare.annotation.JsonObject class *
--keep class * extends com.bluelinelabs.logansquare.JsonMapper
+-keep class **$$JsonObjectMapper { *; }
