@@ -50,6 +50,7 @@ Like all libraries that generate dynamic code, Proguard might think some classes
 
 ```
 -keep class com.bluelinelabs.logansquare.** { *; }
+-keep @com.bluelinelabs.logansquare.annotation.JsonObject class *
 -keep class **$$JsonObjectMapper { *; }
 ```
 
