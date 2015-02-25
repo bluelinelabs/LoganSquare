@@ -144,7 +144,10 @@ public class JsonObjectProcessor extends Processor {
                 objectHolder.fieldMap.put(element.getSimpleName().toString(), fieldHolder);
             }
 
-            fieldHolder.fill(element, elements, types, null, null, objectHolder);
+            String error = fieldHolder.fill(element, elements, types, null, null, objectHolder);
+            if (!TextUtils.isEmpty(error)) {
+                error(element, error);
+            }
         }
     }
 }

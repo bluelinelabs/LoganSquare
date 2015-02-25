@@ -15,11 +15,19 @@ By default, the following types are supported by LoganSquare:
 
 Additionally, the following collections are supported:
 
-* List
-* Set
-* Queue
-* Deque
-* Map (with Strings as keys)
+* Lists
+ * ArrayList
+ * LinkedList
+* Sets
+ * HashSet 
+* Queues
+ * ArrayDeque
+* Deques
+ * ArrayDeque
+* Maps (with Strings as keys)
+ * HashMap
+ * TreeMap
+ * LinkedHashMap 
 * Array (Not technically a Collection, but still supported. Note that Lists are preferred to arrays when possible.)
 
 ###Support for Additional Types

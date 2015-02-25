@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.processor.type.Type;
+import com.bluelinelabs.logansquare.processor.type.container.ContainerType;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -39,7 +40,19 @@ public class JsonFieldHolder {
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
 
-        // TODO: make sure the final subtype isn't null
+        Type typeToCheck = type;
+        boolean hasSubtypes = true;
+        do {
+            if (typeToCheck == null) {
+                return "Type could not be determined for " + element.toString();
+            } else {
+                if (typeToCheck instanceof ContainerType) {
+                    typeToCheck = ((ContainerType)typeToCheck).subType;
+                } else {
+                    hasSubtypes = false;
+                }
+            }
+        } while (hasSubtypes);
 
         return null;
     }

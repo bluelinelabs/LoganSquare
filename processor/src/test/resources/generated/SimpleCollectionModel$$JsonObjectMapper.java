@@ -12,10 +12,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.TreeMap;
 
 public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<SimpleCollectionModel> {
     @Override
@@ -54,8 +57,22 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 }
                 SimpleCollectionModel.ModelForCollection[] array = collection1.toArray(new SimpleCollectionModel.ModelForCollection[collection1.size()]);
                 instance.modelForCollectionArray = array;
-            } else {
+            } else{
                 instance.modelForCollectionArray = null;
+            }
+        } else if ("model_array_list".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                ArrayList<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
+                    }
+                }
+                instance.modelForCollectionArrayList = collection1;
+            } else{
+                instance.modelForCollectionArrayList = null;
             }
         } else if ("model_deque".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -70,6 +87,52 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 instance.modelForCollectionDeque = collection1;
             } else{
                 instance.modelForCollectionDeque = null;
+            }
+        } else if ("model_hash_map".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                HashMap<String, SimpleCollectionModel.ModelForCollection> map1 = new HashMap<String, SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key1 = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map1.put(key1, null);
+                    } else{
+                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                    }
+                }
+                instance.modelForCollectionHashMap = map1;
+            } else{
+                instance.modelForCollectionHashMap = null;
+            }
+        } else if ("model_linked_hash_map".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                LinkedHashMap<String, SimpleCollectionModel.ModelForCollection> map1 = new LinkedHashMap<String, SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key1 = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map1.put(key1, null);
+                    } else{
+                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                    }
+                }
+                instance.modelForCollectionLinkedHashMap = map1;
+            } else{
+                instance.modelForCollectionLinkedHashMap = null;
+            }
+        } else if ("model_linked_list".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                LinkedList<SimpleCollectionModel.ModelForCollection> collection1 = new LinkedList<SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    SimpleCollectionModel.ModelForCollection value1;
+                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    if (value1 != null) {
+                        collection1.add(value1);
+                    }
+                }
+                instance.modelForCollectionLinkedList = collection1;
+            } else{
+                instance.modelForCollectionLinkedList = null;
             }
         } else if ("model_list".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
@@ -129,6 +192,22 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             } else{
                 instance.modelForCollectionSet = null;
             }
+        } else if ("model_tree_map".equals(fieldName)){
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                TreeMap<String, SimpleCollectionModel.ModelForCollection> map1 = new TreeMap<String, SimpleCollectionModel.ModelForCollection>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key1 = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map1.put(key1, null);
+                    } else{
+                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                    }
+                }
+                instance.modelForCollectionTreeMap = map1;
+            } else{
+                instance.modelForCollectionTreeMap = null;
+            }
         } else if ("primitive_array".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 List<Integer> collection1 = new ArrayList<Integer>();
@@ -141,7 +220,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     array[i++] = value;
                 }
                 instance.primitiveArray = array;
-            } else {
+            } else{
                 instance.primitiveArray = null;
             }
         }
@@ -167,11 +246,65 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             }
             jsonGenerator.writeEndArray();
         }
+        final List<SimpleCollectionModel.ModelForCollection> lslocalmodel_array_list = object.modelForCollectionArrayList;
+        if (lslocalmodel_array_list != null) {
+            jsonGenerator.writeFieldName("model_array_list");
+            jsonGenerator.writeStartArray();
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_array_list) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                }
+            }
+            jsonGenerator.writeEndArray();
+        }
         final Queue<SimpleCollectionModel.ModelForCollection> lslocalmodel_deque = object.modelForCollectionDeque;
         if (lslocalmodel_deque != null) {
             jsonGenerator.writeFieldName("model_deque");
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_deque) {
+                if (element1 != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                }
+            }
+            jsonGenerator.writeEndArray();
+        }
+        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodel_hash_map = object.modelForCollectionHashMap;
+        if (lslocalmodel_hash_map != null) {
+            jsonGenerator.writeFieldName("model_hash_map");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_hash_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() == null) {
+                    jsonGenerator.writeNull();
+                } else{
+                    if (entry1.getValue() != null) {
+                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    }
+                }
+            }
+            jsonGenerator.writeEndObject();
+        }
+        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodel_linked_hash_map = object.modelForCollectionLinkedHashMap;
+        if (lslocalmodel_linked_hash_map != null) {
+            jsonGenerator.writeFieldName("model_linked_hash_map");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_linked_hash_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() == null) {
+                    jsonGenerator.writeNull();
+                } else{
+                    if (entry1.getValue() != null) {
+                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    }
+                }
+            }
+            jsonGenerator.writeEndObject();
+        }
+        final List<SimpleCollectionModel.ModelForCollection> lslocalmodel_linked_list = object.modelForCollectionLinkedList;
+        if (lslocalmodel_linked_list != null) {
+            jsonGenerator.writeFieldName("model_linked_list");
+            jsonGenerator.writeStartArray();
+            for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_linked_list) {
                 if (element1 != null) {
                     SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
                 }
@@ -226,6 +359,22 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 }
             }
             jsonGenerator.writeEndArray();
+        }
+        final Map<String, SimpleCollectionModel.ModelForCollection> lslocalmodel_tree_map = object.modelForCollectionTreeMap;
+        if (lslocalmodel_tree_map != null) {
+            jsonGenerator.writeFieldName("model_tree_map");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_tree_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() == null) {
+                    jsonGenerator.writeNull();
+                } else{
+                    if (entry1.getValue() != null) {
+                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    }
+                }
+            }
+            jsonGenerator.writeEndObject();
         }
         final int[] lslocalprimitive_array = object.primitiveArray;
         if (lslocalprimitive_array != null) {

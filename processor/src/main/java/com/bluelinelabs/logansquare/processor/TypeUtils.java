@@ -34,6 +34,7 @@ public class TypeUtils {
             switch (genericClassName) {
                 case "java.util.List":
                 case "java.util.ArrayList":
+                case "java.util.LinkedList":
                 case "java.util.Set":
                 case "java.util.HashSet":
                 case "java.util.Deque":
@@ -42,6 +43,8 @@ public class TypeUtils {
                     return genericTypes.get(0);
                 case "java.util.Map":
                 case "java.util.HashMap":
+                case "java.util.TreeMap":
+                case "java.util.LinkedHashMap":
                     if (!"java.lang.String".equals(genericTypes.get(0).toString())) {
                         throw new IllegalStateException("JsonField Map collections must use Strings as keys");
                     }
