@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<PrePostProcessingModel> {
     @Override
     public PrePostProcessingModel parse(JsonParser jsonParser) throws IOException {

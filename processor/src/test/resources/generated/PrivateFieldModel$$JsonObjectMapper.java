@@ -7,11 +7,13 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unsafe")
 public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<PrivateFieldModel> {
     @Override
     public PrivateFieldModel parse(JsonParser jsonParser) throws IOException {

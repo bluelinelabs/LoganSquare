@@ -16,4 +16,21 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  */
 @Target(FIELD)
 @Retention(CLASS)
-public @interface JsonIgnore { }
+public @interface JsonIgnore {
+
+    public enum IgnorePolicy {
+        /** This field will be ignored for both parsing and serializing. */
+        PARSE_AND_SERIALIZE,
+
+        /** This field will be ignored for parsing, but will still be serialized. */
+        PARSE_ONLY,
+
+        /** This field will be ignored for serializing, but will still be parsed. */
+        SERIALIZE_ONLY
+    }
+
+    /**
+     * Allows control over whether a field should be parsed and/or serialized or not
+     */
+    IgnorePolicy ignorePolicy() default IgnorePolicy.PARSE_AND_SERIALIZE;
+}

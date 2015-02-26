@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+@SuppressWarnings("unsafe")
 public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<NestedCollectionModel> {
     @Override
     public NestedCollectionModel parse(JsonParser jsonParser) throws IOException {

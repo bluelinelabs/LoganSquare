@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class DateModel$$JsonObjectMapper {
     protected static final DateModel.MyDateTypeConverter MY_DATE_TYPE_CONVERTER = new DateModel.MyDateTypeConverter();
 

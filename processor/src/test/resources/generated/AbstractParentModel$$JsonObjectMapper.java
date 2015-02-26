@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class AbstractParentModel$$JsonObjectMapper {
     public static void parseField(AbstractParentModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("parentTestInt".equals(fieldName)) {

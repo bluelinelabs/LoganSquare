@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.Integer;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
+@SuppressWarnings("unsafe")
 public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<SimpleCollectionModel> {
     @Override
     public SimpleCollectionModel parse(JsonParser jsonParser) throws IOException {

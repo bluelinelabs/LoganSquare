@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.demo.model;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonIgnore;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 
@@ -21,6 +22,15 @@ public class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel {
 
     @JsonIgnore
     public int intToIgnore;
+
+    @JsonIgnore(ignorePolicy = IgnorePolicy.PARSE_AND_SERIALIZE)
+    public int intToIgnoreForBoth;
+
+    @JsonIgnore(ignorePolicy = IgnorePolicy.PARSE_ONLY)
+    public int intToIgnoreForParse;
+
+    @JsonIgnore(ignorePolicy = IgnorePolicy.SERIALIZE_ONLY)
+    public int intToIgnoreForSerialization;
 
     public transient int transientIntToIgnore;
 

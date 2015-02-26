@@ -8,8 +8,10 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.Date;
 
+@SuppressWarnings("unsafe")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
     @Override
     public SimpleModel parse(JsonParser jsonParser) throws IOException {
@@ -37,6 +39,8 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
     public static void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("date".equals(fieldName)) {
             instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
+        } else if ("intToIgnoreForSerialization".equals(fieldName)){
+            instance.intToIgnoreForSerialization = jsonParser.getValueAsInt();
         } else if ("string".equals(fieldName)){
             instance.string = jsonParser.getValueAsString(null);
         } else if ("test_double".equals(fieldName)){
@@ -72,6 +76,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         if (object.date != null) {
             LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
         }
+        jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
         jsonGenerator.writeStringField("string", object.string);
         jsonGenerator.writeNumberField("test_double", object.testDouble);
         jsonGenerator.writeNumberField("test_double_obj", object.testDoubleObj);

@@ -19,9 +19,11 @@ public class JsonFieldHolder {
     public String[] fieldName;
     public String setterMethod;
     public String getterMethod;
+    public boolean shouldParse;
+    public boolean shouldSerialize;
     public Type type;
 
-    public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder) {
+    public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
         if (fieldNames == null || fieldNames.length == 0) {
             String defaultFieldName = element.getSimpleName().toString();
 
@@ -34,6 +36,9 @@ public class JsonFieldHolder {
             fieldNames = new String[] { defaultFieldName };
         }
         fieldName = fieldNames;
+
+        this.shouldParse = shouldParse;
+        this.shouldSerialize = shouldSerialize;
 
         setterMethod = getSetter(element, elements);
         getterMethod = getGetter(element, elements);

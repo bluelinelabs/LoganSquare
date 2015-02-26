@@ -7,9 +7,11 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unsafe")
 public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonObjectMapper extends JsonMapper<NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel> {
     @Override
     public NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel parse(JsonParser jsonParser) throws IOException {
@@ -37,6 +39,8 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
     public static void parseField(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("annotated_string".equals(fieldName)) {
             instance.annotatedString = jsonParser.getValueAsString(null);
+        } else if ("intToIgnoreForSerialization".equals(fieldName)){
+            instance.intToIgnoreForSerialization = jsonParser.getValueAsInt();
         } else if ("nonAnnotatedList".equals(fieldName)){
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<String> collection1 = new ArrayList<String>();
@@ -76,6 +80,7 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
             jsonGenerator.writeStartObject();
         }
         jsonGenerator.writeStringField("annotated_string", object.annotatedString);
+        jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
         final List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");

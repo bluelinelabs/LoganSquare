@@ -1,6 +1,8 @@
 package com.bluelinelabs.logansquare.processor.processor;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
@@ -78,7 +80,11 @@ public class JsonFieldProcessor extends Processor {
 
         String[] fieldName = annotation.name();
 
-        String error = fieldHolder.fill(element, elements, types, fieldName, typeConverterType, objectHolder);
+        JsonIgnore ignoreAnnotation = element.getAnnotation(JsonIgnore.class);
+        boolean shouldParse = ignoreAnnotation == null || ignoreAnnotation.ignorePolicy() == IgnorePolicy.SERIALIZE_ONLY;
+        boolean shouldSerialize = ignoreAnnotation == null || ignoreAnnotation.ignorePolicy() == IgnorePolicy.PARSE_ONLY;
+
+        String error = fieldHolder.fill(element, elements, types, fieldName, typeConverterType, objectHolder, shouldParse, shouldSerialize);
         if (!TextUtils.isEmpty(error)) {
             error(element, error);
         }
