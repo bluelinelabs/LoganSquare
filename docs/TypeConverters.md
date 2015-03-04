@@ -29,7 +29,7 @@ Any Java object can be supported by LoganSquare, even if they don't fall into th
 #### For global `TypeConverter`s (used in many places)
 
 ```java
-LoganSquare.registerTypeConverter(Date.class, YourConverter.class)
+LoganSquare.registerTypeConverter(Date.class, new YourConverter());
 ```
 
 #### For `TypeConverter`s that should only be used for certain variables
@@ -53,7 +53,7 @@ public class TimeOnlyDateConverter extends DateTypeConverter {
 
     private DateFormat mDateFormat;
 
-    public DefaultDateConverter() {
+    public TimeOnlyDateConverter() {
         mDateFormat = new SimpleDateFormat("HH:mm");
     }
 
