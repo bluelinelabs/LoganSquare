@@ -17,7 +17,7 @@ import java.util.List;
 public class BarChart extends View {
 
     private static final int SECTION_COUNT = 4;
-    private static final int COLUMNS_PER_SECTION = 5;
+    private static final int COLUMNS_PER_SECTION = 3;
 
     private final Section[] mSections = new Section[SECTION_COUNT];
     private final Rect mTextBounds = new Rect();
@@ -54,18 +54,12 @@ public class BarChart extends View {
         mPaints[1].setColor(0xFFa9e8fe);
 
         mPaints[2] = new Paint();
-        mPaints[2].setColor(0xFFd6b371);
-
-        mPaints[3] = new Paint();
-        mPaints[3].setColor(0xFF89c8de);
-
-        mPaints[4] = new Paint();
-        mPaints[4].setColor(0xFFe9969c);
+        mPaints[2].setColor(0xFFe9969c);
 
         mTextPaint = new TextPaint();
         mTextPaint.setColor(0xFF555555);
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setTextSize(density * 10);
+        mTextPaint.setTextSize(density * 12);
 
         mColumnPadding = (int)(density * 2);
         mSectionPadding = (int)(density * 24);
@@ -161,7 +155,7 @@ public class BarChart extends View {
 
         public Section() {
             title = "";
-            columns = new Column[] {new Column(), new Column(), new Column(), new Column(), new Column()};
+            columns = new Column[] {new Column(), new Column(), new Column()};
         }
     }
 
