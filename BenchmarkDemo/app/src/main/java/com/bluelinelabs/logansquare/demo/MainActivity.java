@@ -22,6 +22,8 @@ import com.bluelinelabs.logansquare.demo.serializetasks.SerializeResult;
 import com.bluelinelabs.logansquare.demo.serializetasks.Serializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.Serializer.SerializeListener;
 import com.bluelinelabs.logansquare.demo.widget.BarChart;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -83,11 +85,13 @@ public class MainActivity extends ActionBarActivity {
         mBarChart.clear();
         mBarChart.setSections(new String[] {"Parse 60 items", "Parse 20 items", "Parse 7 items", "Parse 2 items"});
 
+        Gson gson = new Gson();
+        ObjectMapper objectMapper = new ObjectMapper();
         List<Parser> parsers = new ArrayList<>();
         for (String jsonString : mJsonStringsToParse) {
             for (int iteration = 0; iteration < ITERATIONS; iteration++) {
-                parsers.add(new GsonParser(mParseListener, jsonString));
-                parsers.add(new JacksonDatabindParser(mParseListener, jsonString));
+                parsers.add(new GsonParser(mParseListener, jsonString, gson));
+                parsers.add(new JacksonDatabindParser(mParseListener, jsonString, objectMapper));
                 parsers.add(new LoganSquareParser(mParseListener, jsonString));
             }
         }
@@ -101,11 +105,13 @@ public class MainActivity extends ActionBarActivity {
         mBarChart.clear();
         mBarChart.setSections(new String[] {"Serialize 60 items", "Serialize 20 items", "Serialize 7 items", "Serialize 2 items"});
 
+        Gson gson = new Gson();
+        ObjectMapper objectMapper = new ObjectMapper();
         List<Serializer> serializers = new ArrayList<>();
         for (Response response : mResponsesToSerialize) {
             for (int iteration = 0; iteration < ITERATIONS; iteration++) {
-                serializers.add(new GsonSerializer(mSerializeListener, response));
-                serializers.add(new JacksonDatabindSerializer(mSerializeListener, response));
+                serializers.add(new GsonSerializer(mSerializeListener, response, gson));
+                serializers.add(new JacksonDatabindSerializer(mSerializeListener, response, objectMapper));
                 serializers.add(new LoganSquareSerializer(mSerializeListener, response));
             }
         }
