@@ -89,7 +89,7 @@ public class JsonObjectProcessor extends Processor {
 
             JsonObject annotation = element.getAnnotation(JsonObject.class);
 
-            holder = new JsonObjectHolder(packageName, injectedSimpleClassName, TypeName.get(typeElement.asType()), abstractClass, parentInjectedClassName, annotation.fieldDetectionPolicy(), annotation.fieldNamingPolicy());
+            holder = new JsonObjectHolder(packageName, injectedSimpleClassName, TypeName.get(typeElement.asType()), abstractClass, parentInjectedClassName, annotation.fieldDetectionPolicy(), annotation.fieldNamingPolicy(), annotation.serializeNullObjects(), annotation.serializeNullCollectionElements());
 
             FieldDetectionPolicy fieldDetectionPolicy = annotation.fieldDetectionPolicy();
             if (fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS || fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS) {
@@ -98,7 +98,6 @@ public class JsonObjectProcessor extends Processor {
             if (fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS) {
                 addAllNonPrivateAccessors(element, elements, types, holder);
             }
-
 
             jsonObjectMap.put(TypeUtils.getInjectedFQCN(typeElement, elements), holder);
         }

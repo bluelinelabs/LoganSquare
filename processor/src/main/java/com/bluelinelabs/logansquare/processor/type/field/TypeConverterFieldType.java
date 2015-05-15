@@ -39,15 +39,7 @@ public class TypeConverterFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
-        if (!mTypeName.isPrimitive()) {
-            builder.beginControlFlow("if ($L != null)", getter);
-        }
-
-        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldName, writeFieldNameForObject, JSON_GENERATOR_VARIABLE_NAME);
-
-        if (!mTypeName.isPrimitive()) {
-            builder.endControlFlow();
-        }
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
     }
 }

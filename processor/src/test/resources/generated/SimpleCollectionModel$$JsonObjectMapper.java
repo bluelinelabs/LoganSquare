@@ -53,9 +53,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 SimpleCollectionModel.ModelForCollection[] array = collection1.toArray(new SimpleCollectionModel.ModelForCollection[collection1.size()]);
                 instance.modelForCollectionArray = array;
@@ -68,9 +66,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionArrayList = collection1;
             } else{
@@ -82,9 +78,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionDeque = collection1;
             } else{
@@ -128,9 +122,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionLinkedList = collection1;
             } else{
@@ -142,9 +134,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionList = collection1;
             } else{
@@ -172,9 +162,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionQueue = collection1;
             } else{
@@ -186,9 +174,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
                     value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionSet = collection1;
             } else{
@@ -276,12 +262,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_hash_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
-                    if (entry1.getValue() != null) {
-                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
-                    }
+                if (entry1.getValue() != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -292,12 +274,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_linked_hash_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
-                    if (entry1.getValue() != null) {
-                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
-                    }
+                if (entry1.getValue() != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -330,12 +308,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
-                    if (entry1.getValue() != null) {
-                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
-                    }
+                if (entry1.getValue() != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -368,12 +342,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_tree_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
-                    if (entry1.getValue() != null) {
-                        SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
-                    }
+                if (entry1.getValue() != null) {
+                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();

@@ -51,7 +51,9 @@ public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<P
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        jsonGenerator.writeStringField("unformatted_string", object.unformattedString);
+        if (object.unformattedString != null) {
+            jsonGenerator.writeStringField("unformatted_string", object.unformattedString);
+        }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

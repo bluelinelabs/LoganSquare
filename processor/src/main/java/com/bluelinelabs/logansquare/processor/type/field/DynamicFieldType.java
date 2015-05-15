@@ -32,14 +32,22 @@ public class DynamicFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
-        if (!mTypeName.isPrimitive()) {
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        if (!mTypeName.isPrimitive() && checkIfNull) {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$T.typeConverterFor($T.class).serialize($L, $S, $L, $L)", LoganSquare.class, mTypeName, getter, fieldName, writeFieldNameForObject, JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement("$T.typeConverterFor($T.class).serialize($L, $S, $L, $L)", LoganSquare.class, mTypeName, getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
 
-        if (!mTypeName.isPrimitive()) {
+        if (!mTypeName.isPrimitive() && checkIfNull) {
+            if (writeIfNull) {
+                builder.nextControlFlow("else");
+
+                if (isObjectProperty) {
+                    builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+                }
+                builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+            }
             builder.endControlFlow();
         }
     }

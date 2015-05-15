@@ -57,7 +57,7 @@ public abstract class MapContainerType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean writeFieldName) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         final String mapVariableName = "lslocal" + fieldName;
         final String entryVariableName = "entry" + depth;
 
@@ -71,7 +71,7 @@ public abstract class MapContainerType extends ContainerType {
                 .addStatement(instanceCreator, instanceCreatorArgs)
                 .beginControlFlow("if ($L != null)", mapVariableName);
 
-        if (writeFieldName) {
+        if (isObjectProperty) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
         }
 
@@ -79,11 +79,15 @@ public abstract class MapContainerType extends ContainerType {
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs)
                 .addStatement("$L.writeFieldName($L.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME, entryVariableName)
-                .beginControlFlow("if ($L.getValue() == null)", entryVariableName)
-                .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME)
-                .nextControlFlow("else");
+                .beginControlFlow("if ($L.getValue() != null)", entryVariableName);
 
-        subType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false);
+        subType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
+
+        if (writeCollectionElementIfNull) {
+            builder
+                    .nextControlFlow("else")
+                    .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+        }
 
         builder
                 .endControlFlow()

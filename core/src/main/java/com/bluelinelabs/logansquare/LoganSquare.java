@@ -16,11 +16,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
-    private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new HashMap<Class, JsonMapper>();
+    private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new ConcurrentHashMap<Class, JsonMapper>();
     private static final Map<Class, TypeConverter> TYPE_CONVERTERS = new HashMap<Class, TypeConverter>();
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());

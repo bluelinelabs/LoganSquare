@@ -5,8 +5,8 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
 
-@JsonObject(serializeNullObjects = true)
-public class SimpleModel {
+@JsonObject
+public class SimpleModelWithoutNullObjects {
 
     @JsonField
     public String string;

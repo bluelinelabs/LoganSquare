@@ -10,30 +10,39 @@ import java.util.Date;
 
 public abstract class DateTypeConverter implements TypeConverter<Date> {
 
-    /** Called to get the DateFormat used to parse and serialize objects */
-    public abstract DateFormat getDateFormat();
-
-    private static final Object FORMATTER_LOCK = new Object();
+    // DateFormat is not thread-safe, so wrap it in a ThreadLocal
+    private final ThreadLocal<DateFormat> mDateFormat = new ThreadLocal<DateFormat>(){
+        @Override
+        protected DateFormat initialValue() {
+            return getDateFormat();
+        }
+    };
 
     @Override
     public Date parse(JsonParser jsonParser) throws IOException {
         String dateString = jsonParser.getValueAsString(null);
-        try {
-            // DateFormat is not thread-safe, so this has to be synchronized
-            synchronized (FORMATTER_LOCK) {
-                return getDateFormat().parse(dateString);
+        if (dateString != null) {
+            try {
+                return mDateFormat.get().parse(dateString);
+            } catch (ParseException e) {
+                return null;
             }
-        } catch (ParseException e) {
+        } else {
             return null;
         }
     }
 
     @Override
     public void serialize(Date object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        // DateFormat is not thread-safe, so this has to be synchronized
-        synchronized (FORMATTER_LOCK) {
-            jsonGenerator.writeStringField(fieldName, getDateFormat().format(object));
+        if (object != null) {
+            jsonGenerator.writeStringField(fieldName, mDateFormat.get().format(object));
+        } else {
+            jsonGenerator.writeFieldName(fieldName);
+            jsonGenerator.writeNull();
         }
     }
+
+    /** Called to get the DateFormat used to parse and serialize objects */
+    public abstract DateFormat getDateFormat();
 
 }

@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -34,15 +35,29 @@ public class JsonFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
-        builder.beginControlFlow("if ($L != null)", getter);
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
 
-        if (writeFieldNameForObject) {
+        if (checkIfNull) {
+            builder.beginControlFlow("if ($L != null)", getter);
+        }
+
+        if (isObjectProperty) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
         }
 
-        builder
-                .addStatement("$T._serialize($L, $L, true)", mMapperClassName, getter, JSON_GENERATOR_VARIABLE_NAME)
-                .endControlFlow();
+        builder.addStatement("$T._serialize($L, $L, true)", mMapperClassName, getter, JSON_GENERATOR_VARIABLE_NAME);
+
+        if (checkIfNull) {
+            if (writeIfNull) {
+                builder.nextControlFlow("else");
+
+                if (isObjectProperty) {
+                    builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+                }
+                builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+            }
+
+            builder.endControlFlow();
+        }
     }
 }

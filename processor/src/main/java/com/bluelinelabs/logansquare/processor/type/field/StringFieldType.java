@@ -26,11 +26,28 @@ public class StringFieldType extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean writeFieldNameForObject) {
-        if (writeFieldNameForObject) {
+    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        if (checkIfNull) {
+            builder.beginControlFlow("if ($L != null)", getter);
+        }
+
+        if (isObjectProperty) {
             builder.addStatement("$L.writeStringField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldName, getter);
         } else {
             builder.addStatement("$L.writeString($L)", JSON_GENERATOR_VARIABLE_NAME, getter);
+        }
+
+        if (checkIfNull) {
+            if (writeIfNull) {
+                builder.nextControlFlow("else");
+
+                if (isObjectProperty) {
+                    builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+                }
+                builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+            }
+
+            builder.endControlFlow();
         }
     }
 }

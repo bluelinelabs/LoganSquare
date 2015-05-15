@@ -53,18 +53,14 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             String value2;
                             value2 = jsonParser.getValueAsString(null);
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         String[] array = collection2.toArray(new String[collection2.size()]);
                         value1 = array;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.arrayList = collection1;
             } else{
@@ -98,26 +94,20 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                     } else{
                                         value3 = null;
                                     }
-                                    if (value3 != null) {
-                                        collection3.add(value3);
-                                    }
+                                    collection3.add(value3);
                                 }
                                 value2 = collection3;
                             } else{
                                 value2 = null;
                             }
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         ArrayList[] array = collection2.toArray(new ArrayList[collection2.size()]);
                         value1 = array;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.complexArray = collection1;
             } else{
@@ -149,9 +139,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                                         NestedCollectionModel.ModelForCollection value5;
                                                         value5 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                                                        if (value5 != null) {
-                                                            collection5.add(value5);
-                                                        }
+                                                        collection5.add(value5);
                                                     }
                                                     NestedCollectionModel.ModelForCollection[] array = collection5.toArray(new NestedCollectionModel.ModelForCollection[collection5.size()]);
                                                     map4.put(key4, array);
@@ -164,26 +152,20 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                     } else{
                                         value3 = null;
                                     }
-                                    if (value3 != null) {
-                                        collection3.add(value3);
-                                    }
+                                    collection3.add(value3);
                                 }
                                 value2 = collection3;
                             } else{
                                 value2 = null;
                             }
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         ArrayList[] array = collection2.toArray(new ArrayList[collection2.size()]);
                         value1 = array;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.complexerArray = collection1;
             } else{
@@ -207,33 +189,25 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                             NestedCollectionModel.ModelForCollection value4;
                                             value4 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                                            if (value4 != null) {
-                                                collection4.add(value4);
-                                            }
+                                            collection4.add(value4);
                                         }
                                         value3 = collection4;
                                     } else{
                                         value3 = null;
                                     }
-                                    if (value3 != null) {
-                                        collection3.add(value3);
-                                    }
+                                    collection3.add(value3);
                                 }
                                 value2 = collection3;
                             } else{
                                 value2 = null;
                             }
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         value1 = collection2;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.dontKnowWhatImDoingList = collection1;
             } else{
@@ -279,17 +253,13 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                     } else{
                                                         value4 = null;
                                                     }
-                                                    if (value4 != null) {
-                                                        collection4.add(value4);
-                                                    }
+                                                    collection4.add(value4);
                                                 }
                                                 value3 = collection4;
                                             } else{
                                                 value3 = null;
                                             }
-                                            if (value3 != null) {
-                                                collection3.add(value3);
-                                            }
+                                            collection3.add(value3);
                                         }
                                         map2.put(key2, collection3);
                                     } else{
@@ -317,17 +287,13 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
                             value2 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         value1 = collection2;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionDeque = collection1;
             } else{
@@ -343,17 +309,13 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
                             value2 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         value1 = collection2;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionList = collection1;
             } else{
@@ -373,9 +335,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                             while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                 NestedCollectionModel.ModelForCollection value2;
                                 value2 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                                if (value2 != null) {
-                                    collection2.add(value2);
-                                }
+                                collection2.add(value2);
                             }
                             map1.put(key1, collection2);
                         } else{
@@ -397,17 +357,13 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
                             value2 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         value1 = collection2;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionQueue = collection1;
             } else{
@@ -423,17 +379,13 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
                             value2 = NestedCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
-                            if (value2 != null) {
-                                collection2.add(value2);
-                            }
+                            collection2.add(value2);
                         }
                         value1 = collection2;
                     } else{
                         value1 = null;
                     }
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.modelForCollectionSet = collection1;
             } else{
@@ -456,13 +408,17 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("arrayList");
             jsonGenerator.writeStartArray();
             for (String[] element1 : lslocalarrayList) {
-                final String[] lslocallslocalarrayListElement = element1;
-                if (lslocallslocalarrayListElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (String element2 : lslocallslocalarrayListElement) {
-                        jsonGenerator.writeString(element2);
+                if (element1 != null) {
+                    final String[] lslocallslocalarrayListElement = element1;
+                    if (lslocallslocalarrayListElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (String element2 : lslocallslocalarrayListElement) {
+                            if (element2 != null) {
+                                jsonGenerator.writeString(element2);
+                            }
+                        }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -472,34 +428,36 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("complexArray");
             jsonGenerator.writeStartArray();
             for (List<Map<String, NestedCollectionModel.ModelForCollection>>[] element1 : lslocalcomplexArray) {
-                final List<Map<String, NestedCollectionModel.ModelForCollection>>[] lslocallslocalcomplexArrayElement = element1;
-                if (lslocallslocalcomplexArrayElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (List<Map<String, NestedCollectionModel.ModelForCollection>> element2 : lslocallslocalcomplexArrayElement) {
-                        final List<Map<String, NestedCollectionModel.ModelForCollection>> lslocallslocallslocalcomplexArrayElementElement = element2;
-                        if (lslocallslocallslocalcomplexArrayElementElement != null) {
-                            jsonGenerator.writeStartArray();
-                            for (Map<String, NestedCollectionModel.ModelForCollection> element3 : lslocallslocallslocalcomplexArrayElementElement) {
-                                final Map<String, NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocalcomplexArrayElementElementElement = element3;
-                                if (lslocallslocallslocallslocalcomplexArrayElementElementElement != null) {
-                                    jsonGenerator.writeStartObject();
-                                    for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry4 : lslocallslocallslocallslocalcomplexArrayElementElementElement.entrySet()) {
-                                        jsonGenerator.writeFieldName(entry4.getKey().toString());
-                                        if (entry4.getValue() == null) {
-                                            jsonGenerator.writeNull();
-                                        } else{
-                                            if (entry4.getValue() != null) {
-                                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry4.getValue(), jsonGenerator, true);
+                if (element1 != null) {
+                    final List<Map<String, NestedCollectionModel.ModelForCollection>>[] lslocallslocalcomplexArrayElement = element1;
+                    if (lslocallslocalcomplexArrayElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (List<Map<String, NestedCollectionModel.ModelForCollection>> element2 : lslocallslocalcomplexArrayElement) {
+                            if (element2 != null) {
+                                final List<Map<String, NestedCollectionModel.ModelForCollection>> lslocallslocallslocalcomplexArrayElementElement = element2;
+                                if (lslocallslocallslocalcomplexArrayElementElement != null) {
+                                    jsonGenerator.writeStartArray();
+                                    for (Map<String, NestedCollectionModel.ModelForCollection> element3 : lslocallslocallslocalcomplexArrayElementElement) {
+                                        if (element3 != null) {
+                                            final Map<String, NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocalcomplexArrayElementElementElement = element3;
+                                            if (lslocallslocallslocallslocalcomplexArrayElementElementElement != null) {
+                                                jsonGenerator.writeStartObject();
+                                                for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry4 : lslocallslocallslocallslocalcomplexArrayElementElementElement.entrySet()) {
+                                                    jsonGenerator.writeFieldName(entry4.getKey().toString());
+                                                    if (entry4.getValue() != null) {
+                                                        NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry4.getValue(), jsonGenerator, true);
+                                                    }
+                                                }
+                                                jsonGenerator.writeEndObject();
                                             }
                                         }
                                     }
-                                    jsonGenerator.writeEndObject();
+                                    jsonGenerator.writeEndArray();
                                 }
                             }
-                            jsonGenerator.writeEndArray();
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -509,41 +467,45 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("complexerArray");
             jsonGenerator.writeStartArray();
             for (List<Map<String, NestedCollectionModel.ModelForCollection[]>>[] element1 : lslocalcomplexerArray) {
-                final List<Map<String, NestedCollectionModel.ModelForCollection[]>>[] lslocallslocalcomplexerArrayElement = element1;
-                if (lslocallslocalcomplexerArrayElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (List<Map<String, NestedCollectionModel.ModelForCollection[]>> element2 : lslocallslocalcomplexerArrayElement) {
-                        final List<Map<String, NestedCollectionModel.ModelForCollection[]>> lslocallslocallslocalcomplexerArrayElementElement = element2;
-                        if (lslocallslocallslocalcomplexerArrayElementElement != null) {
-                            jsonGenerator.writeStartArray();
-                            for (Map<String, NestedCollectionModel.ModelForCollection[]> element3 : lslocallslocallslocalcomplexerArrayElementElement) {
-                                final Map<String, NestedCollectionModel.ModelForCollection[]> lslocallslocallslocallslocalcomplexerArrayElementElementElement = element3;
-                                if (lslocallslocallslocallslocalcomplexerArrayElementElementElement != null) {
-                                    jsonGenerator.writeStartObject();
-                                    for (Map.Entry<String, NestedCollectionModel.ModelForCollection[]> entry4 : lslocallslocallslocallslocalcomplexerArrayElementElementElement.entrySet()) {
-                                        jsonGenerator.writeFieldName(entry4.getKey().toString());
-                                        if (entry4.getValue() == null) {
-                                            jsonGenerator.writeNull();
-                                        } else{
-                                            final NestedCollectionModel.ModelForCollection[] lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement = entry4.getValue();
-                                            if (lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement != null) {
-                                                jsonGenerator.writeStartArray();
-                                                for (NestedCollectionModel.ModelForCollection element5 : lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement) {
-                                                    if (element5 != null) {
-                                                        NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element5, jsonGenerator, true);
+                if (element1 != null) {
+                    final List<Map<String, NestedCollectionModel.ModelForCollection[]>>[] lslocallslocalcomplexerArrayElement = element1;
+                    if (lslocallslocalcomplexerArrayElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (List<Map<String, NestedCollectionModel.ModelForCollection[]>> element2 : lslocallslocalcomplexerArrayElement) {
+                            if (element2 != null) {
+                                final List<Map<String, NestedCollectionModel.ModelForCollection[]>> lslocallslocallslocalcomplexerArrayElementElement = element2;
+                                if (lslocallslocallslocalcomplexerArrayElementElement != null) {
+                                    jsonGenerator.writeStartArray();
+                                    for (Map<String, NestedCollectionModel.ModelForCollection[]> element3 : lslocallslocallslocalcomplexerArrayElementElement) {
+                                        if (element3 != null) {
+                                            final Map<String, NestedCollectionModel.ModelForCollection[]> lslocallslocallslocallslocalcomplexerArrayElementElementElement = element3;
+                                            if (lslocallslocallslocallslocalcomplexerArrayElementElementElement != null) {
+                                                jsonGenerator.writeStartObject();
+                                                for (Map.Entry<String, NestedCollectionModel.ModelForCollection[]> entry4 : lslocallslocallslocallslocalcomplexerArrayElementElementElement.entrySet()) {
+                                                    jsonGenerator.writeFieldName(entry4.getKey().toString());
+                                                    if (entry4.getValue() != null) {
+                                                        final NestedCollectionModel.ModelForCollection[] lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement = entry4.getValue();
+                                                        if (lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement != null) {
+                                                            jsonGenerator.writeStartArray();
+                                                            for (NestedCollectionModel.ModelForCollection element5 : lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement) {
+                                                                if (element5 != null) {
+                                                                    NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element5, jsonGenerator, true);
+                                                                }
+                                                            }
+                                                            jsonGenerator.writeEndArray();
+                                                        }
                                                     }
                                                 }
-                                                jsonGenerator.writeEndArray();
+                                                jsonGenerator.writeEndObject();
                                             }
                                         }
                                     }
-                                    jsonGenerator.writeEndObject();
+                                    jsonGenerator.writeEndArray();
                                 }
                             }
-                            jsonGenerator.writeEndArray();
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -553,29 +515,35 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("dontKnowWhatImDoingList");
             jsonGenerator.writeStartArray();
             for (List<List<ArrayList<NestedCollectionModel.ModelForCollection>>> element1 : lslocaldontKnowWhatImDoingList) {
-                final List<List<ArrayList<NestedCollectionModel.ModelForCollection>>> lslocallslocaldontKnowWhatImDoingListElement = element1;
-                if (lslocallslocaldontKnowWhatImDoingListElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (List<ArrayList<NestedCollectionModel.ModelForCollection>> element2 : lslocallslocaldontKnowWhatImDoingListElement) {
-                        final List<ArrayList<NestedCollectionModel.ModelForCollection>> lslocallslocallslocaldontKnowWhatImDoingListElementElement = element2;
-                        if (lslocallslocallslocaldontKnowWhatImDoingListElementElement != null) {
-                            jsonGenerator.writeStartArray();
-                            for (ArrayList<NestedCollectionModel.ModelForCollection> element3 : lslocallslocallslocaldontKnowWhatImDoingListElementElement) {
-                                final List<NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement = element3;
-                                if (lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement != null) {
+                if (element1 != null) {
+                    final List<List<ArrayList<NestedCollectionModel.ModelForCollection>>> lslocallslocaldontKnowWhatImDoingListElement = element1;
+                    if (lslocallslocaldontKnowWhatImDoingListElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (List<ArrayList<NestedCollectionModel.ModelForCollection>> element2 : lslocallslocaldontKnowWhatImDoingListElement) {
+                            if (element2 != null) {
+                                final List<ArrayList<NestedCollectionModel.ModelForCollection>> lslocallslocallslocaldontKnowWhatImDoingListElementElement = element2;
+                                if (lslocallslocallslocaldontKnowWhatImDoingListElementElement != null) {
                                     jsonGenerator.writeStartArray();
-                                    for (NestedCollectionModel.ModelForCollection element4 : lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement) {
-                                        if (element4 != null) {
-                                            NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element4, jsonGenerator, true);
+                                    for (ArrayList<NestedCollectionModel.ModelForCollection> element3 : lslocallslocallslocaldontKnowWhatImDoingListElementElement) {
+                                        if (element3 != null) {
+                                            final List<NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement = element3;
+                                            if (lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement != null) {
+                                                jsonGenerator.writeStartArray();
+                                                for (NestedCollectionModel.ModelForCollection element4 : lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement) {
+                                                    if (element4 != null) {
+                                                        NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element4, jsonGenerator, true);
+                                                    }
+                                                }
+                                                jsonGenerator.writeEndArray();
+                                            }
                                         }
                                     }
                                     jsonGenerator.writeEndArray();
                                 }
                             }
-                            jsonGenerator.writeEndArray();
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -586,42 +554,38 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, Map<String, ArrayList<List<Map<String, NestedCollectionModel.ModelForCollection>>>>> entry1 : lslocaldontKnowWhatImDoingMap.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
+                if (entry1.getValue() != null) {
                     final Map<String, ArrayList<List<Map<String, NestedCollectionModel.ModelForCollection>>>> lslocallslocaldontKnowWhatImDoingMapElement = entry1.getValue();
                     if (lslocallslocaldontKnowWhatImDoingMapElement != null) {
                         jsonGenerator.writeStartObject();
                         for (Map.Entry<String, ArrayList<List<Map<String, NestedCollectionModel.ModelForCollection>>>> entry2 : lslocallslocaldontKnowWhatImDoingMapElement.entrySet()) {
                             jsonGenerator.writeFieldName(entry2.getKey().toString());
-                            if (entry2.getValue() == null) {
-                                jsonGenerator.writeNull();
-                            } else{
+                            if (entry2.getValue() != null) {
                                 final List<List<Map<String, NestedCollectionModel.ModelForCollection>>> lslocallslocallslocaldontKnowWhatImDoingMapElementElement = entry2.getValue();
                                 if (lslocallslocallslocaldontKnowWhatImDoingMapElementElement != null) {
                                     jsonGenerator.writeStartArray();
                                     for (List<Map<String, NestedCollectionModel.ModelForCollection>> element3 : lslocallslocallslocaldontKnowWhatImDoingMapElementElement) {
-                                        final List<Map<String, NestedCollectionModel.ModelForCollection>> lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement = element3;
-                                        if (lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement != null) {
-                                            jsonGenerator.writeStartArray();
-                                            for (Map<String, NestedCollectionModel.ModelForCollection> element4 : lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement) {
-                                                final Map<String, NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement = element4;
-                                                if (lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement != null) {
-                                                    jsonGenerator.writeStartObject();
-                                                    for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry5 : lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement.entrySet()) {
-                                                        jsonGenerator.writeFieldName(entry5.getKey().toString());
-                                                        if (entry5.getValue() == null) {
-                                                            jsonGenerator.writeNull();
-                                                        } else{
-                                                            if (entry5.getValue() != null) {
-                                                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry5.getValue(), jsonGenerator, true);
+                                        if (element3 != null) {
+                                            final List<Map<String, NestedCollectionModel.ModelForCollection>> lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement = element3;
+                                            if (lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement != null) {
+                                                jsonGenerator.writeStartArray();
+                                                for (Map<String, NestedCollectionModel.ModelForCollection> element4 : lslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElement) {
+                                                    if (element4 != null) {
+                                                        final Map<String, NestedCollectionModel.ModelForCollection> lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement = element4;
+                                                        if (lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement != null) {
+                                                            jsonGenerator.writeStartObject();
+                                                            for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry5 : lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement.entrySet()) {
+                                                                jsonGenerator.writeFieldName(entry5.getKey().toString());
+                                                                if (entry5.getValue() != null) {
+                                                                    NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry5.getValue(), jsonGenerator, true);
+                                                                }
                                                             }
+                                                            jsonGenerator.writeEndObject();
                                                         }
                                                     }
-                                                    jsonGenerator.writeEndObject();
                                                 }
+                                                jsonGenerator.writeEndArray();
                                             }
-                                            jsonGenerator.writeEndArray();
                                         }
                                     }
                                     jsonGenerator.writeEndArray();
@@ -639,15 +603,17 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("model_deque");
             jsonGenerator.writeStartArray();
             for (List<NestedCollectionModel.ModelForCollection> element1 : lslocalmodel_deque) {
-                final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_dequeElement = element1;
-                if (lslocallslocalmodel_dequeElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_dequeElement) {
-                        if (element2 != null) {
-                            NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                if (element1 != null) {
+                    final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_dequeElement = element1;
+                    if (lslocallslocalmodel_dequeElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_dequeElement) {
+                            if (element2 != null) {
+                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                            }
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -657,15 +623,17 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("model_list");
             jsonGenerator.writeStartArray();
             for (List<NestedCollectionModel.ModelForCollection> element1 : lslocalmodel_list) {
-                final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_listElement = element1;
-                if (lslocallslocalmodel_listElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_listElement) {
-                        if (element2 != null) {
-                            NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                if (element1 != null) {
+                    final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_listElement = element1;
+                    if (lslocallslocalmodel_listElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_listElement) {
+                            if (element2 != null) {
+                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                            }
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -676,9 +644,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, List<NestedCollectionModel.ModelForCollection>> entry1 : lslocalmodel_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
+                if (entry1.getValue() != null) {
                     final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_mapElement = entry1.getValue();
                     if (lslocallslocalmodel_mapElement != null) {
                         jsonGenerator.writeStartArray();
@@ -698,15 +664,17 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("model_queue");
             jsonGenerator.writeStartArray();
             for (List<NestedCollectionModel.ModelForCollection> element1 : lslocalmodel_queue) {
-                final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_queueElement = element1;
-                if (lslocallslocalmodel_queueElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_queueElement) {
-                        if (element2 != null) {
-                            NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                if (element1 != null) {
+                    final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_queueElement = element1;
+                    if (lslocallslocalmodel_queueElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_queueElement) {
+                            if (element2 != null) {
+                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                            }
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();
@@ -716,15 +684,17 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeFieldName("model_set");
             jsonGenerator.writeStartArray();
             for (List<NestedCollectionModel.ModelForCollection> element1 : lslocalmodel_set) {
-                final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_setElement = element1;
-                if (lslocallslocalmodel_setElement != null) {
-                    jsonGenerator.writeStartArray();
-                    for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_setElement) {
-                        if (element2 != null) {
-                            NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                if (element1 != null) {
+                    final List<NestedCollectionModel.ModelForCollection> lslocallslocalmodel_setElement = element1;
+                    if (lslocallslocalmodel_setElement != null) {
+                        jsonGenerator.writeStartArray();
+                        for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_setElement) {
+                            if (element2 != null) {
+                                NestedCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element2, jsonGenerator, true);
+                            }
                         }
+                        jsonGenerator.writeEndArray();
                     }
-                    jsonGenerator.writeEndArray();
                 }
             }
             jsonGenerator.writeEndArray();

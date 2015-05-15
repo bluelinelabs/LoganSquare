@@ -20,9 +20,7 @@ public final class DateModel$$JsonObjectMapper {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        if (object.date != null) {
-            MY_DATE_TYPE_CONVERTER.serialize(object.date, "date", true, jsonGenerator);
-        }
+        MY_DATE_TYPE_CONVERTER.serialize(object.date, "date", true, jsonGenerator);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

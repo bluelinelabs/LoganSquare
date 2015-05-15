@@ -47,9 +47,7 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     String value1;
                     value1 = jsonParser.getValueAsString(null);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.nonAnnotatedList = collection1;
             } else {
@@ -79,19 +77,25 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        jsonGenerator.writeStringField("annotated_string", object.annotatedString);
+        if (object.annotatedString != null) {
+            jsonGenerator.writeStringField("annotated_string", object.annotatedString);
+        }
         jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
         final List<String> lslocalnonAnnotatedList = object.nonAnnotatedList;
         if (lslocalnonAnnotatedList != null) {
             jsonGenerator.writeFieldName("nonAnnotatedList");
             jsonGenerator.writeStartArray();
             for (String element1 : lslocalnonAnnotatedList) {
-                jsonGenerator.writeString(element1);
+                if (element1 != null) {
+                    jsonGenerator.writeString(element1);
+                }
             }
             jsonGenerator.writeEndArray();
         }
         jsonGenerator.writeNumberField("nonAnnotatedPrivateInt", object.getNonAnnotatedPrivateInt());
-        jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
+        if (object.nonAnnotatedString != null) {
+            jsonGenerator.writeStringField("nonAnnotatedString", object.nonAnnotatedString);
+        }
         jsonGenerator.writeNumberField("privateStaticIntToInclude", object.getPrivateStaticIntToInclude());
         jsonGenerator.writeNumberField("privateTransientIntToInclude", object.getPrivateTransientIntToInclude());
         jsonGenerator.writeNumberField("staticIntToInclude", object.staticIntToInclude);

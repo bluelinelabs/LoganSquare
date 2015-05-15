@@ -27,9 +27,7 @@ public abstract class SingleParameterCollectionType extends ContainerType {
         subType.parse(builder, depth + 1, "$L = $L", valueVarName);
 
         builder
-                .beginControlFlow("if ($L != null)", valueVarName)
                 .addStatement("$L.add($L)", collectionVarName, valueVarName)
-                .endControlFlow()
                 .endControlFlow();
 
         builder
@@ -40,7 +38,7 @@ public abstract class SingleParameterCollectionType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean writeFieldName) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         String collectionVariableName = "lslocal" + fieldName;
         final String elementVarName = "element" + depth;
 
@@ -54,17 +52,25 @@ public abstract class SingleParameterCollectionType extends ContainerType {
                 .addStatement(instanceCreator, instanceCreatorArgs)
                 .beginControlFlow("if ($L != null)", collectionVariableName);
 
-        if (writeFieldName) {
+        if (isObjectProperty) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
         }
 
         builder
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
-                .beginControlFlow(forLine, forLineArgs);
+                .beginControlFlow(forLine, forLineArgs)
+                .beginControlFlow("if ($L != null)", elementVarName);
 
-        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false);
+        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false, false, false, writeCollectionElementIfNull);
 
-        builder
+        if (writeCollectionElementIfNull) {
+            builder
+                    .nextControlFlow("else")
+                    .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+        }
+
+            builder
+                .endControlFlow()
                 .endControlFlow()
                 .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .endControlFlow();

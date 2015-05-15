@@ -184,7 +184,7 @@ public class ObjectMapperInjector {
                     getter = "object." + entry.getKey();
                 }
 
-                fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true);
+                fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true, true, mJsonObjectHolder.serializeNullObjects, mJsonObjectHolder.serializeNullCollectionElements);
             }
         }
 
