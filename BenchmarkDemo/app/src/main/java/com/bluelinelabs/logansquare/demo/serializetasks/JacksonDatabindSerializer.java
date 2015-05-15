@@ -5,19 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonDatabindSerializer extends Serializer {
 
-    public JacksonDatabindSerializer(SerializeListener parseListener, Response response) {
+    private final ObjectMapper objectMapper;
+
+    public JacksonDatabindSerializer(SerializeListener parseListener, Response response, ObjectMapper objectMapper) {
         super(parseListener, response);
+        this.objectMapper = objectMapper;
     }
 
     @Override
     protected String serialize(Response response) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.writeValueAsString(response);
         } catch (Exception e) {
             return null;
         } finally {
-            objectMapper = null;
             System.gc();
         }
     }

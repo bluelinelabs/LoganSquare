@@ -5,20 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonDatabindParser extends Parser {
 
-    public JacksonDatabindParser(ParseListener parseListener, String jsonString) {
+    private final ObjectMapper objectMapper;
+
+    public JacksonDatabindParser(ParseListener parseListener, String jsonString, ObjectMapper objectMapper) {
         super(parseListener, jsonString);
+        this.objectMapper = objectMapper;
     }
 
     @Override
     protected int parse(String json) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             Response response = objectMapper.readValue(json, Response.class);
             return response.users.size();
         } catch (Exception e) {
             return 0;
         } finally {
-            objectMapper = null;
             System.gc();
         }
     }
