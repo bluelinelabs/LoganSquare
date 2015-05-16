@@ -1,9 +1,9 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.processor.model.NestedCollectionModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleModel;
+import com.bluelinelabs.logansquare.processor.model.SimpleModelWithoutNullObjects;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import static com.google.common.truth.Truth.ASSERT;
@@ -46,6 +47,25 @@ public class RoundTripTests {
     }
 
     @Test
+    public void simpleObjectListWithNulls() {
+        String json = "[{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "{\"date\":\"2015-02-22T18:45:50.748+0000\",\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "{\"date\":null,\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":null,\"test_float\":898.0,\"test_float_obj\":null,\"test_int\":32,\"test_int_obj\":null,\"test_long\":932,\"test_long_obj\":null,\"test_string\":null}," +
+                "null," +
+                "null]";
+
+        String reserialized = null;
+        try {
+            List<SimpleModel> simpleModels = LoganSquare.parseList(json, SimpleModel.class);
+            reserialized = LoganSquare.serialize(simpleModels, SimpleModel.class);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
     public void simpleObjectMap() {
         String json = "{\"obj1\":{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
                 "\"obj2\":{\"date\":\"2015-02-22T18:45:50.748+0000\",\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}}";
@@ -59,10 +79,53 @@ public class RoundTripTests {
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
 
+    @Test
+    public void simpleObjectMapWithNulls() {
+        String json = "{\"obj1\":{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "\"obj2\":{\"date\":\"2015-02-22T18:45:50.748+0000\",\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "\"obj3\":{\"date\":null,\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":null,\"test_float\":898.0,\"test_float_obj\":null,\"test_int\":32,\"test_int_obj\":null,\"test_long\":932,\"test_long_obj\":null,\"test_string\":null}," +
+                "\"obj4\":null}";
+
+        String reserialized = null;
+        try {
+            Map<String, SimpleModel> simpleModelMap = LoganSquare.parseMap(json, SimpleModel.class);
+            TreeMap<String, SimpleModel> sortedMap = new TreeMap<>();
+            sortedMap.put("obj1", simpleModelMap.get("obj1"));
+            sortedMap.put("obj2", simpleModelMap.get("obj2"));
+            sortedMap.put("obj3", simpleModelMap.get("obj3"));
+            sortedMap.put("obj4", simpleModelMap.get("obj4"));
+
+            reserialized = LoganSquare.serialize(sortedMap, SimpleModel.class);
+        } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void simpleObjectMapWithoutNulls() {
+        String json = "{\"obj1\":{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "\"obj2\":{\"date\":\"2015-02-22T18:45:50.748+0000\",\"string\":\"testString2\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}," +
+                "\"obj3\":{\"string\":\"testString2\",\"test_double\":342.0,\"test_float\":898.0,\"test_int\":32,\"test_long\":932}," +
+                "\"obj4\":null}";
+
+        String reserialized = null;
+        try {
+            Map<String, SimpleModelWithoutNullObjects> simpleModelMap = LoganSquare.parseMap(json, SimpleModelWithoutNullObjects.class);
+            TreeMap<String, SimpleModelWithoutNullObjects> sortedMap = new TreeMap<>();
+            sortedMap.put("obj1", simpleModelMap.get("obj1"));
+            sortedMap.put("obj2", simpleModelMap.get("obj2"));
+            sortedMap.put("obj3", simpleModelMap.get("obj3"));
+            sortedMap.put("obj4", simpleModelMap.get("obj4"));
+
+            reserialized = LoganSquare.serialize(sortedMap, SimpleModelWithoutNullObjects.class);
+        } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     public void nestedCollection() {
-
         List<ArrayList<Set<Map<String, List<String>>>>>[] array = (List<ArrayList<Set<Map<String, List<String>>>>>[])new List<?>[] {getStringListMapSetArrayListList() };
 
         NestedCollectionModel model = new NestedCollectionModel();

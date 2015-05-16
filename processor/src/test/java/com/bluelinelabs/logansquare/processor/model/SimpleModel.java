@@ -5,7 +5,7 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
 
-@JsonObject
+@JsonObject(serializeNullObjects = true)
 public class SimpleModel {
 
     @JsonField

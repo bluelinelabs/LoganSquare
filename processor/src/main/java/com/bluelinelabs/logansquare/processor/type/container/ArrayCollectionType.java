@@ -49,10 +49,7 @@ public class ArrayCollectionType extends ContainerType {
             builder.addStatement("$T $L", subType.getTypeName(), valueVarName);
             subType.parse(builder, depth + 1, "$L = $L", valueVarName);
 
-            builder
-                    .beginControlFlow("if ($L != null)", valueVarName)
-                    .addStatement("$L.add($L)", collectionVarName, valueVarName)
-                    .endControlFlow();
+            builder.addStatement("$L.add($L)", collectionVarName, valueVarName);
         } else {
             subType.parse(builder, depth + 1, "$L.add($L)", collectionVarName);
         }
@@ -78,7 +75,7 @@ public class ArrayCollectionType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean writeFieldName) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         String collectionVariableName = "lslocal" + fieldName;
         final String elementVarName = "element" + depth;
 
@@ -102,7 +99,7 @@ public class ArrayCollectionType extends ContainerType {
                 .addStatement(instanceCreator, instanceCreatorArgs)
                 .beginControlFlow("if ($L != null)", collectionVariableName);
 
-        if (writeFieldName) {
+        if (isObjectProperty) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
         }
 
@@ -110,7 +107,20 @@ public class ArrayCollectionType extends ContainerType {
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs);
 
-        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false);
+        if (!subType.getTypeName().isPrimitive()) {
+            builder.beginControlFlow("if ($L != null)", elementVarName);
+        }
+
+        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false, false, false, writeCollectionElementIfNull);
+
+        if (!subType.getTypeName().isPrimitive()) {
+            if (writeCollectionElementIfNull) {
+                builder
+                        .nextControlFlow("else")
+                        .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+            }
+            builder.endControlFlow();
+        }
 
         builder
                 .endControlFlow()

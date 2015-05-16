@@ -5,6 +5,7 @@ import com.bluelinelabs.logansquare.processor.type.field.TypeConverterFieldType;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -40,6 +41,8 @@ public class ObjectMapperInjector {
 
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(mJsonObjectHolder.injectedClassName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+
+        builder.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "\"unsafe\"").build());
 
         if (!mJsonObjectHolder.isAbstractClass) {
             builder.superclass(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.objectTypeName));
@@ -173,14 +176,16 @@ public class ObjectMapperInjector {
         for (Map.Entry<String, JsonFieldHolder> entry : mJsonObjectHolder.fieldMap.entrySet()) {
             JsonFieldHolder fieldHolder = entry.getValue();
 
-            String getter;
-            if (fieldHolder.hasGetter()) {
-                getter = "object." + fieldHolder.getterMethod + "()";
-            } else {
-                getter = "object." + entry.getKey();
-            }
+            if (fieldHolder.shouldSerialize) {
+                String getter;
+                if (fieldHolder.hasGetter()) {
+                    getter = "object." + fieldHolder.getterMethod + "()";
+                } else {
+                    getter = "object." + entry.getKey();
+                }
 
-            fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true);
+                fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true, true, mJsonObjectHolder.serializeNullObjects, mJsonObjectHolder.serializeNullCollectionElements);
+            }
         }
 
         if (mJsonObjectHolder.parentInjectedTypeName != null) {
@@ -200,25 +205,27 @@ public class ObjectMapperInjector {
         for (Map.Entry<String, JsonFieldHolder> entry : mJsonObjectHolder.fieldMap.entrySet()) {
             JsonFieldHolder fieldHolder = entry.getValue();
 
-            if (entryCount == 0) {
-                builder.beginControlFlow("if (" + getParseFieldIfStatement(fieldHolder) + ")");
-            } else {
-                builder.nextControlFlow("else if (" + getParseFieldIfStatement(fieldHolder) + ")");
+            if (fieldHolder.shouldParse) {
+                if (entryCount == 0) {
+                    builder.beginControlFlow("if (" + getParseFieldIfStatement(fieldHolder) + ")");
+                } else {
+                    builder.nextControlFlow("else if (" + getParseFieldIfStatement(fieldHolder) + ")");
+                }
+
+                String setter;
+                Object[] stringFormatArgs;
+                if (fieldHolder.hasSetter()) {
+                    setter = "instance.$L($L)";
+                    stringFormatArgs = new Object[] { fieldHolder.setterMethod };
+                } else {
+                    setter = "instance.$L = $L";
+                    stringFormatArgs = new Object[] { entry.getKey() };
+                }
+
+                fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
+
+                entryCount++;
             }
-
-            String setter;
-            Object[] stringFormatArgs;
-            if (fieldHolder.hasSetter()) {
-                setter = "instance.$L($L)";
-                stringFormatArgs = new Object[] { fieldHolder.setterMethod };
-            } else {
-                setter = "instance.$L = $L";
-                stringFormatArgs = new Object[] { entry.getKey() };
-            }
-
-            fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
-
-            entryCount++;
         }
         return entryCount;
     }

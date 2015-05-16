@@ -10,21 +10,21 @@ import java.util.Calendar;
 
 public abstract class CalendarTypeConverter implements TypeConverter<Calendar> {
 
-    /** Called to get the DateFormat used to parse and serialize objects */
-    public abstract DateFormat getDateFormat();
-
-    private static final Object FORMATTER_LOCK = new Object();
+    // DateFormat is not thread-safe, so wrap it in a ThreadLocal
+    private final ThreadLocal<DateFormat> mDateFormat = new ThreadLocal<DateFormat>(){
+        @Override
+        protected DateFormat initialValue() {
+            return getDateFormat();
+        }
+    };
 
     @Override
     public Calendar parse(JsonParser jsonParser) throws IOException {
         String dateString = jsonParser.getValueAsString(null);
         try {
-            // DateFormat is not thread-safe, so this has to be synchronized
-            synchronized (FORMATTER_LOCK) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(getDateFormat().parse(dateString));
-                return calendar;
-            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(mDateFormat.get().parse(dateString));
+            return calendar;
         } catch (ParseException e) {
             return null;
         }
@@ -32,10 +32,10 @@ public abstract class CalendarTypeConverter implements TypeConverter<Calendar> {
 
     @Override
     public void serialize(Calendar object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        // DateFormat is not thread-safe, so this has to be synchronized
-        synchronized (FORMATTER_LOCK) {
-            jsonGenerator.writeStringField(fieldName, getDateFormat().format(object.getTimeInMillis()));
-        }
+        jsonGenerator.writeStringField(fieldName, mDateFormat.get().format(object.getTimeInMillis()));
     }
+
+    /** Called to get the DateFormat used to parse and serialize objects */
+    public abstract DateFormat getDateFormat();
 
 }

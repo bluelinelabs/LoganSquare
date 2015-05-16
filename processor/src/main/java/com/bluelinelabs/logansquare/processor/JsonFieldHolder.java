@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.processor.type.Type;
+import com.bluelinelabs.logansquare.processor.type.container.ContainerType;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -18,9 +19,11 @@ public class JsonFieldHolder {
     public String[] fieldName;
     public String setterMethod;
     public String getterMethod;
+    public boolean shouldParse;
+    public boolean shouldSerialize;
     public Type type;
 
-    public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder) {
+    public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
         if (fieldNames == null || fieldNames.length == 0) {
             String defaultFieldName = element.getSimpleName().toString();
 
@@ -34,12 +37,27 @@ public class JsonFieldHolder {
         }
         fieldName = fieldNames;
 
+        this.shouldParse = shouldParse;
+        this.shouldSerialize = shouldSerialize;
+
         setterMethod = getSetter(element, elements);
         getterMethod = getGetter(element, elements);
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
 
-        // TODO: make sure the final subtype isn't null
+        Type typeToCheck = type;
+        boolean hasSubtypes = true;
+        do {
+            if (typeToCheck == null) {
+                return "Type could not be determined for " + element.toString();
+            } else {
+                if (typeToCheck instanceof ContainerType) {
+                    typeToCheck = ((ContainerType)typeToCheck).subType;
+                } else {
+                    hasSubtypes = false;
+                }
+            }
+        } while (hasSubtypes);
 
         return null;
     }

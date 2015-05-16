@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class EnumModel$$JsonObjectMapper {
     protected static final EnumModel.EnumTypeConverter ENUM_TYPE_CONVERTER = new EnumModel.EnumTypeConverter();
 
@@ -18,9 +20,7 @@ public final class EnumModel$$JsonObjectMapper {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        if (object.myEnum != null) {
-            ENUM_TYPE_CONVERTER.serialize(object.myEnum, "enum", true, jsonGenerator);
-        }
+        ENUM_TYPE_CONVERTER.serialize(object.myEnum, "enum", true, jsonGenerator);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

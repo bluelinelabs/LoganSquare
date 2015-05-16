@@ -4,25 +4,18 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
-import com.squareup.javapoet.TypeName;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
 
-public class MapContainerType extends ContainerType {
+public abstract class MapContainerType extends ContainerType {
 
     private final ClassName mClassName;
 
     public MapContainerType(ClassName className) {
         mClassName = className;
-    }
-
-    @Override
-    public TypeName getTypeName() {
-        return ClassName.get(HashMap.class);
     }
 
     @Override
@@ -41,7 +34,7 @@ public class MapContainerType extends ContainerType {
         String keyVariableName = "key" + depth;
 
         final String instanceCreator = String.format("$T<$T, %s> $L = new $T<$T, %s>()", subType.getParameterizedTypeString(), subType.getParameterizedTypeString());
-        final Object[] instanceCreatorArgs = expandStringArgs(HashMap.class, String.class, subType.getParameterizedTypeStringArgs(), mapVariableName, HashMap.class, String.class, subType.getParameterizedTypeStringArgs());
+        final Object[] instanceCreatorArgs = expandStringArgs(getTypeName(), String.class, subType.getParameterizedTypeStringArgs(), mapVariableName, getTypeName(), String.class, subType.getParameterizedTypeStringArgs());
 
         builder.beginControlFlow("if ($L.getCurrentToken() == $T.START_OBJECT)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
                 .addStatement(instanceCreator, instanceCreatorArgs)
@@ -64,7 +57,7 @@ public class MapContainerType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean writeFieldName) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         final String mapVariableName = "lslocal" + fieldName;
         final String entryVariableName = "entry" + depth;
 
@@ -78,7 +71,7 @@ public class MapContainerType extends ContainerType {
                 .addStatement(instanceCreator, instanceCreatorArgs)
                 .beginControlFlow("if ($L != null)", mapVariableName);
 
-        if (writeFieldName) {
+        if (isObjectProperty) {
             builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
         }
 
@@ -86,11 +79,15 @@ public class MapContainerType extends ContainerType {
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs)
                 .addStatement("$L.writeFieldName($L.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME, entryVariableName)
-                .beginControlFlow("if ($L.getValue() == null)", entryVariableName)
-                .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME)
-                .nextControlFlow("else");
+                .beginControlFlow("if ($L.getValue() != null)", entryVariableName);
 
-        subType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false);
+        subType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
+
+        if (writeCollectionElementIfNull) {
+            builder
+                    .nextControlFlow("else")
+                    .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+        }
 
         builder
                 .endControlFlow()

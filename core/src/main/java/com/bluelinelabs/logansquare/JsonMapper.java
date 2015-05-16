@@ -129,10 +129,7 @@ public abstract class JsonMapper<T> {
         List<T> list = new ArrayList<>();
         if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
             while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                T object = parse(jsonParser);
-                if (object != null) {
-                    list.add(object);
-                }
+                list.add(parse(jsonParser));
             }
         }
         return list;
@@ -260,7 +257,11 @@ public abstract class JsonMapper<T> {
     public void serialize(List<T> list, JsonGenerator jsonGenerator) throws IOException {
         jsonGenerator.writeStartArray();
         for (T object : list) {
-            serialize(object, jsonGenerator, true);
+            if (object != null) {
+                serialize(object, jsonGenerator, true);
+            } else {
+                jsonGenerator.writeNull();
+            }
         }
         jsonGenerator.writeEndArray();
     }

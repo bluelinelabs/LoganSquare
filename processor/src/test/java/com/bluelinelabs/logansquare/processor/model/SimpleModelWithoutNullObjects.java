@@ -1,14 +1,12 @@
-package com.bluelinelabs.logansquare.processor;
+package com.bluelinelabs.logansquare.processor.model;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
-import com.bluelinelabs.logansquare.annotation.JsonIgnore;
-import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
 
 @JsonObject
-public class SimpleModel {
+public class SimpleModelWithoutNullObjects {
 
     @JsonField
     public String string;
@@ -42,20 +40,4 @@ public class SimpleModel {
 
     @JsonField(name = "test_double_obj")
     public Double testDoubleObj;
-
-    @JsonIgnore
-    @JsonField
-    public int intToIgnore;
-
-    @JsonIgnore(ignorePolicy = IgnorePolicy.PARSE_AND_SERIALIZE)
-    @JsonField
-    public int intToIgnoreForBoth;
-
-    @JsonIgnore(ignorePolicy = IgnorePolicy.PARSE_ONLY)
-    @JsonField
-    public int intToIgnoreForParse;
-
-    @JsonIgnore(ignorePolicy = IgnorePolicy.SERIALIZE_ONLY)
-    @JsonField
-    public int intToIgnoreForSerialization;
 }

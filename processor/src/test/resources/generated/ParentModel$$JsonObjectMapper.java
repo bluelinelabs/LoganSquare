@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class ParentModel$$JsonObjectMapper extends JsonMapper<ParentModel> {
     @Override
     public ParentModel parse(JsonParser jsonParser) throws IOException {

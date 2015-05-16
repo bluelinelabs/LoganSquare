@@ -7,9 +7,11 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unsafe")
 public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapper<LowerCaseNamingPolicyModel> {
     @Override
     public LowerCaseNamingPolicyModel parse(JsonParser jsonParser) throws IOException {
@@ -41,9 +43,7 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     String value1;
                     value1 = jsonParser.getValueAsString(null);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.camelCaseList = collection1;
             } else{
@@ -68,11 +68,15 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
             jsonGenerator.writeFieldName("camel_case_list");
             jsonGenerator.writeStartArray();
             for (String element1 : lslocalcamel_case_list) {
-                jsonGenerator.writeString(element1);
+                if (element1 != null) {
+                    jsonGenerator.writeString(element1);
+                }
             }
             jsonGenerator.writeEndArray();
         }
-        jsonGenerator.writeStringField("camel_case_string", object.camelCaseString);
+        if (object.camelCaseString != null) {
+            jsonGenerator.writeStringField("camel_case_string", object.camelCaseString);
+        }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

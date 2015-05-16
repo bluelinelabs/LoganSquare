@@ -7,11 +7,13 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unsafe")
 public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<PrivateFieldModel> {
     @Override
     public PrivateFieldModel parse(JsonParser jsonParser) throws IOException {
@@ -47,9 +49,7 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     String value1;
                     value1 = jsonParser.getValueAsString(null);
-                    if (value1 != null) {
-                        collection1.add(value1);
-                    }
+                    collection1.add(value1);
                 }
                 instance.setPrivateList(collection1);
             } else {
@@ -87,14 +87,18 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        jsonGenerator.writeStringField("string_to_test_m_vars", object.getStringThatStartsWithM());
+        if (object.getStringThatStartsWithM() != null) {
+            jsonGenerator.writeStringField("string_to_test_m_vars", object.getStringThatStartsWithM());
+        }
         jsonGenerator.writeBooleanField("privateBoolean", object.isPrivateBoolean());
         final List<String> lslocalprivateList = object.getPrivateList();
         if (lslocalprivateList != null) {
             jsonGenerator.writeFieldName("privateList");
             jsonGenerator.writeStartArray();
             for (String element1 : lslocalprivateList) {
-                jsonGenerator.writeString(element1);
+                if (element1 != null) {
+                    jsonGenerator.writeString(element1);
+                }
             }
             jsonGenerator.writeEndArray();
         }
@@ -104,16 +108,18 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, String> entry1 : lslocalprivateMap.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
-                if (entry1.getValue() == null) {
-                    jsonGenerator.writeNull();
-                } else{
+                if (entry1.getValue() != null) {
                     jsonGenerator.writeString(entry1.getValue());
                 }
             }
             jsonGenerator.writeEndObject();
         }
-        jsonGenerator.writeStringField("private_named_string", object.getPrivateNamedString());
-        jsonGenerator.writeStringField("privateString", object.getPrivateString());
+        if (object.getPrivateNamedString() != null) {
+            jsonGenerator.writeStringField("private_named_string", object.getPrivateNamedString());
+        }
+        if (object.getPrivateString() != null) {
+            jsonGenerator.writeStringField("privateString", object.getPrivateString());
+        }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

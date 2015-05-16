@@ -17,6 +17,8 @@ public class JsonObjectHolder {
     public final TypeName parentInjectedTypeName;
     public final FieldDetectionPolicy fieldDetectionPolicy;
     public final FieldNamingPolicy fieldNamingPolicy;
+    public final boolean serializeNullObjects;
+    public final boolean serializeNullCollectionElements;
     public String onCompleteCallback;
     public String preSerializeCallback;
 
@@ -25,7 +27,7 @@ public class JsonObjectHolder {
     public final Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
     public boolean fileCreated;
 
-    public JsonObjectHolder(String packageName, String injectedClassName, TypeName objectTypeName, boolean isAbstractClass, TypeName parentInjectedTypeName, FieldDetectionPolicy fieldDetectionPolicy, FieldNamingPolicy fieldNamingPolicy) {
+    public JsonObjectHolder(String packageName, String injectedClassName, TypeName objectTypeName, boolean isAbstractClass, TypeName parentInjectedTypeName, FieldDetectionPolicy fieldDetectionPolicy, FieldNamingPolicy fieldNamingPolicy, boolean serializeNullObjects, boolean serializeNullCollectionElements) {
         this.packageName = packageName;
         this.injectedClassName = injectedClassName;
         this.objectTypeName = objectTypeName;
@@ -33,5 +35,7 @@ public class JsonObjectHolder {
         this.parentInjectedTypeName = parentInjectedTypeName;
         this.fieldDetectionPolicy = fieldDetectionPolicy;
         this.fieldNamingPolicy = fieldNamingPolicy;
+        this.serializeNullObjects = serializeNullObjects;
+        this.serializeNullCollectionElements = serializeNullCollectionElements;
     }
 }

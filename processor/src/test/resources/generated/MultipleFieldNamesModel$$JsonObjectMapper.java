@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.lang.Override;
 import java.lang.String;
+import java.lang.SuppressWarnings;
 
+@SuppressWarnings("unsafe")
 public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<MultipleFieldNamesModel> {
     @Override
     public MultipleFieldNamesModel parse(JsonParser jsonParser) throws IOException {
@@ -59,7 +61,9 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
         jsonGenerator.writeNumberField("possible_float_name_1", object.testFloat);
         jsonGenerator.writeNumberField("possible_int_name_1", object.testInt);
         jsonGenerator.writeNumberField("possible_long_name_1", object.testLong);
-        jsonGenerator.writeStringField("possible_string_name_1", object.testString);
+        if (object.testString != null) {
+            jsonGenerator.writeStringField("possible_string_name_1", object.testString);
+        }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

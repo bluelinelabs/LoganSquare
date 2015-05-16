@@ -15,9 +15,9 @@ public class DefaultDateFormatter extends SimpleDateFormat {
         setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    /** Replace ending Z's with +00:00 so Java's SimpleDateFormat can handle it correctly */
+    /** Replace ending Z's with +0000 so Java's SimpleDateFormat can handle it correctly */
     private String getFixedInputString(String input) {
-        return input.replaceAll("Z$", "+00:00");
+        return input != null ? input.replaceAll("Z$", "+0000") : null;
     }
 
     @Override

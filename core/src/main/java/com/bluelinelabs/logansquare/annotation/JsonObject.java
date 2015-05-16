@@ -64,4 +64,14 @@ public @interface JsonObject {
      * field's @JsonField annotation.
      */
     FieldNamingPolicy fieldNamingPolicy() default FieldNamingPolicy.FIELD_NAME;
+
+    /**
+     * Allows control over whether or not null fields are serialized. Defaults to false.
+     */
+    boolean serializeNullObjects() default false;
+
+    /**
+     * Allows control over whether or not null collection and array elements are serialized. Defaults to false.
+     */
+    boolean serializeNullCollectionElements() default false;
 }

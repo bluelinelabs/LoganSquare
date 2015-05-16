@@ -18,11 +18,20 @@ public abstract class ContainerType extends Type {
         switch (genericClassTypeMirror.toString()) {
             case "java.util.List":
             case "java.util.ArrayList":
-                containerType = new ListContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
+                containerType = new ArrayListContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
+                break;
+            case "java.util.LinkedList":
+                containerType = new LinkedListContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
             case "java.util.Map":
             case "java.util.HashMap":
-                containerType = new MapContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
+                containerType = new HashMapContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
+                break;
+            case "java.util.TreeMap":
+                containerType = new TreeMapContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
+                break;
+            case "java.util.LinkedHashMap":
+                containerType = new LinkedHashMapContainerType(ClassName.bestGuess(genericClassTypeMirror.toString()));
                 break;
             case "java.util.Set":
             case "java.util.HashSet":

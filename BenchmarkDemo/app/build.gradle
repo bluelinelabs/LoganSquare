@@ -33,7 +33,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -41,13 +41,13 @@ android {
 
 dependencies {
     // LoganSquare annotation processor
-    apt 'com.bluelinelabs:logansquare-compiler:1.0.6'
+    apt 'com.bluelinelabs:logansquare-compiler:1.1.0'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
 
     // LoganSquare runtime library
-    compile 'com.bluelinelabs:logansquare:1.0.6'
+    compile 'com.bluelinelabs:logansquare:1.1.0'
 
     // Jackson libraries for comparison
     compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
