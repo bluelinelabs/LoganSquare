@@ -22,6 +22,7 @@ public class JsonFieldHolder {
     public boolean shouldParse;
     public boolean shouldSerialize;
     public Type type;
+    public Type subType;
 
     public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
         if (fieldNames == null || fieldNames.length == 0) {
@@ -44,6 +45,11 @@ public class JsonFieldHolder {
         getterMethod = getGetter(element, elements);
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
+        subType = type;
+
+        if (type instanceof ContainerType) {
+            subType = ((ContainerType) type).subType;
+        }
 
         Type typeToCheck = type;
         boolean hasSubtypes = true;
