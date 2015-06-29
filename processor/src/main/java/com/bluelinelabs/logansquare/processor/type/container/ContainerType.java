@@ -13,7 +13,7 @@ public abstract class ContainerType extends Type {
 
     public Type subType;
 
-    public static ContainerType containerTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
+    public static ContainerType containerTypeFor(TypeMirror typeMirror, TypeMirror typeConverterType, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
         ContainerType containerType = null;
         switch (genericClassTypeMirror.toString()) {
             case "java.util.List":
@@ -54,7 +54,7 @@ public abstract class ContainerType extends Type {
         }
 
         if (containerType != null) {
-            containerType.subType = Type.typeFor(typeMirror, null, elements, types);
+            containerType.subType = Type.typeFor(typeMirror, typeConverterType, elements, types);
         }
 
         return containerType;
