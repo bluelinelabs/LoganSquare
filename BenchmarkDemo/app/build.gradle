@@ -55,4 +55,9 @@ dependencies {
 
     // GSON library for comparison
     compile 'com.google.code.gson:gson:2.3.1'
+
+    // Google http client for comparison
+    compile('com.google.http-client:google-http-client-jackson2:1.20.0') {
+        exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
+    }
 }
