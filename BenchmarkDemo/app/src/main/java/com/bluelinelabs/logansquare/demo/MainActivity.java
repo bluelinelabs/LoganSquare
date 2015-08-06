@@ -9,12 +9,14 @@ import android.view.View.OnClickListener;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.demo.model.Response;
+import com.bluelinelabs.logansquare.demo.parsetasks.GoogleHttpJackson2Parser;
 import com.bluelinelabs.logansquare.demo.parsetasks.GsonParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.JacksonDatabindParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.LoganSquareParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.ParseResult;
 import com.bluelinelabs.logansquare.demo.parsetasks.Parser;
 import com.bluelinelabs.logansquare.demo.parsetasks.Parser.ParseListener;
+import com.bluelinelabs.logansquare.demo.serializetasks.GoogleHttpJackson2Serializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.GsonSerializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.JacksonDatabindSerializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.LoganSquareSerializer;
@@ -64,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         mResponsesToSerialize = getResponsesToParse();
 
         mBarChart = (BarChart)findViewById(R.id.bar_chart);
-        mBarChart.setColumnTitles(new String[] {"GSON", "Jackson", "LoganSquare"});
+        mBarChart.setColumnTitles(new String[] {"GSON", "Jackson", "LoganSquare", "google-http-jackson2"});
 
         findViewById(R.id.btn_parse_tests).setOnClickListener(new OnClickListener() {
             @Override
@@ -93,6 +95,7 @@ public class MainActivity extends ActionBarActivity {
                 parsers.add(new GsonParser(mParseListener, jsonString, gson));
                 parsers.add(new JacksonDatabindParser(mParseListener, jsonString, objectMapper));
                 parsers.add(new LoganSquareParser(mParseListener, jsonString));
+                parsers.add(new GoogleHttpJackson2Parser(mParseListener, jsonString));
             }
         }
 
@@ -113,6 +116,7 @@ public class MainActivity extends ActionBarActivity {
                 serializers.add(new GsonSerializer(mSerializeListener, response, gson));
                 serializers.add(new JacksonDatabindSerializer(mSerializeListener, response, objectMapper));
                 serializers.add(new LoganSquareSerializer(mSerializeListener, response));
+                serializers.add(new GoogleHttpJackson2Serializer(mSerializeListener, response));
             }
         }
 
@@ -147,6 +151,8 @@ public class MainActivity extends ActionBarActivity {
             mBarChart.addTiming(section, 1, parseResult.runDuration / 1000f);
         } else if (parser instanceof LoganSquareParser) {
             mBarChart.addTiming(section, 2, parseResult.runDuration / 1000f);
+        } else if (parser instanceof GoogleHttpJackson2Parser) {
+            mBarChart.addTiming(section, 3, parseResult.runDuration / 1000f);
         }
     }
 
@@ -176,6 +182,8 @@ public class MainActivity extends ActionBarActivity {
             mBarChart.addTiming(section, 1, serializeResult.runDuration / 1000f);
         } else if (serializer instanceof LoganSquareSerializer) {
             mBarChart.addTiming(section, 2, serializeResult.runDuration / 1000f);
+        } else if (serializer instanceof GoogleHttpJackson2Serializer) {
+            mBarChart.addTiming(section, 3, serializeResult.runDuration / 1000f);
         }
     }
 
