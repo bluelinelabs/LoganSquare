@@ -58,7 +58,8 @@ public abstract class MapContainerType extends ContainerType {
 
     @Override
     public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        final String mapVariableName = "lslocal" + fieldName;
+        final String cleanFieldName = fieldName.replaceAll(" ", "");
+        final String mapVariableName = "lslocal" + cleanFieldName;
         final String entryVariableName = "entry" + depth;
 
         final String instanceCreator = String.format("final $T<$T, %s> $L = $L", subType.getParameterizedTypeString());

@@ -39,7 +39,8 @@ public abstract class SingleParameterCollectionType extends ContainerType {
 
     @Override
     public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        String collectionVariableName = "lslocal" + fieldName;
+        final String cleanFieldName = fieldName.replaceAll(" ", "");
+        final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 
         final String instanceCreator = String.format("final $T<%s> $L = $L", subType.getParameterizedTypeString());
