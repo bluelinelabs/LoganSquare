@@ -72,7 +72,7 @@ public class RoundTripTests {
 
         String reserialized = null;
         try {
-            Map<String, SimpleModel> simpleModelMap = LoganSquare.parseMap(json, SimpleModel.class);
+            Map<String, SimpleModel> simpleModelMap = new TreeMap<>(LoganSquare.parseMap(json, SimpleModel.class));
             reserialized = LoganSquare.serialize(simpleModelMap, SimpleModel.class);
         } catch (Exception ignored) { }
 
