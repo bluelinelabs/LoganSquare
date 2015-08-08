@@ -43,7 +43,6 @@ public abstract class SingleParameterCollectionType extends ContainerType {
     @Override
     public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
-        processedFieldNames.add(cleanFieldName);
         final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 

@@ -1,10 +1,8 @@
 package com.bluelinelabs.logansquare.processor.type.container;
 
 import com.bluelinelabs.logansquare.processor.TextUtils;
-import com.bluelinelabs.logansquare.processor.type.field.FieldType;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ArrayTypeName;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -78,7 +76,6 @@ public class ArrayCollectionType extends ContainerType {
     @Override
     public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
-        processedFieldNames.add(fieldName);
         final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 
