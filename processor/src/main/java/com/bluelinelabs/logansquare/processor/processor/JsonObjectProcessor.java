@@ -7,27 +7,28 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
+import com.bluelinelabs.logansquare.processor.JsonObjectHolder.JsonObjectHolderBuilder;
 import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -89,7 +90,17 @@ public class JsonObjectProcessor extends Processor {
 
             JsonObject annotation = element.getAnnotation(JsonObject.class);
 
-            holder = new JsonObjectHolder(packageName, injectedSimpleClassName, TypeName.get(typeElement.asType()), abstractClass, parentInjectedClassName, annotation.fieldDetectionPolicy(), annotation.fieldNamingPolicy(), annotation.serializeNullObjects(), annotation.serializeNullCollectionElements());
+            holder = new JsonObjectHolderBuilder()
+                    .setPackageName(packageName)
+                    .setInjectedClassName(injectedSimpleClassName)
+                    .setObjectTypeName(TypeName.get(typeElement.asType()))
+                    .setIsAbstractClass(abstractClass)
+                    .setParentInjectedTypeName(parentInjectedClassName)
+                    .setFieldDetectionPolicy(annotation.fieldDetectionPolicy())
+                    .setFieldNamingPolicy(annotation.fieldNamingPolicy())
+                    .setSerializeNullObjects(annotation.serializeNullObjects())
+                    .setSerializeNullCollectionElements(annotation.serializeNullCollectionElements())
+                    .build();
 
             FieldDetectionPolicy fieldDetectionPolicy = annotation.fieldDetectionPolicy();
             if (fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS || fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS) {

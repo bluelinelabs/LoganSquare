@@ -4,7 +4,6 @@ import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldNamingPolicy;
 import com.squareup.javapoet.TypeName;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,15 +26,76 @@ public class JsonObjectHolder {
     public final Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
     public boolean fileCreated;
 
-    public JsonObjectHolder(String packageName, String injectedClassName, TypeName objectTypeName, boolean isAbstractClass, TypeName parentInjectedTypeName, FieldDetectionPolicy fieldDetectionPolicy, FieldNamingPolicy fieldNamingPolicy, boolean serializeNullObjects, boolean serializeNullCollectionElements) {
-        this.packageName = packageName;
-        this.injectedClassName = injectedClassName;
-        this.objectTypeName = objectTypeName;
-        this.isAbstractClass = isAbstractClass;
-        this.parentInjectedTypeName = parentInjectedTypeName;
-        this.fieldDetectionPolicy = fieldDetectionPolicy;
-        this.fieldNamingPolicy = fieldNamingPolicy;
-        this.serializeNullObjects = serializeNullObjects;
-        this.serializeNullCollectionElements = serializeNullCollectionElements;
+    private JsonObjectHolder(JsonObjectHolderBuilder builder) {
+        packageName = builder.packageName;
+        injectedClassName = builder.injectedClassName;
+        objectTypeName = builder.objectTypeName;
+        isAbstractClass = builder.isAbstractClass;
+        parentInjectedTypeName = builder.parentInjectedTypeName;
+        fieldDetectionPolicy = builder.fieldDetectionPolicy;
+        fieldNamingPolicy = builder.fieldNamingPolicy;
+        serializeNullObjects = builder.serializeNullObjects;
+        serializeNullCollectionElements = builder.serializeNullCollectionElements;
+    }
+
+    public static class JsonObjectHolderBuilder {
+        private String packageName;
+        private String injectedClassName;
+        private TypeName objectTypeName;
+        private boolean isAbstractClass;
+        private TypeName parentInjectedTypeName;
+        private FieldDetectionPolicy fieldDetectionPolicy;
+        private FieldNamingPolicy fieldNamingPolicy;
+        private boolean serializeNullObjects;
+        private boolean serializeNullCollectionElements;
+
+        public JsonObjectHolderBuilder setPackageName(String packageName) {
+            this.packageName = packageName;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setInjectedClassName(String injectedClassName) {
+            this.injectedClassName = injectedClassName;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setObjectTypeName(TypeName objectTypeName) {
+            this.objectTypeName = objectTypeName;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setIsAbstractClass(boolean isAbstractClass) {
+            this.isAbstractClass = isAbstractClass;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setParentInjectedTypeName(TypeName parentInjectedTypeName) {
+            this.parentInjectedTypeName = parentInjectedTypeName;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setFieldDetectionPolicy(FieldDetectionPolicy fieldDetectionPolicy) {
+            this.fieldDetectionPolicy = fieldDetectionPolicy;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setFieldNamingPolicy(FieldNamingPolicy fieldNamingPolicy) {
+            this.fieldNamingPolicy = fieldNamingPolicy;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setSerializeNullObjects(boolean serializeNullObjects) {
+            this.serializeNullObjects = serializeNullObjects;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setSerializeNullCollectionElements(boolean serializeNullCollectionElements) {
+            this.serializeNullCollectionElements = serializeNullCollectionElements;
+            return this;
+        }
+
+        public JsonObjectHolder build() {
+            return new JsonObjectHolder(this);
+        }
     }
 }
