@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.processor.type.container;
 
+import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.type.field.FieldType;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ArrayTypeName;
@@ -75,8 +76,10 @@ public class ArrayCollectionType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        String collectionVariableName = "lslocal" + fieldName;
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
+        processedFieldNames.add(fieldName);
+        final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 
         final String instanceCreator;
@@ -111,7 +114,7 @@ public class ArrayCollectionType extends ContainerType {
             builder.beginControlFlow("if ($L != null)", elementVarName);
         }
 
-        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false, false, false, writeCollectionElementIfNull);
+        subType.serialize(builder, depth + 1, collectionVariableName + "Element", processedFieldNames, elementVarName, false, false, false, writeCollectionElementIfNull);
 
         if (!subType.getTypeName().isPrimitive()) {
             if (writeCollectionElementIfNull) {

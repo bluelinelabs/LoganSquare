@@ -1,8 +1,11 @@
 package com.bluelinelabs.logansquare.processor.type.container;
 
+import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
+
+import java.util.List;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -38,8 +41,9 @@ public abstract class SingleParameterCollectionType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        final String cleanFieldName = fieldName.replaceAll(" ", "");
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
+        processedFieldNames.add(cleanFieldName);
         final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 
@@ -62,7 +66,7 @@ public abstract class SingleParameterCollectionType extends ContainerType {
                 .beginControlFlow(forLine, forLineArgs)
                 .beginControlFlow("if ($L != null)", elementVarName);
 
-        subType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false, false, false, writeCollectionElementIfNull);
+        subType.serialize(builder, depth + 1, collectionVariableName + "Element", processedFieldNames, elementVarName, false, false, false, writeCollectionElementIfNull);
 
         if (writeCollectionElementIfNull) {
             builder

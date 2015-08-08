@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.processor;
+package com.bluelinelabs.logansquare.processor.model;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -51,6 +51,18 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
       } else{
         instance.addressLines = null;
       }
+    } else if ("AddressLines".equals(fieldName)){
+      if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+        ArrayList<String> collection1 = new ArrayList<String>();
+        while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+          String value1;
+          value1 = jsonParser.getValueAsString(null);
+          collection1.add(value1);
+        }
+        instance.addressLinesDuplicate = collection1;
+      } else{
+        instance.addressLinesDuplicate = null;
+      }
     } else if ("All Contacts".equals(fieldName)){
       if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
         HashMap<String, String> map1 = new HashMap<String, String>();
@@ -69,6 +81,19 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
       }
     } else if ("Full Name".equals(fieldName)){
       instance.fullName = jsonParser.getValueAsString(null);
+    } else if ("Pet Names".equals(fieldName)){
+      if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+        List<String> collection1 = new ArrayList<String>();
+        while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+          String value1;
+          value1 = jsonParser.getValueAsString(null);
+          collection1.add(value1);
+        }
+        String[] array = collection1.toArray(new String[collection1.size()]);
+        instance.petNames = array;
+      } else{
+        instance.petNames = null;
+      }
     }
   }
 
@@ -92,6 +117,17 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
       }
       jsonGenerator.writeEndArray();
     }
+    final List<String> lslocalAddressLines1 = object.addressLinesDuplicate;
+    if (lslocalAddressLines1 != null) {
+      jsonGenerator.writeFieldName("AddressLines");
+      jsonGenerator.writeStartArray();
+      for (String element1 : lslocalAddressLines1) {
+        if (element1 != null) {
+          jsonGenerator.writeString(element1);
+        }
+      }
+      jsonGenerator.writeEndArray();
+    }
     final Map<String, String> lslocalAllContacts = object.allContacts;
     if (lslocalAllContacts != null) {
       jsonGenerator.writeFieldName("All Contacts");
@@ -106,6 +142,17 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
     }
     if (object.fullName != null) {
       jsonGenerator.writeStringField("Full Name", object.fullName);
+    }
+    final String[] lslocalPetNames = object.petNames;
+    if (lslocalPetNames != null) {
+      jsonGenerator.writeFieldName("Pet Names");
+      jsonGenerator.writeStartArray();
+      for (String element1 : lslocalPetNames) {
+        if (element1 != null) {
+          jsonGenerator.writeString(element1);
+        }
+      }
+      jsonGenerator.writeEndArray();
     }
     if (writeStartAndEnd) {
       jsonGenerator.writeEndObject();

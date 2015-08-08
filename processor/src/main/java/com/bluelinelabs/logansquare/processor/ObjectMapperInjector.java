@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ObjectMapperInjector {
 
@@ -173,6 +175,7 @@ public class ObjectMapperInjector {
                 .addStatement("$L.writeStartObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .endControlFlow();
 
+        List<String> processedFields = new ArrayList<>(mJsonObjectHolder.fieldMap.size());
         for (Map.Entry<String, JsonFieldHolder> entry : mJsonObjectHolder.fieldMap.entrySet()) {
             JsonFieldHolder fieldHolder = entry.getValue();
 
@@ -184,7 +187,7 @@ public class ObjectMapperInjector {
                     getter = "object." + entry.getKey();
                 }
 
-                fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], getter, true, true, mJsonObjectHolder.serializeNullObjects, mJsonObjectHolder.serializeNullCollectionElements);
+                fieldHolder.type.serialize(builder, 1, fieldHolder.fieldName[0], processedFields, getter, true, true, mJsonObjectHolder.serializeNullObjects, mJsonObjectHolder.serializeNullCollectionElements);
             }
         }
 
