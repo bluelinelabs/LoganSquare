@@ -20,7 +20,7 @@ public abstract class Type {
     public abstract String getParameterizedTypeString();
     public abstract Object[] getParameterizedTypeStringArgs();
     public abstract void parse(MethodSpec.Builder builder, int depth, String setter, Object... setterFormatArgs);
-    public abstract void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull);
+    public abstract void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull);
 
     public static Type typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         TypeMirror genericClassTypeMirror = types.erasure(typeMirror);

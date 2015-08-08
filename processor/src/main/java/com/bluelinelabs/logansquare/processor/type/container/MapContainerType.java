@@ -1,10 +1,12 @@
 package com.bluelinelabs.logansquare.processor.type.container;
 
+import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
@@ -57,8 +59,9 @@ public abstract class MapContainerType extends ContainerType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        final String mapVariableName = "lslocal" + fieldName;
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+        final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
+        final String mapVariableName = "lslocal" + cleanFieldName;
         final String entryVariableName = "entry" + depth;
 
         final String instanceCreator = String.format("final $T<$T, %s> $L = $L", subType.getParameterizedTypeString());
@@ -81,7 +84,7 @@ public abstract class MapContainerType extends ContainerType {
                 .addStatement("$L.writeFieldName($L.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME, entryVariableName)
                 .beginControlFlow("if ($L.getValue() != null)", entryVariableName);
 
-        subType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
+        subType.serialize(builder, depth + 1, mapVariableName + "Element", processedFieldNames, entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
 
         if (writeCollectionElementIfNull) {
             builder
