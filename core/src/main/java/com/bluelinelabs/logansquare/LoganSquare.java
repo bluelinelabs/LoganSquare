@@ -1,14 +1,6 @@
 package com.bluelinelabs.logansquare;
 
-import com.bluelinelabs.logansquare.objectmappers.BooleanMapper;
-import com.bluelinelabs.logansquare.objectmappers.DoubleMapper;
-import com.bluelinelabs.logansquare.objectmappers.FloatMapper;
-import com.bluelinelabs.logansquare.objectmappers.IntegerMapper;
-import com.bluelinelabs.logansquare.objectmappers.ListMapper;
-import com.bluelinelabs.logansquare.objectmappers.LongMapper;
-import com.bluelinelabs.logansquare.objectmappers.MapMapper;
-import com.bluelinelabs.logansquare.objectmappers.ObjectMapper;
-import com.bluelinelabs.logansquare.objectmappers.StringMapper;
+import com.bluelinelabs.logansquare.internal.JsonMapperLoader;
 import com.bluelinelabs.logansquare.typeconverters.DefaultCalendarConverter;
 import com.bluelinelabs.logansquare.typeconverters.DefaultDateConverter;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
@@ -18,33 +10,21 @@ import com.fasterxml.jackson.core.JsonFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
-    private static final ListMapper LIST_MAPPER = new ListMapper();
-    private static final MapMapper MAP_MAPPER = new MapMapper();
-
-    private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new ConcurrentHashMap<Class, JsonMapper>();
+    private static final SimpleArrayMap<Class, JsonMapper> OBJECT_MAPPERS = new SimpleArrayMap<Class, JsonMapper>();
     static {
-        OBJECT_MAPPERS.put(String.class, new StringMapper());
-        OBJECT_MAPPERS.put(Integer.class, new IntegerMapper());
-        OBJECT_MAPPERS.put(Long.class, new LongMapper());
-        OBJECT_MAPPERS.put(Float.class, new FloatMapper());
-        OBJECT_MAPPERS.put(Double.class, new DoubleMapper());
-        OBJECT_MAPPERS.put(Boolean.class, new BooleanMapper());
-        OBJECT_MAPPERS.put(Object.class, new ObjectMapper());
-        OBJECT_MAPPERS.put(List.class, LIST_MAPPER);
-        OBJECT_MAPPERS.put(ArrayList.class, LIST_MAPPER);
-        OBJECT_MAPPERS.put(Map.class, MAP_MAPPER);
-        OBJECT_MAPPERS.put(HashMap.class, MAP_MAPPER);
+        try {
+            ((JsonMapperLoader)Class.forName(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME).newInstance()).putAllJsonMappers(OBJECT_MAPPERS);
+        } catch (Exception e) {
+            throw new RuntimeException("JsonMapperLoaderImpl class not found. Have you included the steps needed for LoganSquare to process your annotations?");
+        }
     }
 
     private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<Class, TypeConverter>();
@@ -189,16 +169,10 @@ public class LoganSquare {
         JsonMapper<E> mapper = OBJECT_MAPPERS.get(cls);
 
         if (mapper == null) {
-            try {
-                Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
-                mapper = (JsonMapper<E>)mapperClass.newInstance();
-                OBJECT_MAPPERS.put(cls, mapper);
-            } catch (Exception e) {
-                throw new NoSuchMapperException(cls, e);
-            }
+            throw new NoSuchMapperException(cls);
+        } else {
+            return mapper;
         }
-
-        return mapper;
     }
 
     /**

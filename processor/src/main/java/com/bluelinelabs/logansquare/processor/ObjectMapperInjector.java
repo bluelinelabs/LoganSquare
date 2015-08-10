@@ -13,11 +13,12 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 
-import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.lang.model.element.Modifier;
 
 public class ObjectMapperInjector {
 

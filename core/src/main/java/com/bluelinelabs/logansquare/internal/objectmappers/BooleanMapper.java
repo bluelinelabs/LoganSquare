@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
