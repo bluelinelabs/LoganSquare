@@ -63,8 +63,6 @@ public class JsonObjectProcessor extends Processor {
 
         if (element.getModifiers().contains(PRIVATE)) {
             error(element, "%s: %s annotation can't be used on private classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
-        } else if (typeElement.getTypeParameters().size() > 0) {
-            error(element, "%s: @%s annotation can't be used on generic classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
         }
 
         JsonObjectHolder holder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(typeElement, elements));
@@ -100,6 +98,7 @@ public class JsonObjectProcessor extends Processor {
                     .setFieldNamingPolicy(annotation.fieldNamingPolicy())
                     .setSerializeNullObjects(annotation.serializeNullObjects())
                     .setSerializeNullCollectionElements(annotation.serializeNullCollectionElements())
+                    .setTypeParameters(typeElement.getTypeParameters())
                     .build();
 
             FieldDetectionPolicy fieldDetectionPolicy = annotation.fieldDetectionPolicy();

@@ -27,8 +27,8 @@ public class DynamicFieldType extends FieldType {
 
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
-        setter = replaceLastLiteral(setter, "LoganSquare.typeConverterFor($T.class).parse($L)");
-        builder.addStatement(setter, expandStringArgs(setterFormatArgs, mTypeName, JSON_PARSER_VARIABLE_NAME));
+        setter = replaceLastLiteral(setter, "$T.typeConverterFor($T.class).parse($L)");
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, LoganSquare.class, mTypeName, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override

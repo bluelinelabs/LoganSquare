@@ -1,20 +1,24 @@
 package com.bluelinelabs.logansquare.processor.type;
 
-import com.bluelinelabs.logansquare.processor.type.container.ContainerType;
+import com.bluelinelabs.logansquare.processor.type.collection.ArrayCollectionType;
+import com.bluelinelabs.logansquare.processor.type.collection.CollectionType;
 import com.bluelinelabs.logansquare.processor.type.field.FieldType;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedType;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public abstract class Type {
+
+    public final List<Type> parameterTypes;
 
     public abstract TypeName getTypeName();
     public abstract String getParameterizedTypeString();
@@ -22,17 +26,27 @@ public abstract class Type {
     public abstract void parse(MethodSpec.Builder builder, int depth, String setter, Object... setterFormatArgs);
     public abstract void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull);
 
+    public Type() {
+        parameterTypes = new ArrayList<>();
+    }
+
     public static Type typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
         TypeMirror genericClassTypeMirror = types.erasure(typeMirror);
-
         boolean hasTypeConverter = typeConverterType != null && !typeConverterType.toString().equals("void");
-        boolean isCollection = !genericClassTypeMirror.toString().equals(typeMirror.toString()) || (typeMirror instanceof ArrayType);
 
-        if (!hasTypeConverter && isCollection) {
-            return ContainerType.containerTypeFor(typeMirror, genericClassTypeMirror, elements, types);
+        Type type;
+        if (!hasTypeConverter && typeMirror instanceof ArrayType) {
+            TypeMirror arrayTypeMirror = ((ArrayType)typeMirror).getComponentType();
+            type = new ArrayCollectionType(Type.typeFor(arrayTypeMirror, null, elements, types));
+        } else if (genericClassTypeMirror.toString().equals("java.lang.Object")) {
+            type = new ParameterizedType(typeMirror);
+        } else if (!hasTypeConverter && !genericClassTypeMirror.toString().equals(typeMirror.toString())) {
+            type = CollectionType.containerTypeFor(typeMirror, genericClassTypeMirror, elements, types);
         } else {
-            return FieldType.fieldTypeFor(typeMirror, typeConverterType, elements, types);
+            type = FieldType.fieldTypeFor(typeMirror, typeConverterType, elements, types);
         }
+
+        return type;
     }
 
     protected Object[] expandStringArgs(Object... args) {
@@ -46,5 +60,15 @@ public abstract class Type {
         }
 
         return argList.toArray(new Object[argList.size()]);
+    }
+
+    public void addParameterTypes(List<TypeMirror> parameterTypes, Elements elements, Types types) {
+        for (TypeMirror typeMirror : parameterTypes) {
+            addParameterType(typeMirror, elements, types);
+        }
+    }
+
+    public void addParameterType(TypeMirror parameterType, Elements elements, Types types) {
+        parameterTypes.add(Type.typeFor(parameterType, null, elements, types));
     }
 }

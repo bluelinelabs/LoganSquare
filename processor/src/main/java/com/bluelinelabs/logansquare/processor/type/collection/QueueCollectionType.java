@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
@@ -6,11 +6,11 @@ import com.squareup.javapoet.TypeName;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class QueueContainerType extends SingleParameterCollectionType {
+public class QueueCollectionType extends SingleParameterCollectionType {
 
     private final ClassName mClassName;
 
-    public QueueContainerType(ClassName className) {
+    public QueueCollectionType(ClassName className) {
         mClassName = className;
     }
 
@@ -21,12 +21,12 @@ public class QueueContainerType extends SingleParameterCollectionType {
 
     @Override
     public String getParameterizedTypeString() {
-        return "$T<" + subType.getParameterizedTypeString() + ">";
+        return "$T<" + parameterTypes.get(0).getParameterizedTypeString() + ">";
     }
 
     @Override
     public Object[] getParameterizedTypeStringArgs() {
-        return expandStringArgs(mClassName, subType.getParameterizedTypeStringArgs());
+        return expandStringArgs(mClassName, parameterTypes.get(0).getParameterizedTypeStringArgs());
     }
 
     @Override

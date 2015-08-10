@@ -146,9 +146,6 @@ public class RoundTripTests {
             reserialized = LoganSquare.serialize(map, Object.class);
         } catch (Exception ignored) { }
 
-        System.out.println(json);
-        System.out.println(reserialized);
-
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
 

@@ -4,8 +4,11 @@ import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldNamingPolicy;
 import com.squareup.javapoet.TypeName;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.lang.model.element.TypeParameterElement;
 
 public class JsonObjectHolder {
 
@@ -18,6 +21,7 @@ public class JsonObjectHolder {
     public final FieldNamingPolicy fieldNamingPolicy;
     public final boolean serializeNullObjects;
     public final boolean serializeNullCollectionElements;
+    public final List<? extends TypeParameterElement> typeParameters;
     public String onCompleteCallback;
     public String preSerializeCallback;
 
@@ -36,6 +40,7 @@ public class JsonObjectHolder {
         fieldNamingPolicy = builder.fieldNamingPolicy;
         serializeNullObjects = builder.serializeNullObjects;
         serializeNullCollectionElements = builder.serializeNullCollectionElements;
+        typeParameters = builder.typeParameters;
     }
 
     public static class JsonObjectHolderBuilder {
@@ -48,6 +53,7 @@ public class JsonObjectHolder {
         private FieldNamingPolicy fieldNamingPolicy;
         private boolean serializeNullObjects;
         private boolean serializeNullCollectionElements;
+        private List<? extends TypeParameterElement> typeParameters;
 
         public JsonObjectHolderBuilder setPackageName(String packageName) {
             this.packageName = packageName;
@@ -91,6 +97,11 @@ public class JsonObjectHolder {
 
         public JsonObjectHolderBuilder setSerializeNullCollectionElements(boolean serializeNullCollectionElements) {
             this.serializeNullCollectionElements = serializeNullCollectionElements;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setTypeParameters(List<? extends TypeParameterElement> typeParameters) {
+            this.typeParameters = typeParameters;
             return this;
         }
 

@@ -1,6 +1,5 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;

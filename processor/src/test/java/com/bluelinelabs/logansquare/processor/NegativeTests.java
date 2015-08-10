@@ -18,15 +18,6 @@ public class NegativeTests {
     }
 
     @Test
-    public void genericObject() {
-        ASSERT.about(javaSource())
-                .that(JavaFileObjects.forResource("model/bad/GenericModel.java"))
-                .processedWith(new JsonAnnotationProcessor())
-                .failsToCompile()
-                .withErrorContaining("@JsonObject annotation can't be used on generic classes.");
-    }
-
-    @Test
     public void privateField() {
         ASSERT.about(javaSource())
                 .that(JavaFileObjects.forResource("model/bad/PrivateFieldModelWithoutAccessors.java"))

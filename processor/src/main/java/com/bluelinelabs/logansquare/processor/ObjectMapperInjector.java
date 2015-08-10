@@ -1,6 +1,8 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.LoganSquare;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedType;
 import com.bluelinelabs.logansquare.processor.type.field.TypeConverterFieldType;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -12,12 +14,15 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
-import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeParameterElement;
 
 public class ObjectMapperInjector {
 
@@ -48,6 +53,10 @@ public class ObjectMapperInjector {
             builder.superclass(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.objectTypeName));
         }
 
+        for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
+            builder.addTypeVariable(TypeVariableName.get(typeParameterElement.getSimpleName().toString()));
+        }
+
         // TypeConverters could be expensive to create, so just use one per class
         Set<ClassName> typeConvertersUsed = new HashSet<>();
         for (JsonFieldHolder fieldHolder : mJsonObjectHolder.fieldMap.values()) {
@@ -62,31 +71,62 @@ public class ObjectMapperInjector {
                     .build());
         }
 
-        if (!mJsonObjectHolder.isAbstractClass) {
-            builder.addMethod(getParseMethod());
-            builder.addMethod(getStaticParseMethod());
+        if (mJsonObjectHolder.typeParameters.size() > 0) {
+            MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
+            for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
+                final String typeName = typeParameterElement.getSimpleName().toString();
+                final String classArgumentName = typeName + "Class";
+                final String jsonMapperVariableName = getJsonMapperVariableNameForTypeParameter(typeName);
+
+                // Add a JsonMapper reference
+                builder.addField(FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get(typeName)), jsonMapperVariableName)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+
+                        .build());
+
+                constructorBuilder.addParameter(ParameterizedTypeName.get(ClassName.get(Class.class), TypeVariableName.get(typeName)), classArgumentName);
+                constructorBuilder.addStatement("$L = $T.mapperFor($L)", jsonMapperVariableName, LoganSquare.class, classArgumentName);
+            }
+            builder.addMethod(constructorBuilder.build());
         }
 
-        builder.addMethod(getParseFieldMethod());
-
+        final boolean includeStaticMethods = mJsonObjectHolder.typeParameters.size() == 0;
         if (!mJsonObjectHolder.isAbstractClass) {
-            builder.addMethod(getSerializeMethod());
+            builder.addMethod(getParseMethod(includeStaticMethods));
+
+            if (includeStaticMethods) {
+                builder.addMethod(getStaticParseMethod());
+            }
         }
 
-        builder.addMethod(getStaticSerializeMethod());
+        builder.addMethod(getParseFieldMethod(includeStaticMethods));
+
+        if (!mJsonObjectHolder.isAbstractClass) {
+            builder.addMethod(getSerializeMethod(includeStaticMethods));
+        }
+
+        if (includeStaticMethods) {
+            builder.addMethod(getStaticSerializeMethod());
+        }
 
         return builder.build();
     }
 
-    private MethodSpec getParseMethod() {
-        return MethodSpec.methodBuilder("parse")
+    private MethodSpec getParseMethod(boolean referToStatic) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("parse")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(mJsonObjectHolder.objectTypeName)
                 .addParameter(JsonParser.class, JSON_PARSER_VARIABLE_NAME)
-                .addException(IOException.class)
-                .addStatement("return _parse($L)", JSON_PARSER_VARIABLE_NAME)
-                .build();
+                .addException(IOException.class);
+
+        if (referToStatic) {
+            builder.addStatement("return _parse($L)", JSON_PARSER_VARIABLE_NAME);
+        } else {
+            insertParseStatements(builder);
+        }
+
+        return builder.build();
     }
 
     private MethodSpec getStaticParseMethod() {
@@ -94,8 +134,19 @@ public class ObjectMapperInjector {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(mJsonObjectHolder.objectTypeName)
                 .addParameter(JsonParser.class, JSON_PARSER_VARIABLE_NAME)
-                .addException(IOException.class)
-                .addStatement("$T instance = new $T()", mJsonObjectHolder.objectTypeName, mJsonObjectHolder.objectTypeName)
+                .addException(IOException.class);
+
+        insertParseStatements(builder);
+
+        for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
+            builder.addTypeVariable(TypeVariableName.get(typeParameterElement.getSimpleName().toString()));
+        }
+
+        return builder.build();
+    }
+
+    private void insertParseStatements(MethodSpec.Builder builder) {
+        builder.addStatement("$T instance = new $T()", mJsonObjectHolder.objectTypeName, mJsonObjectHolder.objectTypeName)
                 .beginControlFlow("if ($L.getCurrentToken() == null)", JSON_PARSER_VARIABLE_NAME)
                 .addStatement("$L.nextToken()", JSON_PARSER_VARIABLE_NAME)
                 .endControlFlow()
@@ -114,14 +165,14 @@ public class ObjectMapperInjector {
             builder.addStatement("instance.$L()", mJsonObjectHolder.onCompleteCallback);
         }
 
-        return builder
-                .addStatement("return instance")
-                .build();
+        builder.addStatement("return instance");
     }
 
-    private MethodSpec getParseFieldMethod() {
+    private MethodSpec getParseFieldMethod(boolean makeStatic) {
+        Modifier[] modifiers = makeStatic ? new Modifier[] {Modifier.PUBLIC, Modifier.STATIC} : new Modifier[] {Modifier.PUBLIC};
+
         MethodSpec.Builder builder = MethodSpec.methodBuilder("parseField")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addModifiers(modifiers)
                 .addParameter(mJsonObjectHolder.objectTypeName, "instance")
                 .addParameter(String.class, "fieldName")
                 .addParameter(JsonParser.class, JSON_PARSER_VARIABLE_NAME)
@@ -141,19 +192,31 @@ public class ObjectMapperInjector {
             builder.endControlFlow();
         }
 
+        if (makeStatic) {
+            for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
+                builder.addTypeVariable(TypeVariableName.get(typeParameterElement.getSimpleName().toString()));
+            }
+        }
+
         return builder.build();
     }
 
-    private MethodSpec getSerializeMethod() {
-        return MethodSpec.methodBuilder("serialize")
+    private MethodSpec getSerializeMethod(boolean referToStatic) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("serialize")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(mJsonObjectHolder.objectTypeName, "object")
                 .addParameter(JsonGenerator.class, JSON_GENERATOR_VARIABLE_NAME)
                 .addParameter(boolean.class, "writeStartAndEnd")
-                .addException(IOException.class)
-                .addStatement("_serialize(object, $L, writeStartAndEnd)", JSON_GENERATOR_VARIABLE_NAME)
-                .build();
+                .addException(IOException.class);
+
+        if (referToStatic) {
+            builder.addStatement("_serialize(object, $L, writeStartAndEnd)", JSON_GENERATOR_VARIABLE_NAME);
+        } else {
+            insertSerializeStatements(builder);
+        }
+
+        return builder.build();
     }
 
     private MethodSpec getStaticSerializeMethod() {
@@ -164,6 +227,16 @@ public class ObjectMapperInjector {
                 .addParameter(boolean.class, "writeStartAndEnd")
                 .addException(IOException.class);
 
+        insertSerializeStatements(builder);
+
+        for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
+            builder.addTypeVariable(TypeVariableName.get(typeParameterElement.getSimpleName().toString()));
+        }
+
+        return builder.build();
+    }
+
+    private void insertSerializeStatements(MethodSpec.Builder builder) {
         if (!TextUtils.isEmpty(mJsonObjectHolder.preSerializeCallback)) {
             builder.addStatement("object.$L()", mJsonObjectHolder.preSerializeCallback);
         }
@@ -196,8 +269,6 @@ public class ObjectMapperInjector {
                 .beginControlFlow("if (writeStartAndEnd)")
                 .addStatement("$L.writeEndObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .endControlFlow();
-
-        return builder.build();
     }
 
     private int addParseFieldLines(MethodSpec.Builder builder) {
@@ -222,7 +293,13 @@ public class ObjectMapperInjector {
                     stringFormatArgs = new Object[] { entry.getKey() };
                 }
 
-                fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
+                if (fieldHolder.type != null) {
+                    if (fieldHolder.type instanceof ParameterizedType) {
+                        ParameterizedType parameterizedType = (ParameterizedType)fieldHolder.type;
+                        parameterizedType.setJsonMapperVariableName(getJsonMapperVariableNameForTypeParameter(parameterizedType.getParameterName()));
+                    }
+                    fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
+                }
 
                 entryCount++;
             }
@@ -242,5 +319,9 @@ public class ObjectMapperInjector {
             ifStatement.append('\"').append(fieldName).append("\".equals(fieldName)");
         }
         return ifStatement.toString();
+    }
+
+    private String getJsonMapperVariableNameForTypeParameter(String typeName) {
+        return "m" + typeName + "ClassJsonMapper";
     }
 }
