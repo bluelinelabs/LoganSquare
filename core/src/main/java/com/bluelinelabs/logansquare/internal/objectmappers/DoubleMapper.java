@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -8,21 +8,21 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 
 /**
- * Built-in mapper for Long objects
+ * Built-in mapper for Double objects
  */
-public class LongMapper extends JsonMapper<Long> {
+public class DoubleMapper extends JsonMapper<Double> {
 
     @Override
-    public Long parse(JsonParser jsonParser) throws IOException {
+    public Double parse(JsonParser jsonParser) throws IOException {
         if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
             return null;
         } else {
-            return jsonParser.getLongValue();
+            return jsonParser.getDoubleValue();
         }
     }
 
     @Override
-    public void serialize(Long object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
+    public void serialize(Double object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeNumber(object);
     }
 }
