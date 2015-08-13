@@ -75,17 +75,16 @@ public class ObjectMapperInjector {
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
             for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
                 final String typeName = typeParameterElement.getSimpleName().toString();
-                final String classArgumentName = typeName + "Class";
+                final String typeArgumentName = typeName + "Type";
                 final String jsonMapperVariableName = getJsonMapperVariableNameForTypeParameter(typeName);
 
                 // Add a JsonMapper reference
                 builder.addField(FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get(typeName)), jsonMapperVariableName)
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-
                         .build());
 
-                constructorBuilder.addParameter(ParameterizedTypeName.get(ClassName.get(Class.class), TypeVariableName.get(typeName)), classArgumentName);
-                constructorBuilder.addStatement("$L = $T.mapperFor($L)", jsonMapperVariableName, LoganSquare.class, classArgumentName);
+                constructorBuilder.addParameter(ClassName.get(com.bluelinelabs.logansquare.ParameterizedType.class), typeArgumentName);
+                constructorBuilder.addStatement("$L = $T.mapperFor($L)", jsonMapperVariableName, LoganSquare.class, typeArgumentName);
             }
             builder.addMethod(constructorBuilder.build());
         }

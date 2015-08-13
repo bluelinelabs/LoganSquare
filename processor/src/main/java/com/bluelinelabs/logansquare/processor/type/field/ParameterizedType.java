@@ -29,22 +29,16 @@ public class ParameterizedType extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        if (isObjectProperty) {
-            builder.addStatement("$L.writeObjectField($S, $L)", JSON_GENERATOR_VARIABLE_NAME, fieldName, getter);
-        } else {
-            builder.addStatement("$L.writeObject($L)", JSON_GENERATOR_VARIABLE_NAME, getter);
-        }
+        builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+        builder.addStatement("$L.serialize($L, $L, true)", mJsonMapperVariableName, getter, JSON_GENERATOR_VARIABLE_NAME);
 
         if (checkIfNull) {
             if (writeIfNull) {
                 builder.nextControlFlow("else");
 
-                if (isObjectProperty) {
-                    builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
-                }
+                builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
                 builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
             }
-
             builder.endControlFlow();
         }
     }

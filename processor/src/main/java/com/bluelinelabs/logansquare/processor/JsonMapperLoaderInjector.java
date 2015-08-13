@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.ParameterizedType;
 import com.bluelinelabs.logansquare.internal.JsonMapperLoader;
 import com.bluelinelabs.logansquare.internal.objectmappers.BooleanMapper;
 import com.bluelinelabs.logansquare.internal.objectmappers.DoubleMapper;
@@ -18,6 +19,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,8 +49,15 @@ public class JsonMapperLoaderInjector {
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(Constants.LOADER_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addSuperinterface(ClassName.get(JsonMapperLoader.class));
+        builder.addMethod(getPutAllJsonMappersMethod());
 
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("putAllJsonMappers")
+        addParameterizedMapperGetters(builder);
+
+        return builder.build();
+    }
+
+    private MethodSpec getPutAllJsonMappersMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("putAllJsonMappers")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(Class.class), ClassName.get(JsonMapper.class)), "map")
@@ -65,12 +74,59 @@ public class JsonMapperLoaderInjector {
                 .addStatement("map.put($T.class, new $T())", HashMap.class, MapMapper.class);
 
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
-            if (!jsonObjectHolder.isAbstractClass) {
-                methodBuilder.addStatement("map.put($T.class, new $T())", jsonObjectHolder.objectTypeName, ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+            if (!jsonObjectHolder.isAbstractClass && jsonObjectHolder.typeParameters.size() == 0) {
+                builder.addStatement("map.put($T.class, new $T())", jsonObjectHolder.objectTypeName, ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
             }
         }
 
-        builder.addMethod(methodBuilder.build());
         return builder.build();
+    }
+
+    private void addParameterizedMapperGetters(TypeSpec.Builder builder) {
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("mapperFor")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addTypeVariable(TypeVariableName.get("T"))
+                .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
+                .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type");
+
+        boolean conditionalStarted = false;
+        for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
+            if (!jsonObjectHolder.isAbstractClass && jsonObjectHolder.typeParameters.size() > 0) {
+                String conditional = String.format("if (type.rawType == %s.class)", jsonObjectHolder.objectTypeName.toString().replaceAll("<(.*?)>", ""));
+                if (conditionalStarted) {
+                    methodBuilder.nextControlFlow("else " + conditional);
+                } else {
+                    conditionalStarted = true;
+                    methodBuilder.beginControlFlow(conditional);
+                }
+
+                methodBuilder.beginControlFlow("if (type.typeParameters.size() == $L)", jsonObjectHolder.typeParameters.size());
+
+                StringBuilder constructorArgs = new StringBuilder();
+                for (int i = 0; i < jsonObjectHolder.typeParameters.size(); i++) {
+                    if (constructorArgs.length() > 0) {
+                        constructorArgs.append(", ");
+                    }
+                    constructorArgs.append("type.typeParameters.get(").append(i).append(")");
+                }
+                methodBuilder.addStatement("return new $T(" + constructorArgs.toString() + ")", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+
+                methodBuilder.nextControlFlow("else");
+                methodBuilder.addStatement(
+                        "throw new $T(\"Invalid number of parameter types. Type $T expects $L parameter types, received \" + type.typeParameters.size())",
+                        RuntimeException.class, jsonObjectHolder.objectTypeName, jsonObjectHolder.typeParameters.size()
+                );
+                methodBuilder.endControlFlow();
+            }
+        }
+
+        if (conditionalStarted) {
+            methodBuilder.endControlFlow();
+        }
+
+        methodBuilder.addStatement("return null");
+
+        builder.addMethod(methodBuilder.build());
     }
 }

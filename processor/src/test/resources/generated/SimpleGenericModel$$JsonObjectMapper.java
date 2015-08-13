@@ -2,11 +2,11 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.bluelinelabs.logansquare.ParameterizedType;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
-import java.lang.Class;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
@@ -16,8 +16,8 @@ import java.util.Date;
 public final class SimpleGenericModel$$JsonObjectMapper<T> extends JsonMapper<SimpleGenericModel<T>> {
     private final JsonMapper<T> mTClassJsonMapper;
 
-    public SimpleGenericModel$$JsonObjectMapper(Class<T> TClass) {
-        mTClassJsonMapper = LoganSquare.mapperFor(TClass);
+    public SimpleGenericModel$$JsonObjectMapper(ParameterizedType TType) {
+        mTClassJsonMapper = LoganSquare.mapperFor(TType);
     }
 
     @Override
@@ -98,7 +98,8 @@ public final class SimpleGenericModel$$JsonObjectMapper<T> extends JsonMapper<Si
             jsonGenerator.writeStringField("test_string", object.testString);
         }
         if (object.testT != null) {
-            jsonGenerator.writeObjectField("test_t", object.testT);
+            jsonGenerator.writeFieldName("test_t");
+            mTClassJsonMapper.serialize(object.testT, jsonGenerator, true);
         }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
