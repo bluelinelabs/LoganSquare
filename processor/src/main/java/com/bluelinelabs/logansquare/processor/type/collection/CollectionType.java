@@ -10,7 +10,7 @@ import javax.lang.model.util.Types;
 
 public abstract class CollectionType extends Type {
 
-    public static CollectionType containerTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
+    public static CollectionType collectionTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
         CollectionType collectionType = null;
         switch (genericClassTypeMirror.toString()) {
             case "java.util.List":

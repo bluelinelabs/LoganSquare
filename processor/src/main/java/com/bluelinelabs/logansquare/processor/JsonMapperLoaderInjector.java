@@ -105,12 +105,9 @@ public class JsonMapperLoaderInjector {
 
                 StringBuilder constructorArgs = new StringBuilder();
                 for (int i = 0; i < jsonObjectHolder.typeParameters.size(); i++) {
-                    if (constructorArgs.length() > 0) {
-                        constructorArgs.append(", ");
-                    }
-                    constructorArgs.append("type.typeParameters.get(").append(i).append(")");
+                    constructorArgs.append(", type.typeParameters.get(").append(i).append(")");
                 }
-                methodBuilder.addStatement("return new $T(" + constructorArgs.toString() + ")", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+                methodBuilder.addStatement("return new $T(type" + constructorArgs.toString() + ")", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
 
                 methodBuilder.nextControlFlow("else");
                 methodBuilder.addStatement(

@@ -10,11 +10,11 @@ import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_P
 
 public class ParameterizedType extends FieldType {
 
-    private TypeMirror mTypeMirror;
+    private final TypeName mTypeName;
     private String mJsonMapperVariableName;
 
     public ParameterizedType(TypeMirror typeMirror) {
-        mTypeMirror = typeMirror;
+        mTypeName = TypeName.get(typeMirror);
     }
 
     @Override
@@ -63,12 +63,12 @@ public class ParameterizedType extends FieldType {
 
     @Override
     public TypeName getNonPrimitiveTypeName() {
-        return null;
+        return mTypeName;
     }
 
     @Override
     public TypeName getTypeName() {
-        return null;
+        return mTypeName;
     }
 
     public void setJsonMapperVariableName(String jsonMapperVariableName) {
@@ -76,6 +76,6 @@ public class ParameterizedType extends FieldType {
     }
 
     public String getParameterName() {
-        return mTypeMirror.toString();
+        return mTypeName.toString();
     }
 }

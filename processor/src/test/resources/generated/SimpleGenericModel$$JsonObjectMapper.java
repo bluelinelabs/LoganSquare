@@ -16,7 +16,7 @@ import java.util.Date;
 public final class SimpleGenericModel$$JsonObjectMapper<T> extends JsonMapper<SimpleGenericModel<T>> {
     private final JsonMapper<T> mTClassJsonMapper;
 
-    public SimpleGenericModel$$JsonObjectMapper(ParameterizedType TType) {
+    public SimpleGenericModel$$JsonObjectMapper(ParameterizedType type, ParameterizedType TType) {
         mTClassJsonMapper = LoganSquare.mapperFor(TType);
     }
 

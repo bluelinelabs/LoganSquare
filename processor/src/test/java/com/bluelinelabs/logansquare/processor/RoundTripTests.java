@@ -154,7 +154,7 @@ public class RoundTripTests {
 
     @Test
     public void simpleGenericObject() {
-        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\",\"test_t\":\"generic string!\"}";
+        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_nested_generic\":{\"test_double\":0.0,\"test_float\":0.2,\"test_int\":10,\"test_long\":0},\"test_string\":\"anotherTestString\",\"test_t\":\"generic string!\"}";
 
         String reserialized = null;
         try {
@@ -165,8 +165,21 @@ public class RoundTripTests {
             ignored.printStackTrace();
         }
 
-        System.out.println(json);
-        System.out.println(reserialized);
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void simpleGenericGenericObject() {
+        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\",\"test_t\":{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\",\"test_t\":\"generic string!\"}}";
+
+        String reserialized = null;
+        try {
+            ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>> parameterizedType = new ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>>() { };
+            SimpleGenericModel<SimpleGenericModel<String>> simpleModel = LoganSquare.parse(json, parameterizedType);
+            reserialized = LoganSquare.serialize(simpleModel, parameterizedType);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }

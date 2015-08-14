@@ -44,4 +44,7 @@ public class SimpleGenericModel<T> {
     @JsonField(name = "test_t")
     public T testT;
 
+    @JsonField(name = "test_nested_generic")
+    public SimpleGenericModel<String> testNestedGeneric;
+
 }

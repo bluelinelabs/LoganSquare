@@ -38,10 +38,12 @@ public abstract class Type {
         if (!hasTypeConverter && typeMirror instanceof ArrayType) {
             TypeMirror arrayTypeMirror = ((ArrayType)typeMirror).getComponentType();
             type = new ArrayCollectionType(Type.typeFor(arrayTypeMirror, null, elements, types));
-        } else if (genericClassTypeMirror.toString().equals("java.lang.Object")) {
-            type = new ParameterizedType(typeMirror);
         } else if (!hasTypeConverter && !genericClassTypeMirror.toString().equals(typeMirror.toString())) {
-            type = CollectionType.containerTypeFor(typeMirror, genericClassTypeMirror, elements, types);
+            type = CollectionType.collectionTypeFor(typeMirror, genericClassTypeMirror, elements, types);
+
+            if (type == null) {
+                type = new ParameterizedType(typeMirror);
+            }
         } else {
             type = FieldType.fieldTypeFor(typeMirror, typeConverterType, elements, types);
         }
