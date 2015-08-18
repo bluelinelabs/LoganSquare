@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class AbstractParentModel$$JsonObjectMapper {
     public static void parseField(AbstractParentModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("parentTestInt".equals(fieldName)) {

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<NestedCollectionModel> {
     @Override
     public NestedCollectionModel parse(JsonParser jsonParser) throws IOException {

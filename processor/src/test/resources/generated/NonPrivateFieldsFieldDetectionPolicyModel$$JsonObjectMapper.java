@@ -11,7 +11,7 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper extends JsonMapper<NonPrivateFieldsFieldDetectionPolicyModel> {
     @Override
     public NonPrivateFieldsFieldDetectionPolicyModel parse(JsonParser jsonParser) throws IOException {

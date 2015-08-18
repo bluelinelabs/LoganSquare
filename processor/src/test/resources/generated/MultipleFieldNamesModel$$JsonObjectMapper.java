@@ -9,7 +9,7 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<MultipleFieldNamesModel> {
     @Override
     public MultipleFieldNamesModel parse(JsonParser jsonParser) throws IOException {

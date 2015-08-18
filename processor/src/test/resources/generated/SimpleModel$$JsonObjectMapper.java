@@ -11,7 +11,7 @@ import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
     @Override
     public SimpleModel parse(JsonParser jsonParser) throws IOException {

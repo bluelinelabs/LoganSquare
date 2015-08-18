@@ -12,7 +12,7 @@ import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleGenericModel$$JsonObjectMapper<T> extends JsonMapper<SimpleGenericModel<T>> {
     private final JsonMapper<T> mTClassJsonMapper;
 

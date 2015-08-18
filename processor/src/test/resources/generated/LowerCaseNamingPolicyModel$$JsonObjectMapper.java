@@ -11,7 +11,7 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapper<LowerCaseNamingPolicyModel> {
     @Override
     public LowerCaseNamingPolicyModel parse(JsonParser jsonParser) throws IOException {

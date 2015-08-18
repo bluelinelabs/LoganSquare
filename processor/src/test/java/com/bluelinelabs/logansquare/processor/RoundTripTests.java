@@ -161,9 +161,7 @@ public class RoundTripTests {
             ParameterizedType<SimpleGenericModel<String>> parameterizedType = new ParameterizedType<SimpleGenericModel<String>>() { };
             SimpleGenericModel<String> simpleModel = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(simpleModel, parameterizedType);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
@@ -177,9 +175,7 @@ public class RoundTripTests {
             ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>> parameterizedType = new ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>>() { };
             SimpleGenericModel<SimpleGenericModel<String>> simpleModel = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(simpleModel, parameterizedType);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }

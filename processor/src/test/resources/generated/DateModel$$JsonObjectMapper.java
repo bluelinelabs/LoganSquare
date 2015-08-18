@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class DateModel$$JsonObjectMapper {
     protected static final DateModel.MyDateTypeConverter MY_DATE_TYPE_CONVERTER = new DateModel.MyDateTypeConverter();
 

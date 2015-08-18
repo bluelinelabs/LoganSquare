@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<PrivateFieldModel> {
     @Override
     public PrivateFieldModel parse(JsonParser jsonParser) throws IOException {

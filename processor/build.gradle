@@ -8,7 +8,7 @@ ext.artifactId = 'logansquare-compiler'
 
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.2'
-    compile 'com.squareup:javapoet:1.0.0'
+    compile 'com.squareup:javapoet:1.2.0'
     compile project(':core')
 
     testCompile files("${System.properties['java.home']}/../lib/tools.jar")

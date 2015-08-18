@@ -2,7 +2,7 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.bluelinelabs.logansquare.processor.type.field.ParameterizedType;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 import com.bluelinelabs.logansquare.processor.type.field.TypeConverterFieldType;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -49,7 +49,7 @@ public class ObjectMapperInjector {
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(mJsonObjectHolder.injectedClassName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-        builder.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "\"unsafe\"").build());
+        builder.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "\"unsafe,unchecked\"").build());
 
         if (!mJsonObjectHolder.isAbstractClass) {
             builder.superclass(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.objectTypeName));
@@ -97,8 +97,8 @@ public class ObjectMapperInjector {
         }
 
         for (JsonFieldHolder jsonFieldHolder : mJsonObjectHolder.fieldMap.values()) {
-            if (jsonFieldHolder.type instanceof ParameterizedType) {
-                final String jsonMapperVariableName = getJsonMapperVariableNameForTypeParameter(((ParameterizedType)jsonFieldHolder.type).getParameterName());
+            if (jsonFieldHolder.type instanceof ParameterizedTypeField) {
+                final String jsonMapperVariableName = getJsonMapperVariableNameForTypeParameter(((ParameterizedTypeField)jsonFieldHolder.type).getParameterName());
 
                 if (!createdJsonMappers.contains(jsonMapperVariableName)) {
                     ParameterizedTypeName parameterizedType = ParameterizedTypeName.get(ClassName.get(JsonMapper.class), jsonFieldHolder.type.getTypeName());
@@ -111,7 +111,7 @@ public class ObjectMapperInjector {
                     String typeName = jsonMapperVariableName + "Type";
                     constructorBuilder.addStatement("$T $L = new $T<$T>() { }", com.bluelinelabs.logansquare.ParameterizedType.class, typeName, com.bluelinelabs.logansquare.ParameterizedType.class, jsonFieldHolder.type.getTypeName());
                     constructorBuilder.beginControlFlow("if ($L.equals(type))", typeName);
-                    constructorBuilder.addStatement("$L = ($T)this", jsonMapperVariableName, parameterizedType);
+                    constructorBuilder.addStatement("$L = ($T)this", jsonMapperVariableName, JsonMapper.class);
                     constructorBuilder.nextControlFlow("else");
                     constructorBuilder.addStatement("$L = $T.mapperFor($L)", jsonMapperVariableName, LoganSquare.class, typeName);
                     constructorBuilder.endControlFlow();
@@ -327,8 +327,8 @@ public class ObjectMapperInjector {
                 }
 
                 if (fieldHolder.type != null) {
-                    if (fieldHolder.type instanceof ParameterizedType) {
-                        ParameterizedType parameterizedType = (ParameterizedType)fieldHolder.type;
+                    if (fieldHolder.type instanceof ParameterizedTypeField) {
+                        ParameterizedTypeField parameterizedType = (ParameterizedTypeField)fieldHolder.type;
                         parameterizedType.setJsonMapperVariableName(getJsonMapperVariableNameForTypeParameter(parameterizedType.getParameterName()));
                     }
                     fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
@@ -358,6 +358,8 @@ public class ObjectMapperInjector {
         typeName = typeName.replaceAll("\\.", "_dot_");
         typeName = typeName.replaceAll("<", "lt");
         typeName = typeName.replaceAll(">", "gt");
+        typeName = typeName.replaceAll(" ", "sp");
+        typeName = typeName.replaceAll("\\?", "q");
         return "m" + typeName + "ClassJsonMapper";
     }
 }

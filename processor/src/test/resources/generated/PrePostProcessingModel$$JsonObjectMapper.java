@@ -9,7 +9,7 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<PrePostProcessingModel> {
     @Override
     public PrePostProcessingModel parse(JsonParser jsonParser) throws IOException {

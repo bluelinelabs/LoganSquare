@@ -3,18 +3,16 @@ package com.bluelinelabs.logansquare.processor.type.field;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
-import javax.lang.model.type.TypeMirror;
-
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
 
-public class ParameterizedType extends FieldType {
+public class ParameterizedTypeField extends FieldType {
 
     private final TypeName mTypeName;
     private String mJsonMapperVariableName;
 
-    public ParameterizedType(TypeMirror typeMirror) {
-        mTypeName = TypeName.get(typeMirror);
+    public ParameterizedTypeField(TypeName typeName) {
+        mTypeName = typeName;
     }
 
     @Override

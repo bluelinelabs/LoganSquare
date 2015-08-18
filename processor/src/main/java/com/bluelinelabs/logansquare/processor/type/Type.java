@@ -3,7 +3,7 @@ package com.bluelinelabs.logansquare.processor.type;
 import com.bluelinelabs.logansquare.processor.type.collection.ArrayCollectionType;
 import com.bluelinelabs.logansquare.processor.type.collection.CollectionType;
 import com.bluelinelabs.logansquare.processor.type.field.FieldType;
-import com.bluelinelabs.logansquare.processor.type.field.ParameterizedType;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
@@ -42,7 +42,12 @@ public abstract class Type {
             type = CollectionType.collectionTypeFor(typeMirror, genericClassTypeMirror, elements, types);
 
             if (type == null) {
-                type = new ParameterizedType(typeMirror);
+                if (typeMirror.toString().contains("?")) {
+                    throw new RuntimeException("Generic types with wildcards are currently not supported by LoganSquare.");
+                }
+                try {
+                    type = new ParameterizedTypeField(TypeName.get(typeMirror));
+                } catch (Exception ignored) { }
             }
         } else {
             type = FieldType.fieldTypeFor(typeMirror, typeConverterType, elements, types);

@@ -21,7 +21,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<SimpleCollectionModel> {
     @Override
     public SimpleCollectionModel parse(JsonParser jsonParser) throws IOException {
