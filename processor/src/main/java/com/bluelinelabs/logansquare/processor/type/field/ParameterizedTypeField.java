@@ -1,7 +1,11 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
+import com.bluelinelabs.logansquare.processor.type.Type;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -27,14 +31,18 @@ public class ParameterizedTypeField extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+        if (isObjectProperty) {
+            builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+        }
         builder.addStatement("$L.serialize($L, $L, true)", mJsonMapperVariableName, getter, JSON_GENERATOR_VARIABLE_NAME);
 
         if (checkIfNull) {
             if (writeIfNull) {
                 builder.nextControlFlow("else");
 
-                builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+                if (isObjectProperty) {
+                    builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+                }
                 builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
             }
             builder.endControlFlow();
@@ -43,20 +51,32 @@ public class ParameterizedTypeField extends FieldType {
 
     @Override
     public String getParameterizedTypeString() {
-        StringBuilder string = new StringBuilder("$T<");
-        for (int i = 0; i < parameterTypes.size(); i++) {
-            if (i > 0) {
-                string.append(", ");
+        if (parameterTypes.size() > 0) {
+            StringBuilder string = new StringBuilder("$T<");
+            for (int i = 0; i < parameterTypes.size(); i++) {
+                if (i > 0) {
+                    string.append(", ");
+                }
+                string.append(parameterTypes.get(i).getParameterizedTypeString());
             }
-            string.append(parameterTypes.get(i).getParameterizedTypeString());
+            string.append('>');
+            return string.toString();
+        } else {
+            return "$T";
         }
-        string.append('>');
-        return string.toString();
     }
 
     @Override
     public Object[] getParameterizedTypeStringArgs() {
-        return null;
+        List<Object> args = new ArrayList<>();
+
+        args.add(mTypeName);
+
+        for (Type parameterType : parameterTypes) {
+            args.add(parameterType.getParameterizedTypeStringArgs());
+        }
+
+        return args.toArray(new Object[args.size()]);
     }
 
     @Override

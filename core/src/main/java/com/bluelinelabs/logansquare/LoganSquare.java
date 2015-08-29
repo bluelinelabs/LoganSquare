@@ -226,15 +226,25 @@ public class LoganSquare {
 
     @SuppressWarnings("unchecked")
     public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type) throws NoSuchMapperException {
+        return mapperFor(type, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) throws NoSuchMapperException {
         if (type.typeParameters.size() == 0) {
             return mapperFor((Class<E>)type.rawType);
         } else {
             JsonMapper<E> mapper;
 
-            if (PARAMETERIZED_OBJECT_MAPPERS.containsKey(type)) {
+            if (partialMappers != null && partialMappers.containsKey(type)) {
+                mapper = partialMappers.get(type);
+            } else if (PARAMETERIZED_OBJECT_MAPPERS.containsKey(type)) {
                 mapper = PARAMETERIZED_OBJECT_MAPPERS.get(type);
             } else {
-                mapper = JSON_MAPPER_LOADER.mapperFor(type);
+                if (partialMappers == null) {
+                    partialMappers = new SimpleArrayMap<>();
+                }
+                mapper = JSON_MAPPER_LOADER.mapperFor(type, partialMappers);
                 PARAMETERIZED_OBJECT_MAPPERS.put(type, mapper);
             }
 

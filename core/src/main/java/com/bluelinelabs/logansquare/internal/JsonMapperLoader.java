@@ -7,6 +7,6 @@ import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 public interface JsonMapperLoader {
 
     void putAllJsonMappers(SimpleArrayMap<Class, JsonMapper> map);
-    <T> JsonMapper<T> mapperFor(ParameterizedType<T> type);
+    <T> JsonMapper<T> mapperFor(ParameterizedType<T> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers);
 
 }

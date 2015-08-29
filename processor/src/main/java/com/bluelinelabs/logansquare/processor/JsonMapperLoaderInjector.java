@@ -88,7 +88,8 @@ public class JsonMapperLoaderInjector {
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(TypeVariableName.get("T"))
                 .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
-                .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type");
+                .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type")
+                .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)), "partialMappers");
 
         boolean conditionalStarted = false;
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
@@ -107,7 +108,7 @@ public class JsonMapperLoaderInjector {
                 for (int i = 0; i < jsonObjectHolder.typeParameters.size(); i++) {
                     constructorArgs.append(", type.typeParameters.get(").append(i).append(")");
                 }
-                methodBuilder.addStatement("return new $T(type" + constructorArgs.toString() + ")", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+                methodBuilder.addStatement("return new $T(type" + constructorArgs.toString() + ", partialMappers)", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
 
                 methodBuilder.nextControlFlow("else");
                 methodBuilder.addStatement(

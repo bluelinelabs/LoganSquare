@@ -6,6 +6,7 @@ import com.bluelinelabs.logansquare.processor.model.NestedCollectionModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleModelWithoutNullObjects;
+import com.bluelinelabs.logansquare.processor.model.TwoParamGenericModel;
 
 import org.junit.Test;
 
@@ -176,6 +177,22 @@ public class RoundTripTests {
             SimpleGenericModel<SimpleGenericModel<String>> simpleModel = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(simpleModel, parameterizedType);
         } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void twoParamGenericModelObject() {
+        String json = "{\"t_list\":[\"a\",\"b\"],\"test_k\":1,\"test_t\":\"hello\"}";
+
+        String reserialized = null;
+        try {
+            ParameterizedType<TwoParamGenericModel<String, Integer>> parameterizedType = new ParameterizedType<TwoParamGenericModel<String, Integer>>() { };
+            TwoParamGenericModel<String, Integer> model = LoganSquare.parse(json, parameterizedType);
+            reserialized = LoganSquare.serialize(model, parameterizedType);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }

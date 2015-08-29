@@ -9,6 +9,6 @@ public class Constants {
     public static final String LOADER_PACKAGE_NAME = "com.bluelinelabs.logansquare";
 
     /** The generated JsonMapper loader class */
-    public static final String LOADER_CLASS_NAME = "JsonObjectLoaderImpl";
+    public static final String LOADER_CLASS_NAME = "JsonMapperLoaderImpl";
 
 }
