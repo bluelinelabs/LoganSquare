@@ -55,4 +55,7 @@ dependencies {
 
     // GSON library for comparison
     compile 'com.google.code.gson:gson:2.3.1'
+
+    // MOSHI library for camparison
+    compile 'com.squareup.moshi:moshi:1.0.0'
 }

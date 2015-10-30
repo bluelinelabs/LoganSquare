@@ -12,12 +12,14 @@ import com.bluelinelabs.logansquare.demo.model.Response;
 import com.bluelinelabs.logansquare.demo.parsetasks.GsonParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.JacksonDatabindParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.LoganSquareParser;
+import com.bluelinelabs.logansquare.demo.parsetasks.MoshiParser;
 import com.bluelinelabs.logansquare.demo.parsetasks.ParseResult;
 import com.bluelinelabs.logansquare.demo.parsetasks.Parser;
 import com.bluelinelabs.logansquare.demo.parsetasks.Parser.ParseListener;
 import com.bluelinelabs.logansquare.demo.serializetasks.GsonSerializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.JacksonDatabindSerializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.LoganSquareSerializer;
+import com.bluelinelabs.logansquare.demo.serializetasks.MoshiSerializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.SerializeResult;
 import com.bluelinelabs.logansquare.demo.serializetasks.Serializer;
 import com.bluelinelabs.logansquare.demo.serializetasks.Serializer.SerializeListener;
@@ -25,6 +27,7 @@ import com.bluelinelabs.logansquare.demo.widget.BarChart;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import com.squareup.moshi.Moshi;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
         mResponsesToSerialize = getResponsesToParse();
 
         mBarChart = (BarChart)findViewById(R.id.bar_chart);
-        mBarChart.setColumnTitles(new String[] {"GSON", "Jackson", "LoganSquare"});
+        mBarChart.setColumnTitles(new String[] {"GSON", "Jackson", "LoganSquare", "Moshi"});
 
         findViewById(R.id.btn_parse_tests).setOnClickListener(new OnClickListener() {
             @Override
@@ -87,12 +90,14 @@ public class MainActivity extends ActionBarActivity {
 
         Gson gson = new Gson();
         ObjectMapper objectMapper = new ObjectMapper();
+        Moshi moshi = new Moshi.Builder().build();
         List<Parser> parsers = new ArrayList<>();
         for (String jsonString : mJsonStringsToParse) {
             for (int iteration = 0; iteration < ITERATIONS; iteration++) {
                 parsers.add(new GsonParser(mParseListener, jsonString, gson));
                 parsers.add(new JacksonDatabindParser(mParseListener, jsonString, objectMapper));
                 parsers.add(new LoganSquareParser(mParseListener, jsonString));
+                parsers.add(new MoshiParser(mParseListener, jsonString, moshi));
             }
         }
 
@@ -107,12 +112,14 @@ public class MainActivity extends ActionBarActivity {
 
         Gson gson = new Gson();
         ObjectMapper objectMapper = new ObjectMapper();
+        Moshi moshi = new Moshi.Builder().build();
         List<Serializer> serializers = new ArrayList<>();
         for (Response response : mResponsesToSerialize) {
             for (int iteration = 0; iteration < ITERATIONS; iteration++) {
                 serializers.add(new GsonSerializer(mSerializeListener, response, gson));
                 serializers.add(new JacksonDatabindSerializer(mSerializeListener, response, objectMapper));
                 serializers.add(new LoganSquareSerializer(mSerializeListener, response));
+                serializers.add(new MoshiSerializer(mSerializeListener, response, moshi));
             }
         }
 
@@ -147,6 +154,8 @@ public class MainActivity extends ActionBarActivity {
             mBarChart.addTiming(section, 1, parseResult.runDuration / 1000f);
         } else if (parser instanceof LoganSquareParser) {
             mBarChart.addTiming(section, 2, parseResult.runDuration / 1000f);
+        } else if (parser instanceof MoshiParser) {
+            mBarChart.addTiming(section, 3, parseResult.runDuration / 1000f);
         }
     }
 
@@ -176,6 +185,8 @@ public class MainActivity extends ActionBarActivity {
             mBarChart.addTiming(section, 1, serializeResult.runDuration / 1000f);
         } else if (serializer instanceof LoganSquareSerializer) {
             mBarChart.addTiming(section, 2, serializeResult.runDuration / 1000f);
+        } else if (serializer instanceof MoshiSerializer) {
+            mBarChart.addTiming(section, 3, serializeResult.runDuration / 1000f);
         }
     }
 
@@ -224,7 +235,8 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             new AlertDialog.Builder(this)
                     .setTitle("Error")
-                    .setMessage("The JSON file was not able to load properly. These tests won't work until you completely kill this demo app and restart it.")
+                    .setMessage(
+                        "The JSON file was not able to load properly. These tests won't work until you completely kill this demo app and restart it.")
                     .setPositiveButton("OK", null)
                     .show();
         }
