@@ -3,7 +3,7 @@ package com.bluelinelabs.logansquare.demo.serializetasks;
 import com.bluelinelabs.logansquare.demo.model.Response;
 import com.squareup.moshi.Moshi;
 
-public class MoshiSerializer extends Serializer{
+public class MoshiSerializer extends Serializer {
 
     private final Moshi moshi;
 
