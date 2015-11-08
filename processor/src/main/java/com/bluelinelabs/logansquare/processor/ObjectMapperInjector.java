@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.type.TypeVariable;
 
 public class ObjectMapperInjector {
 
@@ -59,7 +60,7 @@ public class ObjectMapperInjector {
         builder.superclass(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.objectTypeName));
 
         for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
-            builder.addTypeVariable(TypeVariableName.get(typeParameterElement.getSimpleName().toString()));
+            builder.addTypeVariable(TypeVariableName.get((TypeVariable)typeParameterElement.asType()));
         }
 
         if (mJsonObjectHolder.hasParentClass()) {
