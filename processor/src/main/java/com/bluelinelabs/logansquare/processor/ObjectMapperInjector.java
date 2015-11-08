@@ -98,11 +98,12 @@ public class ObjectMapperInjector {
         }
 
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
-        constructorBuilder.addParameter(ClassName.get(ParameterizedType.class), "type");
-        constructorBuilder.addStatement("partialMappers.put(type, this)");
         List<String> createdJsonMappers = new ArrayList<>();
 
         if (mJsonObjectHolder.typeParameters.size() > 0) {
+            constructorBuilder.addParameter(ClassName.get(ParameterizedType.class), "type");
+            constructorBuilder.addStatement("partialMappers.put(type, this)");
+
             for (TypeParameterElement typeParameterElement : mJsonObjectHolder.typeParameters) {
                 final String typeName = typeParameterElement.getSimpleName().toString();
                 final String typeArgumentName = typeName + "Type";
@@ -120,8 +121,8 @@ public class ObjectMapperInjector {
                     constructorBuilder.addStatement("$L = $T.mapperFor($L, partialMappers)", jsonMapperVariableName, LoganSquare.class, typeArgumentName);
                 }
             }
+            constructorBuilder.addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)), "partialMappers");
         }
-        constructorBuilder.addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)), "partialMappers");
 
         for (JsonFieldHolder jsonFieldHolder : mJsonObjectHolder.fieldMap.values()) {
             if (jsonFieldHolder.type instanceof ParameterizedTypeField) {
@@ -137,11 +138,16 @@ public class ObjectMapperInjector {
 
                     String typeName = jsonMapperVariableName + "Type";
                     constructorBuilder.addStatement("$T $L = new $T<$T>() { }", ParameterizedType.class, typeName, ParameterizedType.class, jsonFieldHolder.type.getTypeName());
-                    constructorBuilder.beginControlFlow("if ($L.equals(type))", typeName);
-                    constructorBuilder.addStatement("$L = ($T)this", jsonMapperVariableName, JsonMapper.class);
-                    constructorBuilder.nextControlFlow("else");
-                    constructorBuilder.addStatement("$L = $T.mapperFor($L, partialMappers)", jsonMapperVariableName, LoganSquare.class, typeName);
-                    constructorBuilder.endControlFlow();
+
+                    if (mJsonObjectHolder.typeParameters.size() > 0) {
+                        constructorBuilder.beginControlFlow("if ($L.equals(type))", typeName);
+                        constructorBuilder.addStatement("$L = ($T)this", jsonMapperVariableName, JsonMapper.class);
+                        constructorBuilder.nextControlFlow("else");
+                        constructorBuilder.addStatement("$L = $T.mapperFor($L, partialMappers)", jsonMapperVariableName, LoganSquare.class, typeName);
+                        constructorBuilder.endControlFlow();
+                    } else {
+                        constructorBuilder.addStatement("$L = $T.mapperFor($L)", jsonMapperVariableName, LoganSquare.class, typeName);
+                    }
                 }
             }
         }
