@@ -19,6 +19,9 @@ public class ListMapper extends JsonMapper<List<Object>> {
     }
 
     @Override
+    public void parseField(List<Object> instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(List<Object> list, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         LoganSquare.mapperFor(Object.class).serialize(list, generator);
     }

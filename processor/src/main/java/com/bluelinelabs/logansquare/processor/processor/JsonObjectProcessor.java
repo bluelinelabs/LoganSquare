@@ -15,6 +15,8 @@ import com.squareup.javapoet.TypeName;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +27,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -71,15 +74,32 @@ public class JsonObjectProcessor extends Processor {
             String objectClassName = TypeUtils.getSimpleClassName(typeElement, packageName);
             String injectedSimpleClassName = objectClassName + Constants.MAPPER_CLASS_SUFFIX;
             boolean abstractClass = element.getModifiers().contains(ABSTRACT);
-            TypeName parentInjectedClassName = null;
+            List<? extends TypeParameterElement> parentTypeParameters = new ArrayList<>();
+            List<String> parentUsedTypeParameters = new ArrayList<>();
+            TypeName parentClassName = null;
 
             TypeMirror superclass = typeElement.getSuperclass();
+            if (superclass.getKind() != TypeKind.NONE) {
+                TypeElement superclassElement = (TypeElement)types.asElement(superclass);
+                if (superclassElement.getAnnotation(JsonObject.class) != null) {
+                    if (superclassElement.getTypeParameters() != null) {
+                        parentTypeParameters = superclassElement.getTypeParameters();
+                    }
+
+                    String superclassName = superclass.toString();
+                    int indexOfTypeParamStart = superclassName.indexOf("<");
+                    if (indexOfTypeParamStart > 0) {
+                        String typeParams = superclassName.substring(indexOfTypeParamStart + 1, superclassName.length() - 1);
+                        parentUsedTypeParameters = Arrays.asList(typeParams.split("\\s*,\\s*"));
+                    }
+                }
+            }
             while (superclass.getKind() != TypeKind.NONE) {
                 TypeElement superclassElement = (TypeElement)types.asElement(superclass);
 
                 if (superclassElement.getAnnotation(JsonObject.class) != null) {
                     String superclassPackageName = elements.getPackageOf(superclassElement).getQualifiedName().toString();
-                    parentInjectedClassName = ClassName.get(superclassPackageName, TypeUtils.getSimpleClassName(superclassElement, superclassPackageName) + Constants.MAPPER_CLASS_SUFFIX);
+                    parentClassName = ClassName.get(superclassPackageName, TypeUtils.getSimpleClassName(superclassElement, superclassPackageName));
                     break;
                 }
 
@@ -93,7 +113,9 @@ public class JsonObjectProcessor extends Processor {
                     .setInjectedClassName(injectedSimpleClassName)
                     .setObjectTypeName(TypeName.get(typeElement.asType()))
                     .setIsAbstractClass(abstractClass)
-                    .setParentInjectedTypeName(parentInjectedClassName)
+                    .setParentTypeName(parentClassName)
+                    .setParentTypeParameters(parentTypeParameters)
+                    .setParentUsedTypeParameters(parentUsedTypeParameters)
                     .setFieldDetectionPolicy(annotation.fieldDetectionPolicy())
                     .setFieldNamingPolicy(annotation.fieldNamingPolicy())
                     .setSerializeNullObjects(annotation.serializeNullObjects())

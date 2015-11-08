@@ -32,7 +32,6 @@ public class LoganSquare {
         }
     }
 
-
     private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<>();
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());

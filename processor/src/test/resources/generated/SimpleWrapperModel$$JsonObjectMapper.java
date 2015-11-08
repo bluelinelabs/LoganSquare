@@ -13,10 +13,6 @@ import java.lang.SuppressWarnings;
 public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<SimpleWrapperModel> {
     @Override
     public SimpleWrapperModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static SimpleWrapperModel _parse(JsonParser jsonParser) throws IOException {
         SimpleWrapperModel instance = new SimpleWrapperModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -34,7 +30,8 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
         return instance;
     }
 
-    public static void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("wrappedObject".equals(fieldName)) {
             instance.wrappedObject = SimpleWrapperModel$WrappedClass$$JsonObjectMapper._parse(jsonParser);
         }
@@ -42,10 +39,6 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
 
     @Override
     public void serialize(SimpleWrapperModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(SimpleWrapperModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }

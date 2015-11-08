@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.processor.type.Type;
 import com.bluelinelabs.logansquare.processor.type.collection.CollectionType;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,5 +147,22 @@ public class JsonFieldHolder {
 
     public boolean hasGetter() {
         return !TextUtils.isEmpty(getterMethod);
+    }
+
+    public boolean isGenericType() {
+        return isGenericType(type);
+    }
+
+    private boolean isGenericType(Type type) {
+        if (type instanceof ParameterizedTypeField) {
+            return true;
+        } else {
+            for (Type parameterizedType : type.parameterTypes) {
+                if (isGenericType(parameterizedType)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

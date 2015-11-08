@@ -17,6 +17,9 @@ public class StringMapper extends JsonMapper<String> {
     }
 
     @Override
+    public void parseField(String instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(String object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeString(object);
     }

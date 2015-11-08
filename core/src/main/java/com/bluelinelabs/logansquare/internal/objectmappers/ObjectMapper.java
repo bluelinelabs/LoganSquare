@@ -41,6 +41,9 @@ public class ObjectMapper extends JsonMapper<Object> {
     }
 
     @Override
+    public void parseField(Object instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Object value, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         if (value == null) {
             generator.writeNull();

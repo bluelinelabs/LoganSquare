@@ -4,9 +4,11 @@ import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
 import com.bluelinelabs.logansquare.processor.model.NestedCollectionModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModel;
+import com.bluelinelabs.logansquare.processor.model.SimpleGenericStringModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleModelWithoutNullObjects;
 import com.bluelinelabs.logansquare.processor.model.TwoParamGenericModel;
+import com.bluelinelabs.logansquare.processor.model.TwoParamGenericWithStringModel;
 
 import org.junit.Test;
 
@@ -168,6 +170,19 @@ public class RoundTripTests {
     }
 
     @Test
+    public void simpleGenericStringObject() {
+        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_nested_generic\":{\"test_double\":0.0,\"test_float\":0.2,\"test_int\":10,\"test_long\":0},\"test_string\":\"anotherTestString\",\"test_t\":\"generic string!\"}";
+
+        String reserialized = null;
+        try {
+            SimpleGenericStringModel model = LoganSquare.parse(json, SimpleGenericStringModel.class);
+            reserialized = LoganSquare.serialize(model);
+        } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
     public void simpleGenericGenericObject() {
         String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\",\"test_t\":{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\",\"test_t\":\"generic string!\"}}";
 
@@ -175,6 +190,7 @@ public class RoundTripTests {
         try {
             ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>> parameterizedType = new ParameterizedType<SimpleGenericModel<SimpleGenericModel<String>>>() { };
             SimpleGenericModel<SimpleGenericModel<String>> simpleModel = LoganSquare.parse(json, parameterizedType);
+
             reserialized = LoganSquare.serialize(simpleModel, parameterizedType);
         } catch (Exception ignored) { }
 
@@ -189,6 +205,22 @@ public class RoundTripTests {
         try {
             ParameterizedType<TwoParamGenericModel<String, Integer>> parameterizedType = new ParameterizedType<TwoParamGenericModel<String, Integer>>() { };
             TwoParamGenericModel<String, Integer> model = LoganSquare.parse(json, parameterizedType);
+            reserialized = LoganSquare.serialize(model, parameterizedType);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void twoParamGenericWithStringModelObject() {
+        String json = "{\"t_list\":[\"a\",\"b\"],\"test_k\":1,\"test_t\":\"hello\"}";
+
+        String reserialized = null;
+        try {
+            ParameterizedType<TwoParamGenericWithStringModel<Integer>> parameterizedType = new ParameterizedType<TwoParamGenericWithStringModel<Integer>>() { };
+            TwoParamGenericWithStringModel<Integer> model = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(model, parameterizedType);
         } catch (Exception ignored) {
             ignored.printStackTrace();

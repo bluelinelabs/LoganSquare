@@ -24,6 +24,15 @@ public abstract class JsonMapper<T> {
     public abstract T parse(JsonParser jsonParser) throws IOException;
 
     /**
+     * Parse a single field from a pre-configured JsonParser object into a T instance.
+     *
+     * @param instance The instance of the object that the JsonParser should parse into
+     * @param fieldName The name of the field that should be parsed
+     * @param jsonParser The pre-configured JsonParser
+     */
+    public abstract void parseField(T instance, String fieldName, JsonParser jsonParser) throws IOException;
+
+    /**
      * Serialize an object to a pre-configured JsonGenerator object.
      *
      * @param object The object to serialize.

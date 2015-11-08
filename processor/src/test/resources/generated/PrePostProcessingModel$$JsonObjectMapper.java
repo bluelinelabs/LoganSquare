@@ -13,10 +13,6 @@ import java.lang.SuppressWarnings;
 public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<PrePostProcessingModel> {
     @Override
     public PrePostProcessingModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static PrePostProcessingModel _parse(JsonParser jsonParser) throws IOException {
         PrePostProcessingModel instance = new PrePostProcessingModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -35,7 +31,8 @@ public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<P
         return instance;
     }
 
-    public static void parseField(PrePostProcessingModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(PrePostProcessingModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("unformatted_string".equals(fieldName)) {
             instance.unformattedString = jsonParser.getValueAsString(null);
         }
@@ -43,10 +40,6 @@ public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<P
 
     @Override
     public void serialize(PrePostProcessingModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(PrePostProcessingModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         object.onPreSerialize();
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();

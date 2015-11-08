@@ -22,6 +22,9 @@ public class FloatMapper extends JsonMapper<Float> {
     }
 
     @Override
+    public void parseField(Float instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Float object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeNumber(object);
     }

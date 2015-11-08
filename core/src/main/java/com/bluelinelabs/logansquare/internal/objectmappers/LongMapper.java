@@ -22,6 +22,9 @@ public class LongMapper extends JsonMapper<Long> {
     }
 
     @Override
+    public void parseField(Long instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Long object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeNumber(object);
     }

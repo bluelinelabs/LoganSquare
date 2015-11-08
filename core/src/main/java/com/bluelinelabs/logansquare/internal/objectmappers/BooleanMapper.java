@@ -22,6 +22,9 @@ public class BooleanMapper extends JsonMapper<Boolean> {
     }
 
     @Override
+    public void parseField(Boolean instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Boolean object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeBoolean(object);
     }

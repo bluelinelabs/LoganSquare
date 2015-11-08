@@ -1,15 +1,12 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
-import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.bluelinelabs.logansquare.processor.type.Type;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.lang.annotation.Annotation;
 
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -59,15 +56,7 @@ public abstract class FieldType extends Type {
             } else if (typeMirror instanceof DeclaredType) {
                 Annotation annotation = ((DeclaredType) typeMirror).asElement().getAnnotation(JsonObject.class);
                 if (annotation != null) {
-                    TypeMirror erasedType = types.erasure(typeMirror);
-                    DeclaredType declaredType = (DeclaredType) erasedType;
-                    TypeElement typeElement = (TypeElement) declaredType.asElement();
-
-                    String packageName = elements.getPackageOf(typeElement).getQualifiedName().toString();
-                    ClassName fieldClass = ClassName.bestGuess(typeMirror.toString());
-                    ClassName mapperClass = ClassName.get(packageName, TypeUtils.getSimpleClassName(typeElement, packageName) + Constants.MAPPER_CLASS_SUFFIX);
-
-                    return new JsonFieldType(fieldClass, mapperClass);
+                    return new JsonFieldType(ClassName.bestGuess(typeMirror.toString()));
                 }
             }
 

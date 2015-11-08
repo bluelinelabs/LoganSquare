@@ -22,6 +22,9 @@ public class IntegerMapper extends JsonMapper<Integer> {
     }
 
     @Override
+    public void parseField(Integer instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Integer object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeNumber(object);
     }

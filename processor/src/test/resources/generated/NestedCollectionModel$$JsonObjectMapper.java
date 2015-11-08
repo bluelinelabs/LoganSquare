@@ -21,10 +21,6 @@ import java.util.Set;
 public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<NestedCollectionModel> {
     @Override
     public NestedCollectionModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static NestedCollectionModel _parse(JsonParser jsonParser) throws IOException {
         NestedCollectionModel instance = new NestedCollectionModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -42,7 +38,8 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
         return instance;
     }
 
-    public static void parseField(NestedCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(NestedCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("arrayList".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<String[]> collection1 = new ArrayList<String[]>();
@@ -396,10 +393,6 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
 
     @Override
     public void serialize(NestedCollectionModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(NestedCollectionModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }

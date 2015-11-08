@@ -2,8 +2,12 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldNamingPolicy;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeVariableName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +20,9 @@ public class JsonObjectHolder {
     public final String injectedClassName;
     public final TypeName objectTypeName;
     public final boolean isAbstractClass;
-    public final TypeName parentInjectedTypeName;
+    public final TypeName parentTypeName;
+    public final List<? extends TypeParameterElement> parentTypeParameters;
+    public final List<String> parentUsedTypeParameters;
     public final FieldDetectionPolicy fieldDetectionPolicy;
     public final FieldNamingPolicy fieldNamingPolicy;
     public final boolean serializeNullObjects;
@@ -30,12 +36,34 @@ public class JsonObjectHolder {
     public final Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
     public boolean fileCreated;
 
+    public boolean hasParentClass() {
+        return parentTypeName != null;
+    }
+
+    public TypeName getParameterizedParentTypeName() {
+        if (parentUsedTypeParameters.size() > 0) {
+            List<TypeName> usedParameters = new ArrayList<>();
+            for (String parameter : parentUsedTypeParameters) {
+                if (parameter.indexOf(".") > 0) {
+                    usedParameters.add(ClassName.bestGuess(parameter));
+                } else {
+                    usedParameters.add(TypeVariableName.get(parameter));
+                }
+            }
+            return ParameterizedTypeName.get((ClassName)parentTypeName, usedParameters.toArray(new TypeName[usedParameters.size()]));
+        } else {
+            return parentTypeName;
+        }
+    }
+
     private JsonObjectHolder(JsonObjectHolderBuilder builder) {
         packageName = builder.packageName;
         injectedClassName = builder.injectedClassName;
         objectTypeName = builder.objectTypeName;
         isAbstractClass = builder.isAbstractClass;
-        parentInjectedTypeName = builder.parentInjectedTypeName;
+        parentTypeName = builder.parentTypeName;
+        parentTypeParameters = builder.parentTypeParameters;
+        parentUsedTypeParameters = builder.parentUsedTypeParameters;
         fieldDetectionPolicy = builder.fieldDetectionPolicy;
         fieldNamingPolicy = builder.fieldNamingPolicy;
         serializeNullObjects = builder.serializeNullObjects;
@@ -48,7 +76,9 @@ public class JsonObjectHolder {
         private String injectedClassName;
         private TypeName objectTypeName;
         private boolean isAbstractClass;
-        private TypeName parentInjectedTypeName;
+        private TypeName parentTypeName;
+        private List<? extends TypeParameterElement> parentTypeParameters;
+        private List<String> parentUsedTypeParameters;
         private FieldDetectionPolicy fieldDetectionPolicy;
         private FieldNamingPolicy fieldNamingPolicy;
         private boolean serializeNullObjects;
@@ -75,8 +105,18 @@ public class JsonObjectHolder {
             return this;
         }
 
-        public JsonObjectHolderBuilder setParentInjectedTypeName(TypeName parentInjectedTypeName) {
-            this.parentInjectedTypeName = parentInjectedTypeName;
+        public JsonObjectHolderBuilder setParentTypeName(TypeName parentTypeName) {
+            this.parentTypeName = parentTypeName;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setParentTypeParameters(List<? extends TypeParameterElement> parentTypeParameters) {
+            this.parentTypeParameters = parentTypeParameters;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setParentUsedTypeParameters(List<String> parentUsedTypeParameters) {
+            this.parentUsedTypeParameters = parentUsedTypeParameters;
             return this;
         }
 

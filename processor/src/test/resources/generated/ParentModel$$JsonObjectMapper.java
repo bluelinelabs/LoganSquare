@@ -13,10 +13,6 @@ import java.lang.SuppressWarnings;
 public final class ParentModel$$JsonObjectMapper extends JsonMapper<ParentModel> {
     @Override
     public ParentModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static ParentModel _parse(JsonParser jsonParser) throws IOException {
         ParentModel instance = new ParentModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -34,7 +30,8 @@ public final class ParentModel$$JsonObjectMapper extends JsonMapper<ParentModel>
         return instance;
     }
 
-    public static void parseField(ParentModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(ParentModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("parentTestInt".equals(fieldName)) {
             instance.parentTestInt = jsonParser.getValueAsInt();
         }
@@ -42,10 +39,6 @@ public final class ParentModel$$JsonObjectMapper extends JsonMapper<ParentModel>
 
     @Override
     public void serialize(ParentModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(ParentModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }

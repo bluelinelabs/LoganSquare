@@ -22,6 +22,9 @@ public class DoubleMapper extends JsonMapper<Double> {
     }
 
     @Override
+    public void parseField(Double instance, String fieldName, JsonParser jsonParser) throws IOException { }
+
+    @Override
     public void serialize(Double object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {
         generator.writeNumber(object);
     }

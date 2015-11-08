@@ -15,9 +15,11 @@ import com.bluelinelabs.logansquare.internal.objectmappers.ObjectMapper;
 import com.bluelinelabs.logansquare.internal.objectmappers.StringMapper;
 import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
@@ -49,14 +51,14 @@ public class JsonMapperLoaderInjector {
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(Constants.LOADER_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addSuperinterface(ClassName.get(JsonMapperLoader.class));
-        builder.addMethod(getPutAllJsonMappersMethod());
+        builder.addMethod(getPutAllJsonMappersMethod(builder));
 
         addParameterizedMapperGetters(builder);
 
         return builder.build();
     }
 
-    private MethodSpec getPutAllJsonMappersMethod() {
+    private MethodSpec getPutAllJsonMappersMethod(TypeSpec.Builder typeSpecBuilder) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("putAllJsonMappers")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
@@ -75,7 +77,17 @@ public class JsonMapperLoaderInjector {
 
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
             if (!jsonObjectHolder.isAbstractClass && jsonObjectHolder.typeParameters.size() == 0) {
-                builder.addStatement("map.put($T.class, new $T())", jsonObjectHolder.objectTypeName, ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+                TypeName mapperTypeName = ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName);
+                String variableName = getMapperVariableName(jsonObjectHolder.packageName + "." + jsonObjectHolder.injectedClassName);
+
+                //TODO: this should really be public static final, but for some reason it wasn't initalizing...
+                typeSpecBuilder.addField(FieldSpec.builder(mapperTypeName, variableName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+                );
+
+                builder.addStatement("$L = new $T()", variableName, mapperTypeName);
+                builder.addStatement("map.put($T.class, $L)", jsonObjectHolder.objectTypeName, variableName);
             }
         }
 
@@ -126,5 +138,9 @@ public class JsonMapperLoaderInjector {
         methodBuilder.addStatement("return null");
 
         builder.addMethod(methodBuilder.build());
+    }
+
+    public static String getMapperVariableName(String fullyQualifiedClassName) {
+        return fullyQualifiedClassName.replaceAll("\\.", "_").replaceAll("\\$\\$", "_").toUpperCase();
     }
 }
