@@ -18,7 +18,7 @@ public class JsonFieldType extends FieldType {
     public JsonFieldType(ClassName className) {
         mClassName = className;
         mLoaderClassName = ClassName.get(Constants.LOADER_PACKAGE_NAME, Constants.LOADER_CLASS_NAME);
-        mMapperVariableName = JsonMapperLoaderInjector.getMapperVariableName(mClassName.toString());
+        mMapperVariableName = JsonMapperLoaderInjector.getMapperVariableName(mClassName.toString() + Constants.MAPPER_CLASS_SUFFIX);
     }
 
     @Override

@@ -41,6 +41,7 @@ public final class SimpleGenericModel$$JsonObjectMapper<T> extends JsonMapper<Si
     return instance;
   }
 
+  @Override
   public void parseField(SimpleGenericModel<T> instance, String fieldName, JsonParser jsonParser) throws IOException {
     if ("date".equals(fieldName)) {
       instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);

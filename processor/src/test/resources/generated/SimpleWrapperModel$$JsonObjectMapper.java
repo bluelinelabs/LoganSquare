@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -33,7 +34,7 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
     @Override
     public void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("wrappedObject".equals(fieldName)) {
-            instance.wrappedObject = SimpleWrapperModel$WrappedClass$$JsonObjectMapper._parse(jsonParser);
+            instance.wrappedObject = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLEWRAPPERMODEL_WRAPPEDCLASS__JSONOBJECTMAPPER.parse(jsonParser);
         }
     }
 
@@ -44,7 +45,7 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
         }
         if (object.wrappedObject != null) {
             jsonGenerator.writeFieldName("wrappedObject");
-            SimpleWrapperModel$WrappedClass$$JsonObjectMapper._serialize(object.wrappedObject, jsonGenerator, true);
+            JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLEWRAPPERMODEL_WRAPPEDCLASS__JSONOBJECTMAPPER.serialize(object.wrappedObject, jsonGenerator, true);
         }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();

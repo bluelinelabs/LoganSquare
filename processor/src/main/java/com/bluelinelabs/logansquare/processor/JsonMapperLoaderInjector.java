@@ -141,6 +141,6 @@ public class JsonMapperLoaderInjector {
     }
 
     public static String getMapperVariableName(String fullyQualifiedClassName) {
-        return fullyQualifiedClassName.replaceAll("\\.", "_").replaceAll("\\$\\$", "_").toUpperCase();
+        return fullyQualifiedClassName.replaceAll("\\.", "_").replaceAll("\\$", "_").toUpperCase();
     }
 }
