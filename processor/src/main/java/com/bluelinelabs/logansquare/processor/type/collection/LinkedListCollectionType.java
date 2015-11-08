@@ -1,15 +1,13 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
-public class LinkedListContainerType extends ListContainerType {
+public class LinkedListCollectionType extends ListCollectionType {
 
-    public LinkedListContainerType(ClassName className) {
+    public LinkedListCollectionType(ClassName className) {
         super(className);
     }
 

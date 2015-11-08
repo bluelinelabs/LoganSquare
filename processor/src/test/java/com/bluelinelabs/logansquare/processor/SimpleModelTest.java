@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.google.testing.compile.JavaFileObjects;
+
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.ASSERT;

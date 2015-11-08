@@ -11,14 +11,10 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonObjectMapper extends JsonMapper<NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel> {
     @Override
     public NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel _parse(JsonParser jsonParser) throws IOException {
         NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel instance = new NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -36,7 +32,8 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
         return instance;
     }
 
-    public static void parseField(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("annotated_string".equals(fieldName)) {
             instance.annotatedString = jsonParser.getValueAsString(null);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
@@ -70,10 +67,6 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
 
     @Override
     public void serialize(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }

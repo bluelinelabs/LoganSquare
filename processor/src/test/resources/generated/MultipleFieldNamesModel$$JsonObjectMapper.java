@@ -9,14 +9,10 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<MultipleFieldNamesModel> {
     @Override
     public MultipleFieldNamesModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static MultipleFieldNamesModel _parse(JsonParser jsonParser) throws IOException {
         MultipleFieldNamesModel instance = new MultipleFieldNamesModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -34,7 +30,8 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
         return instance;
     }
 
-    public static void parseField(MultipleFieldNamesModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(MultipleFieldNamesModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("possible_double_name_1".equals(fieldName) || "possible_double_name_2".equals(fieldName)) {
             instance.testDouble = jsonParser.getValueAsDouble();
         } else if ("possible_float_name_1".equals(fieldName) || "possible_float_name_2".equals(fieldName)){
@@ -50,10 +47,6 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
 
     @Override
     public void serialize(MultipleFieldNamesModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(MultipleFieldNamesModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }

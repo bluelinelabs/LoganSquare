@@ -2,11 +2,12 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.Constants;
 
+import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
-import java.util.List;
 
 public class TypeUtils {
 
@@ -20,38 +21,12 @@ public class TypeUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static TypeMirror getTypeFromCollection(TypeMirror typeMirror) {
+    public static List<TypeMirror> getParameterizedTypes(TypeMirror typeMirror) {
         if (!(typeMirror instanceof DeclaredType)) {
             return null;
         }
 
         DeclaredType declaredType = (DeclaredType)typeMirror;
-        List<TypeMirror> genericTypes = (List<TypeMirror>)declaredType.getTypeArguments();
-
-        if (genericTypes.size() > 0) {
-            String genericClassName = declaredType.toString().substring(0, declaredType.toString().indexOf('<'));
-
-            switch (genericClassName) {
-                case "java.util.List":
-                case "java.util.ArrayList":
-                case "java.util.LinkedList":
-                case "java.util.Set":
-                case "java.util.HashSet":
-                case "java.util.Deque":
-                case "java.util.Queue":
-                case "java.util.ArrayDeque":
-                    return genericTypes.get(0);
-                case "java.util.Map":
-                case "java.util.HashMap":
-                case "java.util.TreeMap":
-                case "java.util.LinkedHashMap":
-                    if (!"java.lang.String".equals(genericTypes.get(0).toString())) {
-                        throw new IllegalStateException("JsonField Map collections must use Strings as keys");
-                    }
-                    return genericTypes.get(1);
-            }
-        }
-
-        return null;
+        return (List<TypeMirror>)declaredType.getTypeArguments();
     }
 }
