@@ -91,7 +91,7 @@ public class ObjectMapperInjector {
             }
         }
         for (ClassName typeConverter : typeConvertersUsed) {
-            builder.addField(FieldSpec.builder(typeConverter, TextUtils.toUpperCaseWithUnderscores(typeConverter.simpleName()))
+            builder.addField(FieldSpec.builder(typeConverter, getTypeConverterVariableName(typeConverter))
                     .addModifiers(Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)
                     .initializer("new $T()", typeConverter)
                     .build());
@@ -346,6 +346,10 @@ public class ObjectMapperInjector {
         String typeNameHash = "" + typeName.hashCode();
         typeNameHash = typeNameHash.replaceAll("-", "m");
         return "m" + typeNameHash + "ClassJsonMapper";
+    }
+
+    public static String getTypeConverterVariableName(ClassName className) {
+        return className.toString().replaceAll("\\.", "_").toUpperCase();
     }
 
     private void setFieldHolderJsonMapperVariableName(Type type) {
