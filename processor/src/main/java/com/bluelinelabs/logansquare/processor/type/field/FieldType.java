@@ -35,6 +35,10 @@ public abstract class FieldType extends Type {
                 return new BooleanFieldType(true);
             } else if ("java.lang.Boolean".equals(typeMirror.toString())) {
                 return new BooleanFieldType(false);
+            } else if (typeMirror.getKind() == TypeKind.BYTE) {
+                return new ByteFieldType(true);
+            } else if ("java.lang.Byte".equals(typeMirror.toString())) {
+                return new ByteFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.INT) {
                 return new IntegerFieldType(true);
             } else if ("java.lang.Integer".equals(typeMirror.toString())) {

@@ -9,6 +9,12 @@ import java.util.Date;
 public class SimpleModel {
 
     @JsonField
+    public byte[] primitiveByteArray;
+
+    @JsonField
+    public int[] primitiveIntArray;
+
+    @JsonField
     public String string;
 
     @JsonField

@@ -255,7 +255,7 @@ public class RoundTripTests {
 
     @Test
     public void simpleObject() {
-        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}";
+        String json = "{\"date\":\"2015-02-21T18:45:50.748+0000\",\"primitiveByteArray\":[1,2,3],\"primitiveIntArray\":[1,3,5],\"string\":\"testString\",\"test_double\":342.0,\"test_double_obj\":345.0,\"test_float\":898.0,\"test_float_obj\":382.0,\"test_int\":32,\"test_int_obj\":323,\"test_long\":932,\"test_long_obj\":3920,\"test_string\":\"anotherTestString\"}";
 
         String reserialized = null;
         try {
