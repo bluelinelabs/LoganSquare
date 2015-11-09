@@ -1,16 +1,24 @@
 package com.bluelinelabs.logansquare;
 
+import com.bluelinelabs.logansquare.objectmappers.BooleanMapper;
+import com.bluelinelabs.logansquare.objectmappers.DoubleMapper;
+import com.bluelinelabs.logansquare.objectmappers.FloatMapper;
+import com.bluelinelabs.logansquare.objectmappers.IntegerMapper;
+import com.bluelinelabs.logansquare.objectmappers.ListMapper;
+import com.bluelinelabs.logansquare.objectmappers.LongMapper;
+import com.bluelinelabs.logansquare.objectmappers.MapMapper;
+import com.bluelinelabs.logansquare.objectmappers.ObjectMapper;
+import com.bluelinelabs.logansquare.objectmappers.StringMapper;
 import com.bluelinelabs.logansquare.typeconverters.DefaultCalendarConverter;
 import com.bluelinelabs.logansquare.typeconverters.DefaultDateConverter;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
+import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,8 +29,25 @@ import java.util.concurrent.ConcurrentHashMap;
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
+    private static final ListMapper LIST_MAPPER = new ListMapper();
+    private static final MapMapper MAP_MAPPER = new MapMapper();
+
     private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new ConcurrentHashMap<Class, JsonMapper>();
-    private static final Map<Class, TypeConverter> TYPE_CONVERTERS = new HashMap<Class, TypeConverter>();
+    static {
+        OBJECT_MAPPERS.put(String.class, new StringMapper());
+        OBJECT_MAPPERS.put(Integer.class, new IntegerMapper());
+        OBJECT_MAPPERS.put(Long.class, new LongMapper());
+        OBJECT_MAPPERS.put(Float.class, new FloatMapper());
+        OBJECT_MAPPERS.put(Double.class, new DoubleMapper());
+        OBJECT_MAPPERS.put(Boolean.class, new BooleanMapper());
+        OBJECT_MAPPERS.put(Object.class, new ObjectMapper());
+        OBJECT_MAPPERS.put(List.class, LIST_MAPPER);
+        OBJECT_MAPPERS.put(ArrayList.class, LIST_MAPPER);
+        OBJECT_MAPPERS.put(Map.class, MAP_MAPPER);
+        OBJECT_MAPPERS.put(HashMap.class, MAP_MAPPER);
+    }
+
+    private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<Class, TypeConverter>();
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());
         registerTypeConverter(Calendar.class, new DefaultCalendarConverter());
