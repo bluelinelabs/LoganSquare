@@ -1,6 +1,6 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.processor.TextUtils;
+import com.bluelinelabs.logansquare.processor.ObjectMapperInjector;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -37,11 +37,11 @@ public class TypeConverterFieldType extends FieldType {
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         setter = replaceLastLiteral(setter, "$L.parse($L)");
-        builder.addStatement(setter, expandStringArgs(setterFormatArgs, TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), JSON_PARSER_VARIABLE_NAME));
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, ObjectMapperInjector.getTypeConverterVariableName(mTypeConverter), JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
     public void serialize(Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        builder.addStatement("$L.serialize($L, $S, $L, $L)", TextUtils.toUpperCaseWithUnderscores(mTypeConverter.simpleName()), getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement("$L.serialize($L, $S, $L, $L)", ObjectMapperInjector.getTypeConverterVariableName(mTypeConverter), getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
     }
 }

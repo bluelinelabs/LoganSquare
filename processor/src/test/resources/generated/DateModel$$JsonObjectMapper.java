@@ -10,7 +10,7 @@ import java.lang.SuppressWarnings;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class DateModel$$JsonObjectMapper extends JsonMapper<DateModel> {
-    protected static final DateModel.MyDateTypeConverter MY_DATE_TYPE_CONVERTER = new DateModel.MyDateTypeConverter();
+    protected static final DateModel.MyDateTypeConverter COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_DATEMODEL_MYDATETYPECONVERTER = new DateModel.MyDateTypeConverter();
 
     @Override
     public DateModel parse(JsonParser jsonParser) throws IOException {
@@ -20,7 +20,7 @@ public final class DateModel$$JsonObjectMapper extends JsonMapper<DateModel> {
     @Override
     public void parseField(DateModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("date".equals(fieldName)) {
-            instance.date = MY_DATE_TYPE_CONVERTER.parse(jsonParser);
+            instance.date = COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_DATEMODEL_MYDATETYPECONVERTER.parse(jsonParser);
         }
     }
 
@@ -29,7 +29,7 @@ public final class DateModel$$JsonObjectMapper extends JsonMapper<DateModel> {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        MY_DATE_TYPE_CONVERTER.serialize(object.date, "date", true, jsonGenerator);
+        COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_DATEMODEL_MYDATETYPECONVERTER.serialize(object.date, "date", true, jsonGenerator);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }

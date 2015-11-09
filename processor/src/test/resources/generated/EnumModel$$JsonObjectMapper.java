@@ -10,7 +10,7 @@ import java.lang.SuppressWarnings;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class EnumModel$$JsonObjectMapper extends JsonMapper<EnumModel> {
-    protected static final EnumModel.EnumTypeConverter ENUM_TYPE_CONVERTER = new EnumModel.EnumTypeConverter();
+    protected static final EnumModel.EnumTypeConverter COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_ENUMMODEL_ENUMTYPECONVERTER = new EnumModel.EnumTypeConverter();
 
     @Override
     public EnumModel parse(JsonParser jsonParser) throws IOException {
@@ -20,7 +20,7 @@ public final class EnumModel$$JsonObjectMapper extends JsonMapper<EnumModel> {
     @Override
     public void parseField(EnumModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("enum".equals(fieldName)) {
-            instance.myEnum = ENUM_TYPE_CONVERTER.parse(jsonParser);
+            instance.myEnum = COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_ENUMMODEL_ENUMTYPECONVERTER.parse(jsonParser);
         }
     }
 
@@ -29,7 +29,7 @@ public final class EnumModel$$JsonObjectMapper extends JsonMapper<EnumModel> {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
-        ENUM_TYPE_CONVERTER.serialize(object.myEnum, "enum", true, jsonGenerator);
+        COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_ENUMMODEL_ENUMTYPECONVERTER.serialize(object.myEnum, "enum", true, jsonGenerator);
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
