@@ -75,20 +75,28 @@ public class JsonMapperLoaderInjector {
                 .addStatement("map.put($T.class, new $T())", Map.class, MapMapper.class)
                 .addStatement("map.put($T.class, new $T())", HashMap.class, MapMapper.class);
 
+        List<String> createdMappers = new ArrayList<>();
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
-            if (!jsonObjectHolder.isAbstractClass && jsonObjectHolder.typeParameters.size() == 0) {
+            if (jsonObjectHolder.typeParameters.size() == 0) {
                 TypeName mapperTypeName = ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName);
                 String variableName = getMapperVariableName(jsonObjectHolder.packageName + "." + jsonObjectHolder.injectedClassName);
 
-                //TODO: this should really be public static final, but for some reason it wasn't initalizing...
                 typeSpecBuilder.addField(FieldSpec.builder(mapperTypeName, variableName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
                 );
 
+                createdMappers.add(variableName);
                 builder.addStatement("$L = new $T()", variableName, mapperTypeName);
-                builder.addStatement("map.put($T.class, $L)", jsonObjectHolder.objectTypeName, variableName);
+
+                if (!jsonObjectHolder.isAbstractClass) {
+                    builder.addStatement("map.put($T.class, $L)", jsonObjectHolder.objectTypeName, variableName);
+                }
             }
+        }
+
+        for (String mapper : createdMappers) {
+            builder.addStatement("$L.ensureParent()", mapper);
         }
 
         return builder.build();

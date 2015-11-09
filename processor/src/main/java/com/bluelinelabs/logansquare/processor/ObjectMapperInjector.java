@@ -66,14 +66,14 @@ public class ObjectMapperInjector {
         if (mJsonObjectHolder.hasParentClass()) {
             FieldSpec.Builder parentMapperBuilder;
 
-            if (mJsonObjectHolder.parentTypeParameters.size() == 0){
+            if (mJsonObjectHolder.parentTypeParameters.size() == 0) {
                 parentMapperBuilder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.parentTypeName), PARENT_OBJECT_MAPPER_VARIABLE_NAME)
-                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL);
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC);
 
-                parentMapperBuilder.initializer("$T.$L", ClassName.get(Constants.LOADER_PACKAGE_NAME, Constants.LOADER_CLASS_NAME), JsonMapperLoaderInjector.getMapperVariableName(mJsonObjectHolder.packageName + "." + mJsonObjectHolder.parentTypeName.toString()));
+                parentMapperBuilder.initializer("$T.$L", ClassName.get(Constants.LOADER_PACKAGE_NAME, Constants.LOADER_CLASS_NAME), JsonMapperLoaderInjector.getMapperVariableName(mJsonObjectHolder.parentTypeName.toString() + Constants.MAPPER_CLASS_SUFFIX));
             } else {
                 parentMapperBuilder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.getParameterizedParentTypeName()), PARENT_OBJECT_MAPPER_VARIABLE_NAME)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL);
+                        .addModifiers(Modifier.PRIVATE);
 
                 if (mJsonObjectHolder.typeParameters.size() == 0) {
                     parentMapperBuilder.initializer("$T.mapperFor(new $T<$T>() { })", LoganSquare.class, ParameterizedType.class, mJsonObjectHolder.getParameterizedParentTypeName());
@@ -162,6 +162,7 @@ public class ObjectMapperInjector {
         builder.addMethod(getParseMethod());
         builder.addMethod(getParseFieldMethod());
         builder.addMethod(getSerializeMethod());
+        builder.addMethod(getEnsureParentMethod());
 
         return builder.build();
     }
@@ -239,6 +240,23 @@ public class ObjectMapperInjector {
                 .addException(IOException.class);
 
         insertSerializeStatements(builder);
+
+        return builder.build();
+    }
+
+    private MethodSpec getEnsureParentMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("ensureParent")
+                .addModifiers(Modifier.PUBLIC);
+
+        if (mJsonObjectHolder.hasParentClass()) {
+            builder.beginControlFlow("if ($L == null)", PARENT_OBJECT_MAPPER_VARIABLE_NAME);
+            if (mJsonObjectHolder.parentTypeParameters.size() == 0) {
+                builder.addStatement("$L = $T.$L", PARENT_OBJECT_MAPPER_VARIABLE_NAME, ClassName.get(Constants.LOADER_PACKAGE_NAME, Constants.LOADER_CLASS_NAME), JsonMapperLoaderInjector.getMapperVariableName(mJsonObjectHolder.parentTypeName.toString() + Constants.MAPPER_CLASS_SUFFIX));
+            } else {
+                builder.addStatement("$L = $T.mapperFor(new $T<$T>() { })", PARENT_OBJECT_MAPPER_VARIABLE_NAME, LoganSquare.class, ParameterizedType.class, mJsonObjectHolder.getParameterizedParentTypeName());
+            }
+            builder.endControlFlow();
+        }
 
         return builder.build();
     }

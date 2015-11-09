@@ -194,9 +194,6 @@ public class RoundTripTests {
             reserialized = LoganSquare.serialize(model);
         } catch (Exception ignored) { }
 
-        System.out.println("j = " + json);
-        System.out.println("r = " + reserialized);
-
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
 
@@ -209,9 +206,7 @@ public class RoundTripTests {
             ParameterizedType<SimpleGenericModelWithExtends<String>> parameterizedType = new ParameterizedType<SimpleGenericModelWithExtends<String>>() { };
             SimpleGenericModelWithExtends<String> model = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(model, parameterizedType);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
@@ -239,9 +234,7 @@ public class RoundTripTests {
             ParameterizedType<TwoParamGenericModel<String, Integer>> parameterizedType = new ParameterizedType<TwoParamGenericModel<String, Integer>>() { };
             TwoParamGenericModel<String, Integer> model = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(model, parameterizedType);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
@@ -255,9 +248,7 @@ public class RoundTripTests {
             ParameterizedType<TwoParamGenericWithStringModel<Integer>> parameterizedType = new ParameterizedType<TwoParamGenericWithStringModel<Integer>>() { };
             TwoParamGenericWithStringModel<Integer> model = LoganSquare.parse(json, parameterizedType);
             reserialized = LoganSquare.serialize(model, parameterizedType);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
@@ -301,9 +292,7 @@ public class RoundTripTests {
         try {
             List<SimpleModel> simpleModels = LoganSquare.parseList(json, SimpleModel.class);
             reserialized = LoganSquare.serialize(simpleModels, SimpleModel.class);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
     }
