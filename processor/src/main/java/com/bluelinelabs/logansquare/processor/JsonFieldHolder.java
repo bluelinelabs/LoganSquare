@@ -79,6 +79,8 @@ public class JsonFieldHolder {
         possibleMethodNames.add("get" + elementNameLowerCase);
         if (elementTypeKind == TypeKind.BOOLEAN) {
             possibleMethodNames.add("is" + elementNameLowerCase);
+            possibleMethodNames.add("has" + elementNameLowerCase);
+            possibleMethodNames.add(elementNameLowerCase);
         }
 
         // Handle the case where variables are named in the form mVariableName instead of just variableName
@@ -86,6 +88,8 @@ public class JsonFieldHolder {
             possibleMethodNames.add("get" + elementNameLowerCase.substring(1));
             if (elementTypeKind == TypeKind.BOOLEAN) {
                 possibleMethodNames.add("is" + elementNameLowerCase.substring(1));
+                possibleMethodNames.add("has" + elementNameLowerCase.substring(1));
+                possibleMethodNames.add(elementNameLowerCase.substring(1));
             }
         }
 
