@@ -11,14 +11,10 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapper<LowerCaseNamingPolicyModel> {
     @Override
     public LowerCaseNamingPolicyModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static LowerCaseNamingPolicyModel _parse(JsonParser jsonParser) throws IOException {
         LowerCaseNamingPolicyModel instance = new LowerCaseNamingPolicyModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -36,7 +32,8 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
         return instance;
     }
 
-    public static void parseField(LowerCaseNamingPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(LowerCaseNamingPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("camel_case_list".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 ArrayList<String> collection1 = new ArrayList<String>();
@@ -56,10 +53,6 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
 
     @Override
     public void serialize(LowerCaseNamingPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(LowerCaseNamingPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
@@ -80,5 +73,8 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

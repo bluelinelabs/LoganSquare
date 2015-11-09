@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -20,6 +20,9 @@ public class BooleanMapper extends JsonMapper<Boolean> {
             return jsonParser.getBooleanValue();
         }
     }
+
+    @Override
+    public void parseField(Boolean instance, String fieldName, JsonParser jsonParser) throws IOException { }
 
     @Override
     public void serialize(Boolean object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {

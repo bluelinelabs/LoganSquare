@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -17,6 +17,9 @@ public class ListMapper extends JsonMapper<List<Object>> {
     public List<Object> parse(JsonParser jsonParser) throws IOException {
         return LoganSquare.mapperFor(Object.class).parseList(jsonParser);
     }
+
+    @Override
+    public void parseField(List<Object> instance, String fieldName, JsonParser jsonParser) throws IOException { }
 
     @Override
     public void serialize(List<Object> list, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {

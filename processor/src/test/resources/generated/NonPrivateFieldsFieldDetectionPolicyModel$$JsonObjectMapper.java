@@ -11,14 +11,10 @@ import java.lang.SuppressWarnings;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper extends JsonMapper<NonPrivateFieldsFieldDetectionPolicyModel> {
     @Override
     public NonPrivateFieldsFieldDetectionPolicyModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static NonPrivateFieldsFieldDetectionPolicyModel _parse(JsonParser jsonParser) throws IOException {
         NonPrivateFieldsFieldDetectionPolicyModel instance = new NonPrivateFieldsFieldDetectionPolicyModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -36,7 +32,8 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
         return instance;
     }
 
-    public static void parseField(NonPrivateFieldsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(NonPrivateFieldsFieldDetectionPolicyModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("annotated_string".equals(fieldName)) {
             instance.annotatedString = jsonParser.getValueAsString(null);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
@@ -64,10 +61,6 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
 
     @Override
     public void serialize(NonPrivateFieldsFieldDetectionPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(NonPrivateFieldsFieldDetectionPolicyModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
@@ -94,5 +87,8 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

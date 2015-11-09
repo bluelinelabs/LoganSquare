@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -20,6 +20,9 @@ public class FloatMapper extends JsonMapper<Float> {
             return jsonParser.getFloatValue();
         }
     }
+
+    @Override
+    public void parseField(Float instance, String fieldName, JsonParser jsonParser) throws IOException { }
 
     @Override
     public void serialize(Float object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {

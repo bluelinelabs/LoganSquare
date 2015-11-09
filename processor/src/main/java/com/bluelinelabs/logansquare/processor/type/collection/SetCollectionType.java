@@ -1,17 +1,16 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.util.HashSet;
-import java.util.Queue;
 import java.util.Set;
 
-public class SetContainerType extends SingleParameterCollectionType {
+public class SetCollectionType extends SingleParameterCollectionType {
 
     private final ClassName mClassName;
 
-    public SetContainerType(ClassName className) {
+    public SetCollectionType(ClassName className) {
         mClassName = className;
     }
 
@@ -22,12 +21,12 @@ public class SetContainerType extends SingleParameterCollectionType {
 
     @Override
     public String getParameterizedTypeString() {
-        return "$T<" + subType.getParameterizedTypeString() + ">";
+        return "$T<" + parameterTypes.get(0).getParameterizedTypeString() + ">";
     }
 
     @Override
     public Object[] getParameterizedTypeStringArgs() {
-        return expandStringArgs(Set.class, subType.getParameterizedTypeStringArgs());
+        return expandStringArgs(Set.class, parameterTypes.get(0).getParameterizedTypeStringArgs());
     }
 
     @Override

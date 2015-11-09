@@ -1,16 +1,8 @@
 package com.bluelinelabs.logansquare.processor;
 
+import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.processor.processor.Processor;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
-import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -21,6 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import javax.tools.JavaFileObject;
+
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 public class JsonAnnotationProcessor extends AbstractProcessor {
@@ -29,6 +31,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
     private Filer mFiler;
     private List<Processor> mProcessors;
     private Map<String, JsonObjectHolder> mJsonObjectMap;
+    private boolean mLoaderWritten;
 
     @Override
     public synchronized void init(ProcessingEnvironment env) {
@@ -60,6 +63,21 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
         try {
             for (Processor processor : mProcessors) {
                 processor.findAndParseObjects(env, mJsonObjectMap, mElementUtils, mTypeUtils);
+            }
+
+            if (!mLoaderWritten) {
+                mLoaderWritten = true;
+
+                final JsonMapperLoaderInjector loaderInjector = new JsonMapperLoaderInjector(mJsonObjectMap.values());
+                try {
+                    JavaFileObject jfo = mFiler.createSourceFile(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME);
+                    Writer writer = jfo.openWriter();
+                    writer.write(loaderInjector.getJavaClassFile());
+                    writer.flush();
+                    writer.close();
+                } catch (IOException e) {
+                    error(Constants.LOADER_CLASS_NAME, "Exception occurred while attempting to write injector for the mapper loader. Exception message: %s", e.getMessage());
+                }
             }
 
             for (Map.Entry<String, JsonObjectHolder> entry : mJsonObjectMap.entrySet()) {

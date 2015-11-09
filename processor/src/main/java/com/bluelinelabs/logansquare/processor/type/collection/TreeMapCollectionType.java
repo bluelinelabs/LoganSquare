@@ -1,14 +1,13 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
-public class TreeMapContainerType extends MapContainerType {
+public class TreeMapCollectionType extends MapCollectionType {
 
-    public TreeMapContainerType(ClassName className) {
+    public TreeMapCollectionType(ClassName className) {
         super(className);
     }
 

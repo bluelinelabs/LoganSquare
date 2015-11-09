@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -39,6 +39,9 @@ public class ObjectMapper extends JsonMapper<Object> {
                 throw new RuntimeException("Invalid json token encountered: " + jsonParser.getCurrentToken());
         }
     }
+
+    @Override
+    public void parseField(Object instance, String fieldName, JsonParser jsonParser) throws IOException { }
 
     @Override
     public void serialize(Object value, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {

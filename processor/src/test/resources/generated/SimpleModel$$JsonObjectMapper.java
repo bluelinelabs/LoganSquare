@@ -11,14 +11,10 @@ import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.Date;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
     @Override
     public SimpleModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static SimpleModel _parse(JsonParser jsonParser) throws IOException {
         SimpleModel instance = new SimpleModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -36,7 +32,8 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         return instance;
     }
 
-    public static void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("date".equals(fieldName)) {
             instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
@@ -66,10 +63,6 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
 
     @Override
     public void serialize(SimpleModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(SimpleModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
@@ -102,5 +95,8 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -9,14 +10,10 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<SimpleWrapperModel> {
     @Override
     public SimpleWrapperModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static SimpleWrapperModel _parse(JsonParser jsonParser) throws IOException {
         SimpleWrapperModel instance = new SimpleWrapperModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -34,27 +31,27 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
         return instance;
     }
 
-    public static void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(SimpleWrapperModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("wrappedObject".equals(fieldName)) {
-            instance.wrappedObject = SimpleWrapperModel$WrappedClass$$JsonObjectMapper._parse(jsonParser);
+            instance.wrappedObject = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLEWRAPPERMODEL_WRAPPEDCLASS__JSONOBJECTMAPPER.parse(jsonParser);
         }
     }
 
     @Override
     public void serialize(SimpleWrapperModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(SimpleWrapperModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
         if (object.wrappedObject != null) {
             jsonGenerator.writeFieldName("wrappedObject");
-            SimpleWrapperModel$WrappedClass$$JsonObjectMapper._serialize(object.wrappedObject, jsonGenerator, true);
+            JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLEWRAPPERMODEL_WRAPPEDCLASS__JSONOBJECTMAPPER.serialize(object.wrappedObject, jsonGenerator, true);
         }
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

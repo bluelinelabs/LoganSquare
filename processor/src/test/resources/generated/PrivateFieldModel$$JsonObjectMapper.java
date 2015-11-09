@@ -13,14 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<PrivateFieldModel> {
     @Override
     public PrivateFieldModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static PrivateFieldModel _parse(JsonParser jsonParser) throws IOException {
         PrivateFieldModel instance = new PrivateFieldModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -38,7 +34,8 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         return instance;
     }
 
-    public static void parseField(PrivateFieldModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(PrivateFieldModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("string_to_test_m_vars".equals(fieldName)) {
             instance.setStringThatStartsWithM(jsonParser.getValueAsString(null));
         } else if ("privateBoolean".equals(fieldName)){
@@ -80,10 +77,6 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
 
     @Override
     public void serialize(PrivateFieldModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(PrivateFieldModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
@@ -123,5 +116,8 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

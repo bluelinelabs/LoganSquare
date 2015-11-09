@@ -1,4 +1,4 @@
-package com.bluelinelabs.logansquare.objectmappers;
+package com.bluelinelabs.logansquare.internal.objectmappers;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -20,6 +20,9 @@ public class IntegerMapper extends JsonMapper<Integer> {
             return jsonParser.getIntValue();
         }
     }
+
+    @Override
+    public void parseField(Integer instance, String fieldName, JsonParser jsonParser) throws IOException { }
 
     @Override
     public void serialize(Integer object, JsonGenerator generator, boolean writeStartAndEnd) throws IOException {

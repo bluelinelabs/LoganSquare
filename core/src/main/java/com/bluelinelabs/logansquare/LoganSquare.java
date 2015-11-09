@@ -1,14 +1,6 @@
 package com.bluelinelabs.logansquare;
 
-import com.bluelinelabs.logansquare.objectmappers.BooleanMapper;
-import com.bluelinelabs.logansquare.objectmappers.DoubleMapper;
-import com.bluelinelabs.logansquare.objectmappers.FloatMapper;
-import com.bluelinelabs.logansquare.objectmappers.IntegerMapper;
-import com.bluelinelabs.logansquare.objectmappers.ListMapper;
-import com.bluelinelabs.logansquare.objectmappers.LongMapper;
-import com.bluelinelabs.logansquare.objectmappers.MapMapper;
-import com.bluelinelabs.logansquare.objectmappers.ObjectMapper;
-import com.bluelinelabs.logansquare.objectmappers.StringMapper;
+import com.bluelinelabs.logansquare.internal.JsonMapperLoader;
 import com.bluelinelabs.logansquare.typeconverters.DefaultCalendarConverter;
 import com.bluelinelabs.logansquare.typeconverters.DefaultDateConverter;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
@@ -18,10 +10,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,25 +19,20 @@ import java.util.concurrent.ConcurrentHashMap;
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
-    private static final ListMapper LIST_MAPPER = new ListMapper();
-    private static final MapMapper MAP_MAPPER = new MapMapper();
+    private static final SimpleArrayMap<Class, JsonMapper> OBJECT_MAPPERS = new SimpleArrayMap<>();
+    private static final Map<ParameterizedType, JsonMapper> PARAMETERIZED_OBJECT_MAPPERS = new ConcurrentHashMap<>();
 
-    private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new ConcurrentHashMap<Class, JsonMapper>();
+    private static JsonMapperLoader JSON_MAPPER_LOADER;
     static {
-        OBJECT_MAPPERS.put(String.class, new StringMapper());
-        OBJECT_MAPPERS.put(Integer.class, new IntegerMapper());
-        OBJECT_MAPPERS.put(Long.class, new LongMapper());
-        OBJECT_MAPPERS.put(Float.class, new FloatMapper());
-        OBJECT_MAPPERS.put(Double.class, new DoubleMapper());
-        OBJECT_MAPPERS.put(Boolean.class, new BooleanMapper());
-        OBJECT_MAPPERS.put(Object.class, new ObjectMapper());
-        OBJECT_MAPPERS.put(List.class, LIST_MAPPER);
-        OBJECT_MAPPERS.put(ArrayList.class, LIST_MAPPER);
-        OBJECT_MAPPERS.put(Map.class, MAP_MAPPER);
-        OBJECT_MAPPERS.put(HashMap.class, MAP_MAPPER);
+        try {
+            JSON_MAPPER_LOADER = (JsonMapperLoader)Class.forName(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME).newInstance();
+            JSON_MAPPER_LOADER.putAllJsonMappers(OBJECT_MAPPERS);
+        } catch (Exception e) {
+            throw new RuntimeException("JsonMapperLoaderImpl class not found. Have you included the steps needed for LoganSquare to process your annotations?");
+        }
     }
 
-    private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<Class, TypeConverter>();
+    private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<>();
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());
         registerTypeConverter(Calendar.class, new DefaultCalendarConverter());
@@ -74,6 +59,26 @@ public class LoganSquare {
      */
     public static <E> E parse(String jsonString, Class<E> jsonObjectClass) throws IOException {
         return mapperFor(jsonObjectClass).parse(jsonString);
+    }
+
+    /**
+     * Parse a parameterized object from an InputStream.
+     *
+     * @param is The InputStream, most likely from your networking library.
+     * @param jsonObjectType The ParameterizedType describing the object. Ex: LoganSquare.parse(is, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
+     */
+    public static <E> E parse(InputStream is, ParameterizedType<E> jsonObjectType) throws IOException {
+        return mapperFor(jsonObjectType).parse(is);
+    }
+
+    /**
+     * Parse a parameterized object from a String. Note: parsing from an InputStream should be preferred over parsing from a String if possible.
+     *
+     * @param jsonString The JSON string being parsed.
+     * @param jsonObjectType The ParameterizedType describing the object. Ex: LoganSquare.parse(is, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
+     */
+    public static <E> E parse(String jsonString, ParameterizedType<E> jsonObjectType) throws IOException {
+        return mapperFor(jsonObjectType).parse(jsonString);
     }
 
     /**
@@ -138,6 +143,29 @@ public class LoganSquare {
     }
 
     /**
+     * Serialize a parameterized object to a JSON String.
+     *
+     * @param object The object to serialize.
+     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.serialize(object, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> String serialize(E object, ParameterizedType<E> parameterizedType) throws IOException {
+        return mapperFor(parameterizedType).serialize(object);
+    }
+
+    /**
+     * Serialize a parameterized  object to an OutputStream.
+     *
+     * @param object The object to serialize.
+     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.serialize(object, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { }, os);
+     * @param os The OutputStream being written to.
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> void serialize(E object, ParameterizedType<E> parameterizedType, OutputStream os) throws IOException {
+        mapperFor(parameterizedType).serialize(object, os);
+    }
+
+    /**
      * Serialize a list of objects to a JSON String.
      *
      * @param list The list of objects to serialize.
@@ -189,16 +217,42 @@ public class LoganSquare {
         JsonMapper<E> mapper = OBJECT_MAPPERS.get(cls);
 
         if (mapper == null) {
-            try {
-                Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
-                mapper = (JsonMapper<E>)mapperClass.newInstance();
-                OBJECT_MAPPERS.put(cls, mapper);
-            } catch (Exception e) {
-                throw new NoSuchMapperException(cls, e);
+            throw new NoSuchMapperException(cls);
+        } else {
+            return mapper;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type) throws NoSuchMapperException {
+        return mapperFor(type, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) throws NoSuchMapperException {
+        if (type.typeParameters.size() == 0) {
+            return mapperFor((Class<E>)type.rawType);
+        } else {
+            JsonMapper<E> mapper;
+
+            if (partialMappers != null && partialMappers.containsKey(type)) {
+                mapper = partialMappers.get(type);
+            } else if (PARAMETERIZED_OBJECT_MAPPERS.containsKey(type)) {
+                mapper = PARAMETERIZED_OBJECT_MAPPERS.get(type);
+            } else {
+                if (partialMappers == null) {
+                    partialMappers = new SimpleArrayMap<>();
+                }
+                mapper = JSON_MAPPER_LOADER.mapperFor(type, partialMappers);
+                PARAMETERIZED_OBJECT_MAPPERS.put(type, mapper);
+            }
+
+            if (mapper == null) {
+                throw new NoSuchMapperException(type.rawType);
+            } else {
+                return mapper;
             }
         }
-
-        return mapper;
     }
 
     /**

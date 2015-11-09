@@ -7,15 +7,15 @@ import org.junit.Test;
 import static com.google.common.truth.Truth.ASSERT;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 
-public class SimpleModelTest {
+public class SimpleGenericModelTest {
 
     @Test
     public void generatedSource() {
         ASSERT.about(javaSource())
-                .that(JavaFileObjects.forResource("model/good/SimpleModel.java"))
+                .that(JavaFileObjects.forResource("model/good/SimpleGenericModel.java"))
                 .processedWith(new JsonAnnotationProcessor())
                 .compilesWithoutError()
                 .and()
-                .generatesSources(JavaFileObjects.forResource("generated/SimpleModel$$JsonObjectMapper.java"));
+                .generatesSources(JavaFileObjects.forResource("generated/SimpleGenericModel$$JsonObjectMapper.java"));
     }
 }

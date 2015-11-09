@@ -19,7 +19,7 @@ package com.bluelinelabs.logansquare.util;
 import java.util.Map;
 
 /**
- * Base implementation of {@link ArrayMap} that doesn't include any standard Java
+ * Base implementation of ArrayMap that doesn't include any standard Java
  * container API interoperability.  These features are generally heavier-weight ways
  * to interact with the container, so discouraged, but they can be useful to make it
  * easier to use as a drop-in replacement for HashMap.  If you don't need them, this

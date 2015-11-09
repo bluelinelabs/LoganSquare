@@ -7,27 +7,31 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
+import com.bluelinelabs.logansquare.processor.JsonObjectHolder.JsonObjectHolderBuilder;
 import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -62,8 +66,6 @@ public class JsonObjectProcessor extends Processor {
 
         if (element.getModifiers().contains(PRIVATE)) {
             error(element, "%s: %s annotation can't be used on private classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
-        } else if (typeElement.getTypeParameters().size() > 0) {
-            error(element, "%s: @%s annotation can't be used on generic classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
         }
 
         JsonObjectHolder holder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(typeElement, elements));
@@ -72,15 +74,32 @@ public class JsonObjectProcessor extends Processor {
             String objectClassName = TypeUtils.getSimpleClassName(typeElement, packageName);
             String injectedSimpleClassName = objectClassName + Constants.MAPPER_CLASS_SUFFIX;
             boolean abstractClass = element.getModifiers().contains(ABSTRACT);
-            TypeName parentInjectedClassName = null;
+            List<? extends TypeParameterElement> parentTypeParameters = new ArrayList<>();
+            List<String> parentUsedTypeParameters = new ArrayList<>();
+            TypeName parentClassName = null;
 
             TypeMirror superclass = typeElement.getSuperclass();
+            if (superclass.getKind() != TypeKind.NONE) {
+                TypeElement superclassElement = (TypeElement)types.asElement(superclass);
+                if (superclassElement.getAnnotation(JsonObject.class) != null) {
+                    if (superclassElement.getTypeParameters() != null) {
+                        parentTypeParameters = superclassElement.getTypeParameters();
+                    }
+
+                    String superclassName = superclass.toString();
+                    int indexOfTypeParamStart = superclassName.indexOf("<");
+                    if (indexOfTypeParamStart > 0) {
+                        String typeParams = superclassName.substring(indexOfTypeParamStart + 1, superclassName.length() - 1);
+                        parentUsedTypeParameters = Arrays.asList(typeParams.split("\\s*,\\s*"));
+                    }
+                }
+            }
             while (superclass.getKind() != TypeKind.NONE) {
                 TypeElement superclassElement = (TypeElement)types.asElement(superclass);
 
                 if (superclassElement.getAnnotation(JsonObject.class) != null) {
                     String superclassPackageName = elements.getPackageOf(superclassElement).getQualifiedName().toString();
-                    parentInjectedClassName = ClassName.get(superclassPackageName, TypeUtils.getSimpleClassName(superclassElement, superclassPackageName) + Constants.MAPPER_CLASS_SUFFIX);
+                    parentClassName = ClassName.get(superclassPackageName, TypeUtils.getSimpleClassName(superclassElement, superclassPackageName));
                     break;
                 }
 
@@ -89,7 +108,20 @@ public class JsonObjectProcessor extends Processor {
 
             JsonObject annotation = element.getAnnotation(JsonObject.class);
 
-            holder = new JsonObjectHolder(packageName, injectedSimpleClassName, TypeName.get(typeElement.asType()), abstractClass, parentInjectedClassName, annotation.fieldDetectionPolicy(), annotation.fieldNamingPolicy(), annotation.serializeNullObjects(), annotation.serializeNullCollectionElements());
+            holder = new JsonObjectHolderBuilder()
+                    .setPackageName(packageName)
+                    .setInjectedClassName(injectedSimpleClassName)
+                    .setObjectTypeName(TypeName.get(typeElement.asType()))
+                    .setIsAbstractClass(abstractClass)
+                    .setParentTypeName(parentClassName)
+                    .setParentTypeParameters(parentTypeParameters)
+                    .setParentUsedTypeParameters(parentUsedTypeParameters)
+                    .setFieldDetectionPolicy(annotation.fieldDetectionPolicy())
+                    .setFieldNamingPolicy(annotation.fieldNamingPolicy())
+                    .setSerializeNullObjects(annotation.serializeNullObjects())
+                    .setSerializeNullCollectionElements(annotation.serializeNullCollectionElements())
+                    .setTypeParameters(typeElement.getTypeParameters())
+                    .build();
 
             FieldDetectionPolicy fieldDetectionPolicy = annotation.fieldDetectionPolicy();
             if (fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS || fieldDetectionPolicy == FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS) {

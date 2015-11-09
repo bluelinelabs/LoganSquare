@@ -1,6 +1,7 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.bluelinelabs.logansquare.processor.TextUtils;
+import com.bluelinelabs.logansquare.processor.type.Type;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.MethodSpec;
@@ -13,30 +14,36 @@ import java.util.List;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
 
-public class ArrayCollectionType extends ContainerType {
+public class ArrayCollectionType extends CollectionType {
+
+    private final Type arrayType;
+
+    public ArrayCollectionType(Type arrayType) {
+        this.arrayType = arrayType;
+    }
 
     @Override
     public TypeName getTypeName() {
-        return ArrayTypeName.of(subType.getTypeName());
+        return ArrayTypeName.of(arrayType.getTypeName());
     }
 
     @Override
     public String getParameterizedTypeString() {
-        return subType.getParameterizedTypeString() + "[]";
+        return arrayType.getParameterizedTypeString() + "[]";
     }
 
     @Override
     public Object[] getParameterizedTypeStringArgs() {
-        return subType.getParameterizedTypeStringArgs();
+        return arrayType.getParameterizedTypeStringArgs();
     }
 
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
-        TypeName fieldType = subType.getTypeName();
+        TypeName fieldType = arrayType.getTypeName();
         final String collectionVarName = "collection" + depth;
 
-        final String instanceCreator = String.format("$T<%s> $L = new $T<%s>()", subType.getParameterizedTypeString(), subType.getParameterizedTypeString());
-        final Object[] instanceCreatorArgs = expandStringArgs(List.class, subType.getParameterizedTypeStringArgs(), collectionVarName, ArrayList.class, subType.getParameterizedTypeStringArgs());
+        final String instanceCreator = String.format("$T<%s> $L = new $T<%s>()", arrayType.getParameterizedTypeString(), arrayType.getParameterizedTypeString());
+        final Object[] instanceCreatorArgs = expandStringArgs(List.class, arrayType.getParameterizedTypeStringArgs(), collectionVarName, ArrayList.class, arrayType.getParameterizedTypeStringArgs());
 
         builder.beginControlFlow("if ($L.getCurrentToken() == $T.START_ARRAY)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
                 .addStatement(instanceCreator, instanceCreatorArgs)
@@ -45,12 +52,12 @@ public class ArrayCollectionType extends ContainerType {
         if (!fieldType.isPrimitive()) {
             final String valueVarName = "value" + depth;
 
-            builder.addStatement("$T $L", subType.getTypeName(), valueVarName);
-            subType.parse(builder, depth + 1, "$L = $L", valueVarName);
+            builder.addStatement("$T $L", arrayType.getTypeName(), valueVarName);
+            arrayType.parse(builder, depth + 1, "$L = $L", valueVarName);
 
             builder.addStatement("$L.add($L)", collectionVarName, valueVarName);
         } else {
-            subType.parse(builder, depth + 1, "$L.add($L)", collectionVarName);
+            arrayType.parse(builder, depth + 1, "$L.add($L)", collectionVarName);
         }
 
         builder.endControlFlow();
@@ -83,16 +90,16 @@ public class ArrayCollectionType extends ContainerType {
         final Object[] instanceCreatorArgs;
         final String forLine;
         final Object[] forLineArgs;
-        if (subType.getTypeName().isPrimitive()) {
+        if (arrayType.getTypeName().isPrimitive()) {
             instanceCreator = "final $T[] $L = $L";
-            instanceCreatorArgs = expandStringArgs(subType.getTypeName(), collectionVariableName, getter);
+            instanceCreatorArgs = expandStringArgs(arrayType.getTypeName(), collectionVariableName, getter);
             forLine = "for ($T $L : $L)";
-            forLineArgs = expandStringArgs(subType.getTypeName(), elementVarName, collectionVariableName);
+            forLineArgs = expandStringArgs(arrayType.getTypeName(), elementVarName, collectionVariableName);
         } else {
-            instanceCreator = String.format("final %s[] $L = $L", subType.getParameterizedTypeString());
-            instanceCreatorArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), collectionVariableName, getter);
-            forLine = String.format("for (%s $L : $L)", subType.getParameterizedTypeString());
-            forLineArgs = expandStringArgs(subType.getParameterizedTypeStringArgs(), elementVarName, collectionVariableName);
+            instanceCreator = String.format("final %s[] $L = $L", arrayType.getParameterizedTypeString());
+            instanceCreatorArgs = expandStringArgs(arrayType.getParameterizedTypeStringArgs(), collectionVariableName, getter);
+            forLine = String.format("for (%s $L : $L)", arrayType.getParameterizedTypeString());
+            forLineArgs = expandStringArgs(arrayType.getParameterizedTypeStringArgs(), elementVarName, collectionVariableName);
         }
 
         builder
@@ -107,13 +114,13 @@ public class ArrayCollectionType extends ContainerType {
                 .addStatement("$L.writeStartArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .beginControlFlow(forLine, forLineArgs);
 
-        if (!subType.getTypeName().isPrimitive()) {
+        if (!arrayType.getTypeName().isPrimitive()) {
             builder.beginControlFlow("if ($L != null)", elementVarName);
         }
 
-        subType.serialize(builder, depth + 1, collectionVariableName + "Element", processedFieldNames, elementVarName, false, false, false, writeCollectionElementIfNull);
+        arrayType.serialize(builder, depth + 1, collectionVariableName + "Element", processedFieldNames, elementVarName, false, false, false, writeCollectionElementIfNull);
 
-        if (!subType.getTypeName().isPrimitive()) {
+        if (!arrayType.getTypeName().isPrimitive()) {
             if (writeCollectionElementIfNull) {
                 builder
                         .nextControlFlow("else")

@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -21,14 +22,10 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<SimpleCollectionModel> {
     @Override
     public SimpleCollectionModel parse(JsonParser jsonParser) throws IOException {
-        return _parse(jsonParser);
-    }
-
-    public static SimpleCollectionModel _parse(JsonParser jsonParser) throws IOException {
         SimpleCollectionModel instance = new SimpleCollectionModel();
         if (jsonParser.getCurrentToken() == null) {
             jsonParser.nextToken();
@@ -46,13 +43,14 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
         return instance;
     }
 
-    public static void parseField(SimpleCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+    @Override
+    public void parseField(SimpleCollectionModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("model_array".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
                 List<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 SimpleCollectionModel.ModelForCollection[] array = collection1.toArray(new SimpleCollectionModel.ModelForCollection[collection1.size()]);
@@ -65,7 +63,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 ArrayList<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionArrayList = collection1;
@@ -77,7 +75,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 ArrayDeque<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionDeque = collection1;
@@ -93,7 +91,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map1.put(key1, null);
                     } else{
-                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionHashMap = map1;
@@ -109,7 +107,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map1.put(key1, null);
                     } else{
-                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionLinkedHashMap = map1;
@@ -121,7 +119,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 LinkedList<SimpleCollectionModel.ModelForCollection> collection1 = new LinkedList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionLinkedList = collection1;
@@ -133,7 +131,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 ArrayList<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayList<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionList = collection1;
@@ -149,7 +147,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map1.put(key1, null);
                     } else{
-                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionMap = map1;
@@ -161,7 +159,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 ArrayDeque<SimpleCollectionModel.ModelForCollection> collection1 = new ArrayDeque<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionQueue = collection1;
@@ -173,7 +171,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                 HashSet<SimpleCollectionModel.ModelForCollection> collection1 = new HashSet<SimpleCollectionModel.ModelForCollection>();
                 while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                     SimpleCollectionModel.ModelForCollection value1;
-                    value1 = SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser);
+                    value1 = JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                     collection1.add(value1);
                 }
                 instance.modelForCollectionSet = collection1;
@@ -189,7 +187,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map1.put(key1, null);
                     } else{
-                        map1.put(key1, SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._parse(jsonParser));
+                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
                     }
                 }
                 instance.modelForCollectionTreeMap = map1;
@@ -216,10 +214,6 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
 
     @Override
     public void serialize(SimpleCollectionModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-        _serialize(object, jsonGenerator, writeStartAndEnd);
-    }
-
-    public static void _serialize(SimpleCollectionModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
         if (writeStartAndEnd) {
             jsonGenerator.writeStartObject();
         }
@@ -229,7 +223,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_array) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -240,7 +234,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_array_list) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -251,7 +245,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_deque) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -263,7 +257,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_hash_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -275,7 +269,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_linked_hash_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -286,7 +280,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_linked_list) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -297,7 +291,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_list) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -309,7 +303,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -320,7 +314,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_queue) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -331,7 +325,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeStartArray();
             for (SimpleCollectionModel.ModelForCollection element1 : lslocalmodel_set) {
                 if (element1 != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(element1, jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element1, jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndArray();
@@ -343,7 +337,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             for (Map.Entry<String, SimpleCollectionModel.ModelForCollection> entry1 : lslocalmodel_tree_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
-                    SimpleCollectionModel$ModelForCollection$$JsonObjectMapper._serialize(entry1.getValue(), jsonGenerator, true);
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_PROCESSOR_SIMPLECOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, true);
                 }
             }
             jsonGenerator.writeEndObject();
@@ -360,5 +354,8 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    public void ensureParent() {
     }
 }

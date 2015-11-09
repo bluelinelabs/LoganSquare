@@ -1,14 +1,13 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
-public class LinkedHashMapContainerType extends MapContainerType {
+public class LinkedHashMapCollectionType extends MapCollectionType {
 
-    public LinkedHashMapContainerType(ClassName className) {
+    public LinkedHashMapCollectionType(ClassName className) {
         super(className);
     }
 

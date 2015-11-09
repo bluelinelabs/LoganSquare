@@ -1,15 +1,13 @@
-package com.bluelinelabs.logansquare.processor.type.container;
+package com.bluelinelabs.logansquare.processor.type.collection;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class HashMapContainerType extends MapContainerType {
+public class HashMapCollectionType extends MapCollectionType {
 
-    public HashMapContainerType(ClassName className) {
+    public HashMapCollectionType(ClassName className) {
         super(className);
     }
 

@@ -1,7 +1,11 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.processor.type.Type;
-import com.bluelinelabs.logansquare.processor.type.container.ContainerType;
+import com.bluelinelabs.logansquare.processor.type.collection.CollectionType;
+import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -11,8 +15,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JsonFieldHolder {
 
@@ -45,21 +47,24 @@ public class JsonFieldHolder {
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
 
-        Type typeToCheck = type;
-        boolean hasSubtypes = true;
-        do {
-            if (typeToCheck == null) {
-                return "Type could not be determined for " + element.toString();
-            } else {
-                if (typeToCheck instanceof ContainerType) {
-                    typeToCheck = ((ContainerType)typeToCheck).subType;
-                } else {
-                    hasSubtypes = false;
+        return ensureValidType(type, element);
+    }
+
+    private String ensureValidType(Type type, Element element) {
+        if (type == null) {
+            return "Type could not be determined for " + element.toString();
+        } else {
+            if (type instanceof CollectionType) {
+                for (Type parameterType : type.parameterTypes) {
+                    String errorMessage = ensureValidType(parameterType, element);
+                    if (errorMessage != null) {
+                        return errorMessage;
+                    }
                 }
             }
-        } while (hasSubtypes);
 
-        return null;
+            return null;
+        }
     }
 
     public static String getGetter(Element element, Elements elements) {
@@ -74,6 +79,8 @@ public class JsonFieldHolder {
         possibleMethodNames.add("get" + elementNameLowerCase);
         if (elementTypeKind == TypeKind.BOOLEAN) {
             possibleMethodNames.add("is" + elementNameLowerCase);
+            possibleMethodNames.add("has" + elementNameLowerCase);
+            possibleMethodNames.add(elementNameLowerCase);
         }
 
         // Handle the case where variables are named in the form mVariableName instead of just variableName
@@ -81,6 +88,8 @@ public class JsonFieldHolder {
             possibleMethodNames.add("get" + elementNameLowerCase.substring(1));
             if (elementTypeKind == TypeKind.BOOLEAN) {
                 possibleMethodNames.add("is" + elementNameLowerCase.substring(1));
+                possibleMethodNames.add("has" + elementNameLowerCase.substring(1));
+                possibleMethodNames.add(elementNameLowerCase.substring(1));
             }
         }
 
@@ -142,5 +151,22 @@ public class JsonFieldHolder {
 
     public boolean hasGetter() {
         return !TextUtils.isEmpty(getterMethod);
+    }
+
+    public boolean isGenericType() {
+        return isGenericType(type);
+    }
+
+    private boolean isGenericType(Type type) {
+        if (type instanceof ParameterizedTypeField) {
+            return true;
+        } else {
+            for (Type parameterizedType : type.parameterTypes) {
+                if (isGenericType(parameterizedType)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
