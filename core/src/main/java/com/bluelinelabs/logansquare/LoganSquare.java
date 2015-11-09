@@ -207,31 +207,15 @@ public class LoganSquare {
         mapperFor(jsonObjectClass).serialize(map, os);
     }
 
-    /**
-     * Returns a JsonMapper for a given class that has been annotated with @JsonObject.
-     *
-     * @param cls The class for which the JsonMapper should be fetched.
-     */
     @SuppressWarnings("unchecked")
-    public static <E> JsonMapper<E> mapperFor(Class<E> cls) throws NoSuchMapperException {
-        JsonMapper<E> mapper = OBJECT_MAPPERS.get(cls);
-
-        if (mapper == null) {
-            throw new NoSuchMapperException(cls);
-        } else {
-            return mapper;
-        }
+    private static <E> JsonMapper<E> getMapper(Class<E> cls) {
+        return OBJECT_MAPPERS.get(cls);
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type) throws NoSuchMapperException {
-        return mapperFor(type, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) throws NoSuchMapperException {
+    private static <E> JsonMapper<E> getMapper(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) {
         if (type.typeParameters.size() == 0) {
-            return mapperFor((Class<E>)type.rawType);
+            return getMapper((Class<E>)type.rawType);
         } else {
             JsonMapper<E> mapper;
 
@@ -247,11 +231,61 @@ public class LoganSquare {
                 PARAMETERIZED_OBJECT_MAPPERS.put(type, mapper);
             }
 
-            if (mapper == null) {
-                throw new NoSuchMapperException(type.rawType);
-            } else {
-                return mapper;
-            }
+            return mapper;
+        }
+    }
+
+    /**
+     * Returns whether or not LoganSquare can handle a given class.
+     *
+     * @param cls The class for which support is being checked.
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean supports(Class cls) {
+        return OBJECT_MAPPERS.get(cls) != null;
+    }
+
+    /**
+     * Returns whether or not LoganSquare can handle a given ParameterizedType.
+     *
+     * @param type The ParameterizedType for which support is being checked.
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean supports(ParameterizedType type) {
+        return getMapper(type, null) != null;
+    }
+
+    /**
+     * Returns a JsonMapper for a given class that has been annotated with @JsonObject.
+     *
+     * @param cls The class for which the JsonMapper should be fetched.
+     */
+    public static <E> JsonMapper<E> mapperFor(Class<E> cls) throws NoSuchMapperException {
+        JsonMapper<E> mapper = getMapper(cls);
+
+        if (mapper == null) {
+            throw new NoSuchMapperException(cls);
+        } else {
+            return mapper;
+        }
+    }
+
+    /**
+     * Returns a JsonMapper for a given class that has been annotated with @JsonObject.
+     *
+     * @param type The ParameterizedType for which the JsonMapper should be fetched.
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type) throws NoSuchMapperException {
+        return mapperFor(type, null);
+    }
+
+    public static <E> JsonMapper<E> mapperFor(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) throws NoSuchMapperException {
+        JsonMapper<E> mapper = getMapper(type, partialMappers);
+        if (mapper == null) {
+            throw new NoSuchMapperException(type.rawType);
+        } else {
+            return mapper;
         }
     }
 
