@@ -1,11 +1,13 @@
 package com.bluelinelabs.logansquare.processor.type.collection;
 
+import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.type.Type;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
@@ -60,10 +62,10 @@ public abstract class MapCollectionType extends CollectionType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         Type parameterType = parameterTypes.get(1);
-
-        final String mapVariableName = "lslocal" + fieldName;
+        final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
+        final String mapVariableName = "lslocal" + cleanFieldName;
         final String entryVariableName = "entry" + depth;
 
         final String instanceCreator = String.format("final $T<$T, %s> $L = $L", parameterType.getParameterizedTypeString());
@@ -86,7 +88,7 @@ public abstract class MapCollectionType extends CollectionType {
                 .addStatement("$L.writeFieldName($L.getKey().toString())", JSON_GENERATOR_VARIABLE_NAME, entryVariableName)
                 .beginControlFlow("if ($L.getValue() != null)", entryVariableName);
 
-        parameterType.serialize(builder, depth + 1, mapVariableName + "Element", entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
+        parameterType.serialize(builder, depth + 1, mapVariableName + "Element", processedFieldNames, entryVariableName + ".getValue()", false, false, true, writeCollectionElementIfNull);
 
         if (writeCollectionElementIfNull) {
             builder

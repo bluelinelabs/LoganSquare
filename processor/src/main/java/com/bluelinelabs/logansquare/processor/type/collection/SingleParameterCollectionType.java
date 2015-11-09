@@ -1,9 +1,12 @@
 package com.bluelinelabs.logansquare.processor.type.collection;
 
+import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.type.Type;
 import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
+
+import java.util.List;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -41,10 +44,10 @@ public abstract class SingleParameterCollectionType extends CollectionType {
     }
 
     @Override
-    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+    public void serialize(MethodSpec.Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         Type parameterType = parameterTypes.get(0);
-
-        String collectionVariableName = "lslocal" + fieldName;
+        final String cleanFieldName = TextUtils.toUniqueFieldNameVariable(fieldName, processedFieldNames);
+        final String collectionVariableName = "lslocal" + cleanFieldName;
         final String elementVarName = "element" + depth;
 
         final String instanceCreator = String.format("final $T<%s> $L = $L", parameterType.getParameterizedTypeString());
@@ -66,7 +69,7 @@ public abstract class SingleParameterCollectionType extends CollectionType {
                 .beginControlFlow(forLine, forLineArgs)
                 .beginControlFlow("if ($L != null)", elementVarName);
 
-        parameterType.serialize(builder, depth + 1, collectionVariableName + "Element", elementVarName, false, false, false, writeCollectionElementIfNull);
+        parameterType.serialize(builder, depth + 1, collectionVariableName + "Element", processedFieldNames, elementVarName, false, false, false, writeCollectionElementIfNull);
 
         if (writeCollectionElementIfNull) {
             builder

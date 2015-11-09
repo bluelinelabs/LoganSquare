@@ -1,9 +1,19 @@
 package com.bluelinelabs.logansquare.processor;
 
+import java.util.Collections;
+import java.util.List;
+
 public class TextUtils {
 
     public static boolean isEmpty(String string) {
         return string == null || string.length() == 0;
+    }
+
+    public static String toUniqueFieldNameVariable(String fieldName, List<String> processedFieldNames) {
+        fieldName = fieldName.replaceAll(" ", "");
+        int frequency = Collections.frequency(processedFieldNames, fieldName);
+        processedFieldNames.add(fieldName);
+        return (frequency > 0) ? fieldName + frequency : fieldName;
     }
 
     public static String toUpperCaseWithUnderscores(String className) {

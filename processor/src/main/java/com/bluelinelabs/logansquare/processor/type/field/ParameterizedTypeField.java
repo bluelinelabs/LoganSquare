@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.processor.type.Type;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
@@ -26,7 +27,7 @@ public class ParameterizedTypeField extends FieldType {
     }
 
     @Override
-    public void serialize(Builder builder, int depth, String fieldName, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
+    public void serialize(Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
         if (checkIfNull) {
             builder.beginControlFlow("if ($L != null)", getter);
         }
