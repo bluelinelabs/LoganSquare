@@ -105,7 +105,7 @@ public class JsonMapperLoaderInjector {
 
         boolean conditionalStarted = false;
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
-            if (!jsonObjectHolder.isAbstractClass && jsonObjectHolder.typeParameters.size() > 0) {
+            if (jsonObjectHolder.typeParameters.size() > 0) {
                 String conditional = String.format("if (type.rawType == %s.class)", jsonObjectHolder.objectTypeName.toString().replaceAll("<(.*?)>", ""));
                 if (conditionalStarted) {
                     methodBuilder.nextControlFlow("else " + conditional);
