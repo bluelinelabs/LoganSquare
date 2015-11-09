@@ -32,7 +32,11 @@ public abstract class CalendarTypeConverter implements TypeConverter<Calendar> {
 
     @Override
     public void serialize(Calendar object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeStringField(fieldName, mDateFormat.get().format(object.getTimeInMillis()));
+        if (fieldName != null) {
+            jsonGenerator.writeStringField(fieldName, mDateFormat.get().format(object.getTimeInMillis()));
+        } else {
+            jsonGenerator.writeString(mDateFormat.get().format(object.getTimeInMillis()));
+        }
     }
 
     /** Called to get the DateFormat used to parse and serialize objects */

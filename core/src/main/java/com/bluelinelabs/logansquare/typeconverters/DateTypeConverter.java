@@ -34,10 +34,14 @@ public abstract class DateTypeConverter implements TypeConverter<Date> {
 
     @Override
     public void serialize(Date object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        if (object != null) {
+        if (fieldName != null && object != null) {
             jsonGenerator.writeStringField(fieldName, mDateFormat.get().format(object));
+        } else if (object != null) {
+            jsonGenerator.writeString(mDateFormat.get().format(object));
         } else {
-            jsonGenerator.writeFieldName(fieldName);
+            if (fieldName != null) {
+                jsonGenerator.writeFieldName(fieldName);
+            }
             jsonGenerator.writeNull();
         }
     }

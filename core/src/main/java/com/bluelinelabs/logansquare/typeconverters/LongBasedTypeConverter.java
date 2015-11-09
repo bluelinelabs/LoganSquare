@@ -28,7 +28,11 @@ public abstract class LongBasedTypeConverter<T> implements TypeConverter<T> {
 
     @Override
     public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(fieldName, convertToLong(object));
+        if (fieldName != null) {
+            jsonGenerator.writeNumberField(fieldName, convertToLong(object));
+        } else {
+            jsonGenerator.writeNumber(convertToLong(object));
+        }
     }
 
 }

@@ -28,7 +28,11 @@ public abstract class BooleanBasedTypeConverter<T> implements TypeConverter<T> {
 
     @Override
     public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeBooleanField(fieldName, convertToBoolean(object));
+        if (fieldName != null) {
+            jsonGenerator.writeBooleanField(fieldName, convertToBoolean(object));
+        } else {
+            jsonGenerator.writeBoolean(convertToBoolean(object));
+        }
     }
 
 }

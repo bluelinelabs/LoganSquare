@@ -28,7 +28,11 @@ public abstract class StringBasedTypeConverter<T> implements TypeConverter<T> {
 
     @Override
     public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeStringField(fieldName, convertToString(object));
+        if (fieldName != null) {
+            jsonGenerator.writeStringField(fieldName, convertToString(object));
+        } else {
+            jsonGenerator.writeString(convertToString(object));
+        }
     }
 
 }

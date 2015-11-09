@@ -28,7 +28,11 @@ public abstract class FloatBasedTypeConverter<T> implements TypeConverter<T> {
 
     @Override
     public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(fieldName, convertToFloat(object));
+        if (fieldName != null) {
+            jsonGenerator.writeNumberField(fieldName, convertToFloat(object));
+        } else {
+            jsonGenerator.writeNumber(convertToFloat(object));
+        }
     }
 
 }

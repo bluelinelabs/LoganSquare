@@ -28,7 +28,11 @@ public abstract class DoubleBasedTypeConverter<T> implements TypeConverter<T> {
 
     @Override
     public void serialize(T object, String fieldName, boolean writeFieldNameForObject, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(fieldName, convertToDouble(object));
+        if (fieldName != null) {
+            jsonGenerator.writeNumberField(fieldName, convertToDouble(object));
+        } else {
+            jsonGenerator.writeNumber(convertToDouble(object));
+        }
     }
 
 }

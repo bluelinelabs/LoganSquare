@@ -2,6 +2,9 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
+import com.bluelinelabs.logansquare.processor.model.EnumListModel;
+import com.bluelinelabs.logansquare.processor.model.EnumListModel.LsEnumTestConverter;
+import com.bluelinelabs.logansquare.processor.model.EnumListModel.TestEnum;
 import com.bluelinelabs.logansquare.processor.model.NestedCollectionModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModelWithExtends;
@@ -264,6 +267,20 @@ public class RoundTripTests {
         } catch (Exception ignored) { }
 
         ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void enumList() {
+        String json = "{\"enum_array\":[\"TWO\",\"ONE\"],\"enum_list\":[\"ONE\",\"TWO\",\"ONE\"],\"enum_map\":{\"key\":\"ONE\"},\"enum_obj\":\"ONE\"}";
+
+        String serialized = null;
+        try {
+            LoganSquare.registerTypeConverter(TestEnum.class, new LsEnumTestConverter());
+            EnumListModel test = LoganSquare.parse(json, EnumListModel.class);
+            serialized = LoganSquare.serialize(test);
+        } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(serialized)).isTrue();
     }
 
     @Test
