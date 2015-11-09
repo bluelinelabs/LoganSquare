@@ -32,4 +32,7 @@ public final class AbstractParentModel$$JsonObjectMapper extends JsonMapper<Abst
             jsonGenerator.writeEndObject();
         }
     }
+
+    public void ensureParent() {
+    }
 }

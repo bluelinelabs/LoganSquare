@@ -74,4 +74,7 @@ public final class LowerCaseNamingPolicyModel$$JsonObjectMapper extends JsonMapp
             jsonGenerator.writeEndObject();
         }
     }
+
+    public void ensureParent() {
+    }
 }

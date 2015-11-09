@@ -355,4 +355,7 @@ public final class SimpleCollectionModel$$JsonObjectMapper extends JsonMapper<Si
             jsonGenerator.writeEndObject();
         }
     }
+
+    public void ensureParent() {
+    }
 }

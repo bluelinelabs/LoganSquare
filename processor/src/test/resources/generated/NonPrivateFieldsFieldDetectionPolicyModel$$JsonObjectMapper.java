@@ -88,4 +88,7 @@ public final class NonPrivateFieldsFieldDetectionPolicyModel$$JsonObjectMapper e
             jsonGenerator.writeEndObject();
         }
     }
+
+    public void ensureParent() {
+    }
 }

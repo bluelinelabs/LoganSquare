@@ -696,4 +696,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
             jsonGenerator.writeEndObject();
         }
     }
+
+    public void ensureParent() {
+    }
 }

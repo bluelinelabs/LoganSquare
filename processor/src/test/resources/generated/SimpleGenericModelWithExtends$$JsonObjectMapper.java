@@ -108,4 +108,7 @@ public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends Str
       jsonGenerator.writeEndObject();
     }
   }
+
+  public void ensureParent() {
+  }
 }
