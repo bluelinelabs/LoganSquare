@@ -13,14 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unsafe")
+@SuppressWarnings("unsafe,unchecked")
 public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper<WhitespaceFieldNameModel> {
   @Override
   public WhitespaceFieldNameModel parse(JsonParser jsonParser) throws IOException {
-    return _parse(jsonParser);
-  }
-
-  public static WhitespaceFieldNameModel _parse(JsonParser jsonParser) throws IOException {
     WhitespaceFieldNameModel instance = new WhitespaceFieldNameModel();
     if (jsonParser.getCurrentToken() == null) {
       jsonParser.nextToken();
@@ -38,7 +34,8 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
     return instance;
   }
 
-  public static void parseField(WhitespaceFieldNameModel instance, String fieldName, JsonParser jsonParser) throws IOException {
+  @Override
+  public void parseField(WhitespaceFieldNameModel instance, String fieldName, JsonParser jsonParser) throws IOException {
     if ("Address Lines".equals(fieldName)) {
       if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
         ArrayList<String> collection1 = new ArrayList<String>();
@@ -99,10 +96,6 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
 
   @Override
   public void serialize(WhitespaceFieldNameModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
-    _serialize(object, jsonGenerator, writeStartAndEnd);
-  }
-
-  public static void _serialize(WhitespaceFieldNameModel object, JsonGenerator jsonGenerator, boolean writeStartAndEnd) throws IOException {
     if (writeStartAndEnd) {
       jsonGenerator.writeStartObject();
     }
@@ -157,5 +150,8 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
     if (writeStartAndEnd) {
       jsonGenerator.writeEndObject();
     }
+  }
+
+  public void ensureParent() {
   }
 }
