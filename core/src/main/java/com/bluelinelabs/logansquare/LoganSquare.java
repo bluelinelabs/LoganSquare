@@ -146,7 +146,7 @@ public class LoganSquare {
      * Serialize a parameterized object to a JSON String.
      *
      * @param object The object to serialize.
-     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.parse(is, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
+     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.serialize(object, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
      */
     @SuppressWarnings("unchecked")
     public static <E> String serialize(E object, ParameterizedType<E> parameterizedType) throws IOException {
@@ -157,7 +157,7 @@ public class LoganSquare {
      * Serialize a parameterized  object to an OutputStream.
      *
      * @param object The object to serialize.
-     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.parse(is, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { });
+     * @param parameterizedType The ParameterizedType describing the object. Ex: LoganSquare.serialize(object, new ParameterizedType&lt;MyModel&lt;OtherModel&gt;&gt;() { }, os);
      * @param os The OutputStream being written to.
      */
     @SuppressWarnings("unchecked")

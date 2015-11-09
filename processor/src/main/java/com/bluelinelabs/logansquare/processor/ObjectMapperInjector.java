@@ -284,10 +284,23 @@ public class ObjectMapperInjector {
             JsonFieldHolder fieldHolder = entry.getValue();
 
             if (fieldHolder.shouldParse) {
+                List<Object> args = new ArrayList<>();
+                StringBuilder ifStatement = new StringBuilder();
+                boolean isFirst = true;
+                for (String fieldName : fieldHolder.fieldName) {
+                    if (isFirst) {
+                        isFirst = false;
+                    } else {
+                        ifStatement.append(" || ");
+                    }
+                    ifStatement.append("$S.equals(fieldName)");
+                    args.add(fieldName);
+                }
+
                 if (entryCount == 0) {
-                    builder.beginControlFlow("if (" + getParseFieldIfStatement(fieldHolder) + ")");
+                    builder.beginControlFlow("if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
                 } else {
-                    builder.nextControlFlow("else if (" + getParseFieldIfStatement(fieldHolder) + ")");
+                    builder.nextControlFlow("else if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
                 }
 
                 String setter;
@@ -309,20 +322,6 @@ public class ObjectMapperInjector {
             }
         }
         return entryCount;
-    }
-
-    private String getParseFieldIfStatement(JsonFieldHolder fieldHolder) {
-        StringBuilder ifStatement = new StringBuilder();
-        boolean isFirst = true;
-        for (String fieldName : fieldHolder.fieldName) {
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                ifStatement.append(" || ");
-            }
-            ifStatement.append('\"').append(fieldName).append("\".equals(fieldName)");
-        }
-        return ifStatement.toString();
     }
 
     private String getJsonMapperVariableNameForTypeParameter(String typeName) {
