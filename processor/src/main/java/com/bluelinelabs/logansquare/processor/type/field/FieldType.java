@@ -7,6 +7,11 @@ import com.squareup.javapoet.TypeName;
 
 import java.lang.annotation.Annotation;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -62,12 +67,38 @@ public abstract class FieldType extends Type {
                 if (annotation != null) {
                     return new JsonFieldType(ClassName.bestGuess(typeMirror.toString()));
                 }
+
+                if (hasValueOfMethod(types, ((DeclaredType) typeMirror))) {
+                    return new ConventionFieldType(TypeName.get(typeMirror));
+                }
             }
 
             return new DynamicFieldType(TypeName.get(typeMirror));
         } else {
             return null;
         }
+    }
+
+    private static boolean hasValueOfMethod(Types types, DeclaredType type) {
+        for (Element child : type.asElement().getEnclosedElements()) {
+            if (child.getKind() == ElementKind.METHOD && "valueOf".contentEquals(child.getSimpleName())) {
+                final ExecutableElement method = (ExecutableElement) child;
+
+                if (method.getThrownTypes().isEmpty()
+                        && method.getModifiers().contains(Modifier.STATIC)
+                        && method.getModifiers().contains(Modifier.PUBLIC)
+                        && method.getParameters().size() == 1) {
+
+                    final TypeMirror paramType = method.getParameters().get(0).asType();
+
+                    if ("java.lang.String".equals(paramType.toString())) {
+                        return types.isAssignable(method.getReturnType(), type);
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     protected static String replaceLastLiteral(String string, String replacement) {

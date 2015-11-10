@@ -294,13 +294,22 @@ public class LoganSquare {
      *
      * @param cls The class for which the TypeConverter should be fetched.
      */
-    @SuppressWarnings("unchecked")
     public static <E> TypeConverter<E> typeConverterFor(Class<E> cls) throws NoSuchTypeConverterException {
-        TypeConverter<E> typeConverter = TYPE_CONVERTERS.get(cls);
+        TypeConverter<E> typeConverter = getConverter(cls);
         if (typeConverter == null) {
             throw new NoSuchTypeConverterException(cls);
         }
         return typeConverter;
+    }
+
+    /**
+     * Returns a TypeConverter for a given class.
+     *
+     * @param cls The class for which the TypeConverter should be fetched.
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> TypeConverter<E> getConverter(Class<? extends E> cls) {
+        return TYPE_CONVERTERS.get(cls);
     }
 
     /**
