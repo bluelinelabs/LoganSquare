@@ -1,15 +1,19 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
+import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
@@ -38,6 +42,22 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
             instance.intToIgnoreForSerialization = jsonParser.getValueAsInt();
+        } else if ("object_map".equals(fieldName)) {
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                HashMap<String, Object> map1 = new HashMap<String, Object>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key1 = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map1.put(key1, null);
+                    } else {
+                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser));
+                    }
+                }
+                instance.objectMap = map1;
+            } else {
+                instance.objectMap = null;
+            }
         } else if ("string".equals(fieldName)){
             instance.string = jsonParser.getValueAsString(null);
         } else if ("test_double".equals(fieldName)){
@@ -70,6 +90,18 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
         }
         jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
+        final Map<String, Object> lslocalobject_map = object.objectMap;
+        if (lslocalobject_map != null) {
+            jsonGenerator.writeFieldName("object_map");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, Object> entry1 : lslocalobject_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() != null) {
+                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, false);
+                }
+            }
+            jsonGenerator.writeEndObject();
+        }
         if (object.string != null) {
             jsonGenerator.writeStringField("string", object.string);
         }

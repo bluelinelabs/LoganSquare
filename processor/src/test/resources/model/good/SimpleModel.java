@@ -6,6 +6,7 @@ import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
+import java.util.Map;
 
 @JsonObject
 public class SimpleModel {
@@ -58,4 +59,7 @@ public class SimpleModel {
     @JsonIgnore(ignorePolicy = IgnorePolicy.SERIALIZE_ONLY)
     @JsonField
     public int intToIgnoreForSerialization;
+
+    @JsonField(name = "object_map")
+    public Map<String, Object> objectMap;
 }

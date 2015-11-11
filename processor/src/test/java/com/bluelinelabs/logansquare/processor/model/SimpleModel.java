@@ -4,6 +4,7 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
+import java.util.Map;
 
 @JsonObject(serializeNullObjects = true)
 public class SimpleModel {
@@ -46,4 +47,7 @@ public class SimpleModel {
 
     @JsonField(name = "test_double_obj")
     public Double testDoubleObj;
+
+    @JsonField(name = "object_map")
+    public Map<String, Object> objectMap;
 }
