@@ -51,6 +51,8 @@ public class JsonMapperLoaderInjector {
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(Constants.LOADER_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addSuperinterface(ClassName.get(JsonMapperLoader.class));
+
+        addAllBuiltInMappers(builder);
         builder.addMethod(getPutAllJsonMappersMethod(builder));
 
         addParameterizedMapperGetters(builder);
@@ -58,22 +60,42 @@ public class JsonMapperLoaderInjector {
         return builder.build();
     }
 
+    private void addAllBuiltInMappers(TypeSpec.Builder typeSpecBuilder) {
+        addBuiltInMapper(typeSpecBuilder, StringMapper.class);
+        addBuiltInMapper(typeSpecBuilder, IntegerMapper.class);
+        addBuiltInMapper(typeSpecBuilder, LongMapper.class);
+        addBuiltInMapper(typeSpecBuilder, FloatMapper.class);
+        addBuiltInMapper(typeSpecBuilder, DoubleMapper.class);
+        addBuiltInMapper(typeSpecBuilder, BooleanMapper.class);
+        addBuiltInMapper(typeSpecBuilder, ObjectMapper.class);
+        addBuiltInMapper(typeSpecBuilder, ListMapper.class);
+        addBuiltInMapper(typeSpecBuilder, MapMapper.class);
+    }
+
+    private void addBuiltInMapper(TypeSpec.Builder typeSpecBuilder, Class mapperClass) {
+        typeSpecBuilder.addField(FieldSpec.builder(mapperClass, getMapperVariableName(mapperClass))
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.STATIC)
+                .initializer("new $T()", mapperClass)
+                .build()
+        );
+    }
+
     private MethodSpec getPutAllJsonMappersMethod(TypeSpec.Builder typeSpecBuilder) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("putAllJsonMappers")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(Class.class), ClassName.get(JsonMapper.class)), "map")
-                .addStatement("map.put($T.class, new $T())", String.class, StringMapper.class)
-                .addStatement("map.put($T.class, new $T())", Integer.class, IntegerMapper.class)
-                .addStatement("map.put($T.class, new $T())", Long.class, LongMapper.class)
-                .addStatement("map.put($T.class, new $T())", Float.class, FloatMapper.class)
-                .addStatement("map.put($T.class, new $T())", Double.class, DoubleMapper.class)
-                .addStatement("map.put($T.class, new $T())", Boolean.class, BooleanMapper.class)
-                .addStatement("map.put($T.class, new $T())", Object.class, ObjectMapper.class)
-                .addStatement("map.put($T.class, new $T())", List.class, ListMapper.class)
-                .addStatement("map.put($T.class, new $T())", ArrayList.class, ListMapper.class)
-                .addStatement("map.put($T.class, new $T())", Map.class, MapMapper.class)
-                .addStatement("map.put($T.class, new $T())", HashMap.class, MapMapper.class);
+                .addStatement("map.put($T.class, $L)", String.class, getMapperVariableName(StringMapper.class))
+                .addStatement("map.put($T.class, $L)", Integer.class, getMapperVariableName(IntegerMapper.class))
+                .addStatement("map.put($T.class, $L)", Long.class, getMapperVariableName(LongMapper.class))
+                .addStatement("map.put($T.class, $L)", Float.class, getMapperVariableName(FloatMapper.class))
+                .addStatement("map.put($T.class, $L)", Double.class, getMapperVariableName(DoubleMapper.class))
+                .addStatement("map.put($T.class, $L)", Boolean.class, getMapperVariableName(BooleanMapper.class))
+                .addStatement("map.put($T.class, $L)", Object.class, getMapperVariableName(ObjectMapper.class))
+                .addStatement("map.put($T.class, $L)", List.class, getMapperVariableName(ListMapper.class))
+                .addStatement("map.put($T.class, $L)", ArrayList.class, getMapperVariableName(ListMapper.class))
+                .addStatement("map.put($T.class, $L)", Map.class, getMapperVariableName(MapMapper.class))
+                .addStatement("map.put($T.class, $L)", HashMap.class, getMapperVariableName(MapMapper.class));
 
         List<String> createdMappers = new ArrayList<>();
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
@@ -146,6 +168,10 @@ public class JsonMapperLoaderInjector {
         methodBuilder.addStatement("return null");
 
         builder.addMethod(methodBuilder.build());
+    }
+
+    public static String getMapperVariableName(Class cls) {
+        return getMapperVariableName(cls.getCanonicalName());
     }
 
     public static String getMapperVariableName(String fullyQualifiedClassName) {

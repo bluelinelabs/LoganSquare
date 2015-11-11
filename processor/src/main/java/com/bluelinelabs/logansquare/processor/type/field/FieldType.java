@@ -33,29 +33,29 @@ public abstract class FieldType extends Type {
                 return new TypeConverterFieldType(TypeName.get(typeMirror), ClassName.bestGuess(typeConverterType.toString()));
             } else if (typeMirror.getKind() == TypeKind.BOOLEAN) {
                 return new BooleanFieldType(true);
-            } else if ("java.lang.Boolean".equals(typeMirror.toString())) {
+            } else if (Boolean.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new BooleanFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.BYTE) {
                 return new ByteFieldType(true);
-            } else if ("java.lang.Byte".equals(typeMirror.toString())) {
+            } else if (Byte.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new ByteFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.INT) {
                 return new IntegerFieldType(true);
-            } else if ("java.lang.Integer".equals(typeMirror.toString())) {
+            } else if (Integer.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new IntegerFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.LONG) {
                 return new LongFieldType(true);
-            } else if ("java.lang.Long".equals(typeMirror.toString())) {
+            } else if (Long.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new LongFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.FLOAT) {
                 return new FloatFieldType(true);
-            } else if ("java.lang.Float".equals(typeMirror.toString())) {
+            } else if (Float.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new FloatFieldType(false);
             } else if (typeMirror.getKind() == TypeKind.DOUBLE) {
                 return new DoubleFieldType(true);
-            } else if ("java.lang.Double".equals(typeMirror.toString())) {
+            } else if (Double.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new DoubleFieldType(false);
-            } else if ("java.lang.String".equals(typeMirror.toString())) {
+            } else if (String.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new StringFieldType();
             } else if (typeMirror instanceof DeclaredType) {
                 Annotation annotation = ((DeclaredType) typeMirror).asElement().getAnnotation(JsonObject.class);
