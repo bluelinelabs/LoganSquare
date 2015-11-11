@@ -41,13 +41,13 @@ android {
 
 dependencies {
     // LoganSquare annotation processor
-    apt 'com.bluelinelabs:logansquare-compiler:1.2.7'
+    apt 'com.bluelinelabs:logansquare-compiler:1.2.8'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
 
     // LoganSquare runtime library
-    compile 'com.bluelinelabs:logansquare:1.2.7'
+    compile 'com.bluelinelabs:logansquare:1.2.8'
 
     // Jackson libraries for comparison
     compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'

@@ -57,6 +57,8 @@ public abstract class FieldType extends Type {
                 return new DoubleFieldType(false);
             } else if (String.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new StringFieldType();
+            } else if (Object.class.getCanonicalName().equals(typeMirror.toString())) {
+                return new UnknownFieldType();
             } else if (typeMirror instanceof DeclaredType) {
                 Annotation annotation = ((DeclaredType) typeMirror).asElement().getAnnotation(JsonObject.class);
                 if (annotation != null) {
