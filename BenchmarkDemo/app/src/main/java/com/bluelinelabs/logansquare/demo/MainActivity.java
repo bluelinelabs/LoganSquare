@@ -96,8 +96,8 @@ public class MainActivity extends ActionBarActivity {
             for (int iteration = 0; iteration < ITERATIONS; iteration++) {
                 parsers.add(new GsonParser(mParseListener, jsonString, gson));
                 parsers.add(new JacksonDatabindParser(mParseListener, jsonString, objectMapper));
-                parsers.add(new LoganSquareParser(mParseListener, jsonString));
                 parsers.add(new MoshiParser(mParseListener, jsonString, moshi));
+                parsers.add(new LoganSquareParser(mParseListener, jsonString));
             }
         }
 

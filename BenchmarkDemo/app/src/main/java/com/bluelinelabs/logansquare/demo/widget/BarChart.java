@@ -16,7 +16,7 @@ import java.util.List;
 /** Hacked together barchart view for this demo. Please do not take this as an example of a good way to do things. */
 public class BarChart extends View {
 
-    private static final int SECTION_COUNT = 5;
+    private static final int SECTION_COUNT = 4;
     private static final int COLUMNS_PER_SECTION = 4;
 
     private final Section[] mSections = new Section[SECTION_COUNT];
@@ -24,6 +24,7 @@ public class BarChart extends View {
 
     private final Paint[] mPaints = new Paint[COLUMNS_PER_SECTION];
     private TextPaint mTextPaint;
+    private int mColumnHeight;
     private int mColumnPadding;
     private int mSectionPadding;
     private int mDividerHeight;
@@ -48,22 +49,23 @@ public class BarChart extends View {
         final float density = context.getResources().getDisplayMetrics().density;
 
         mPaints[0] = new Paint();
-        mPaints[0].setColor(0xFFf5d391);
+        mPaints[0].setColor(0xfff5d391);
 
         mPaints[1] = new Paint();
-        mPaints[1].setColor(0xFFa9e8fe);
+        mPaints[1].setColor(0xffa9e8fe);
 
         mPaints[2] = new Paint();
-        mPaints[2].setColor(0xFFe9969c);
+        mPaints[2].setColor(0xffe9969c);
 
         mPaints[3] = new Paint();
-        mPaints[3].setColor(0xFFb5d951);
+        mPaints[3].setColor(0xffb5d951);
 
         mTextPaint = new TextPaint();
-        mTextPaint.setColor(0xFF555555);
+        mTextPaint.setColor(0xff555555);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(density * 12);
 
+        mColumnHeight = (int)(density * 20);
         mColumnPadding = (int)(density * 2);
         mSectionPadding = (int)(density * 24);
         mDividerHeight = (int)(density * 2);
@@ -102,6 +104,12 @@ public class BarChart extends View {
     public void addTiming(int section, int column, float timing) {
         mSections[section].columns[column].addTiming(timing);
         invalidate();
+    }
+
+    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        final int width = MeasureSpec.getSize(widthMeasureSpec);
+        final int height = SECTION_COUNT * mSectionPadding + SECTION_COUNT * COLUMNS_PER_SECTION * (mColumnPadding + mColumnHeight);
+        setMeasuredDimension(width, height);
     }
 
     @Override

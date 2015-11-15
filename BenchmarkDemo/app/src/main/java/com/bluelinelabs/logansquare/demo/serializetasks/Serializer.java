@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class Serializer extends AsyncTask<Void, Void, SerializeResult> {
 
     public interface SerializeListener {
-        public void onComplete(Serializer serializer, SerializeResult serializeResult);
+        void onComplete(Serializer serializer, SerializeResult serializeResult);
     }
 
     private final SerializeListener mParseListener;

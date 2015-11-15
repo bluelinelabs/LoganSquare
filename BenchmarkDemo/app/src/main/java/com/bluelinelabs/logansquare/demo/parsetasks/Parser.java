@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class Parser extends AsyncTask<Void, Void, ParseResult> {
 
     public interface ParseListener {
-        public void onComplete(Parser parser, ParseResult parseResult);
+        void onComplete(Parser parser, ParseResult parseResult);
     }
 
     private final ParseListener mParseListener;
