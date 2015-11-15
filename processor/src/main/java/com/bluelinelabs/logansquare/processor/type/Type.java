@@ -4,15 +4,12 @@ import com.bluelinelabs.logansquare.processor.type.collection.ArrayCollectionTyp
 import com.bluelinelabs.logansquare.processor.type.collection.CollectionType;
 import com.bluelinelabs.logansquare.processor.type.field.FieldType;
 import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.TypeMirror;
@@ -22,7 +19,6 @@ import javax.lang.model.util.Types;
 public abstract class Type {
 
     public final List<Type> parameterTypes;
-    protected final Set<ClassName> usedMappersFromLoader;
 
     public abstract TypeName getTypeName();
     public abstract String getParameterizedTypeString();
@@ -32,7 +28,6 @@ public abstract class Type {
 
     public Type() {
         parameterTypes = new ArrayList<>();
-        usedMappersFromLoader = new HashSet<>();
     }
 
     public static Type typeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
@@ -82,9 +77,5 @@ public abstract class Type {
 
     public void addParameterType(TypeMirror parameterType, Elements elements, Types types) {
         parameterTypes.add(Type.typeFor(parameterType, null, elements, types));
-    }
-
-    public Set<ClassName> getUsedMappersFromLoader() {
-        return usedMappersFromLoader;
     }
 }

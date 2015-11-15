@@ -1,6 +1,5 @@
 package com.bluelinelabs.logansquare.processor;
 
-import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
@@ -38,11 +37,9 @@ public class ObjectMapperInjector {
     public static final String JSON_GENERATOR_VARIABLE_NAME = "jsonGenerator";
 
     private final JsonObjectHolder mJsonObjectHolder;
-    private final Set<ClassName> mUsedMappersFromLoader;
 
     public ObjectMapperInjector(JsonObjectHolder jsonObjectHolder) {
         mJsonObjectHolder = jsonObjectHolder;
-        mUsedMappersFromLoader = new HashSet<>();
     }
 
     public String getJavaClassFile() {
@@ -165,20 +162,6 @@ public class ObjectMapperInjector {
         builder.addMethod(getParseFieldMethod());
         builder.addMethod(getSerializeMethod());
         builder.addMethod(getEnsureParentMethod());
-
-        for (JsonFieldHolder fieldHolder : mJsonObjectHolder.fieldMap.values()) {
-            mUsedMappersFromLoader.addAll(fieldHolder.type.getUsedMappersFromLoader());
-        }
-        for (ClassName requiredMapper : mUsedMappersFromLoader) {
-            System.out.println("rm = " + requiredMapper);
-            final String variableName = JsonMapperLoaderInjector.getMapperVariableName(requiredMapper.toString());
-            builder.addField(
-                    FieldSpec.builder(requiredMapper, variableName)
-                            .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
-                            .initializer("$T.$L", ClassName.get(Constants.LOADER_PACKAGE_NAME, Constants.LOADER_CLASS_NAME), variableName)
-                            .build()
-            );
-        }
 
         return builder.build();
     }
@@ -361,7 +344,6 @@ public class ObjectMapperInjector {
 
     private String getJsonMapperVariableNameForClassName(ClassName className) {
         final String fqcn = TypeUtils.getInjectedFQCN(className);
-        mUsedMappersFromLoader.add(ClassName.bestGuess(fqcn));
         return JsonMapperLoaderInjector.getMapperVariableName(fqcn);
     }
 

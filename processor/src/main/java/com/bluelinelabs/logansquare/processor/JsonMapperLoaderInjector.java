@@ -74,7 +74,7 @@ public class JsonMapperLoaderInjector {
 
     private void addBuiltInMapper(TypeSpec.Builder typeSpecBuilder, Class mapperClass) {
         typeSpecBuilder.addField(FieldSpec.builder(mapperClass, getMapperVariableName(mapperClass))
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer("new $T()", mapperClass)
                 .build()
         );

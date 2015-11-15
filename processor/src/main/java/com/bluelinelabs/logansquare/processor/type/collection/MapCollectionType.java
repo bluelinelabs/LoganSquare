@@ -59,8 +59,6 @@ public abstract class MapCollectionType extends CollectionType {
                 .nextControlFlow("else")
                 .addStatement(setter, expandStringArgs(setterFormatArgs, "null"))
                 .endControlFlow();
-
-        usedMappersFromLoader.addAll(parameterType.getUsedMappersFromLoader());
     }
 
     @Override
@@ -103,7 +101,5 @@ public abstract class MapCollectionType extends CollectionType {
                 .endControlFlow()
                 .addStatement("$L.writeEndObject()", JSON_GENERATOR_VARIABLE_NAME)
                 .endControlFlow();
-
-        usedMappersFromLoader.addAll(parameterType.getUsedMappersFromLoader());
     }
 }
