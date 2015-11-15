@@ -23,14 +23,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
-    apt 'com.bluelinelabs:logansquare-compiler:1.2.9'
-    compile 'com.bluelinelabs:logansquare:1.2.9'
+    apt 'com.bluelinelabs:logansquare-compiler:1.3.0'
+    compile 'com.bluelinelabs:logansquare:1.3.0'
 }
 
 ```

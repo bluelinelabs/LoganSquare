@@ -5,6 +5,7 @@ import com.bluelinelabs.logansquare.ParameterizedType;
 import com.bluelinelabs.logansquare.processor.model.EnumListModel;
 import com.bluelinelabs.logansquare.processor.model.EnumListModel.LsEnumTestConverter;
 import com.bluelinelabs.logansquare.processor.model.EnumListModel.TestEnum;
+import com.bluelinelabs.logansquare.processor.model.ExternalModel;
 import com.bluelinelabs.logansquare.processor.model.NestedCollectionModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModel;
 import com.bluelinelabs.logansquare.processor.model.SimpleGenericModelWithExtends;
@@ -263,6 +264,19 @@ public class RoundTripTests {
         String reserialized = null;
         try {
             SimpleModel simpleModel = LoganSquare.parse(json, SimpleModel.class);
+            reserialized = LoganSquare.serialize(simpleModel);
+        } catch (Exception ignored) { }
+
+        ASSERT.that(json.equals(reserialized)).isTrue();
+    }
+
+    @Test
+    public void externalObject() {
+        String json = "{\"string\":\"I am a very good string.\"}";
+
+        String reserialized = null;
+        try {
+            ExternalModel simpleModel = LoganSquare.parse(json, ExternalModel.class);
             reserialized = LoganSquare.serialize(simpleModel);
         } catch (Exception ignored) { }
 

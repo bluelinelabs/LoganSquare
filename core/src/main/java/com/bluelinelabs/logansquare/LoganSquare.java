@@ -209,7 +209,16 @@ public class LoganSquare {
 
     @SuppressWarnings("unchecked")
     private static <E> JsonMapper<E> getMapper(Class<E> cls) {
-        return OBJECT_MAPPERS.get(cls);
+        JsonMapper<E> mapper = OBJECT_MAPPERS.get(cls);
+        if (mapper == null) {
+            // The only way the mapper wouldn't already be loaded into OBJECT_MAPPERS is if it was compiled separately, but let's handle it anyway
+            try {
+                Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
+                mapper = (JsonMapper<E>)mapperClass.newInstance();
+                OBJECT_MAPPERS.put(cls, mapper);
+            } catch (Exception ignored) { }
+        }
+        return mapper;
     }
 
     @SuppressWarnings("unchecked")
@@ -242,7 +251,7 @@ public class LoganSquare {
      */
     @SuppressWarnings("unchecked")
     public static boolean supports(Class cls) {
-        return OBJECT_MAPPERS.get(cls) != null;
+        return getMapper(cls) != null;
     }
 
     /**
