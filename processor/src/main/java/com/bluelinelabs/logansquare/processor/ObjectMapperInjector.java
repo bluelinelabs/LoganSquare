@@ -68,7 +68,7 @@ public class ObjectMapperInjector {
 
             if (mJsonObjectHolder.parentTypeParameters.size() == 0) {
                 parentMapperBuilder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.parentTypeName), PARENT_OBJECT_MAPPER_VARIABLE_NAME)
-                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC);
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL);
 
                 parentMapperBuilder.initializer("$L", getJsonMapperVariableNameForClassName((ClassName)mJsonObjectHolder.parentTypeName));
             } else {
@@ -162,7 +162,6 @@ public class ObjectMapperInjector {
         builder.addMethod(getParseMethod());
         builder.addMethod(getParseFieldMethod());
         builder.addMethod(getSerializeMethod());
-        builder.addMethod(getEnsureParentMethod());
 
         return builder.build();
     }
@@ -240,23 +239,6 @@ public class ObjectMapperInjector {
                 .addException(IOException.class);
 
         insertSerializeStatements(builder);
-
-        return builder.build();
-    }
-
-    private MethodSpec getEnsureParentMethod() {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("ensureParent")
-                .addModifiers(Modifier.PUBLIC);
-
-        if (mJsonObjectHolder.hasParentClass()) {
-            builder.beginControlFlow("if ($L == null)", PARENT_OBJECT_MAPPER_VARIABLE_NAME);
-            if (mJsonObjectHolder.parentTypeParameters.size() == 0) {
-                builder.addStatement("$L = $L", PARENT_OBJECT_MAPPER_VARIABLE_NAME, getJsonMapperVariableNameForClassName((ClassName)mJsonObjectHolder.parentTypeName));
-            } else {
-                builder.addStatement("$L = $T._mapperFor(new $T<$T>() { })", PARENT_OBJECT_MAPPER_VARIABLE_NAME, JSON_MAPPER_LOADER_CLASSNAME, ParameterizedType.class, mJsonObjectHolder.getParameterizedParentTypeName());
-            }
-            builder.endControlFlow();
-        }
 
         return builder.build();
     }

@@ -109,10 +109,6 @@ public class JsonMapperLoaderInjector {
             }
         }
 
-        for (String mapper : createdMappers) {
-            builder.addStatement("$L.ensureParent()", mapper);
-        }
-
         return builder.build();
     }
 
