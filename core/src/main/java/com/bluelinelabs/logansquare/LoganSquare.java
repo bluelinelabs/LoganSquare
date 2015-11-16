@@ -14,13 +14,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
     private static final SimpleArrayMap<Class, JsonMapper> OBJECT_MAPPERS = new SimpleArrayMap<>();
-    private static final Map<ParameterizedType, JsonMapper> PARAMETERIZED_OBJECT_MAPPERS = new ConcurrentHashMap<>();
 
     private static JsonMapperLoader JSON_MAPPER_LOADER;
     static {
@@ -208,7 +206,7 @@ public class LoganSquare {
     }
 
     @SuppressWarnings("unchecked")
-    private static <E> JsonMapper<E> getMapper(Class<E> cls) {
+    /*package*/ static <E> JsonMapper<E> getMapper(Class<E> cls) {
         JsonMapper<E> mapper = OBJECT_MAPPERS.get(cls);
         if (mapper == null) {
             // The only way the mapper wouldn't already be loaded into OBJECT_MAPPERS is if it was compiled separately, but let's handle it anyway
@@ -223,25 +221,7 @@ public class LoganSquare {
 
     @SuppressWarnings("unchecked")
     private static <E> JsonMapper<E> getMapper(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) {
-        if (type.typeParameters.size() == 0) {
-            return getMapper((Class<E>)type.rawType);
-        } else {
-            JsonMapper<E> mapper;
-
-            if (partialMappers != null && partialMappers.containsKey(type)) {
-                mapper = partialMappers.get(type);
-            } else if (PARAMETERIZED_OBJECT_MAPPERS.containsKey(type)) {
-                mapper = PARAMETERIZED_OBJECT_MAPPERS.get(type);
-            } else {
-                if (partialMappers == null) {
-                    partialMappers = new SimpleArrayMap<>();
-                }
-                mapper = JSON_MAPPER_LOADER.mapperFor(type, partialMappers);
-                PARAMETERIZED_OBJECT_MAPPERS.put(type, mapper);
-            }
-
-            return mapper;
-        }
+        return JSON_MAPPER_LOADER.mapperFor(type, partialMappers);
     }
 
     /**

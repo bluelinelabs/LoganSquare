@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.JsonMapper;
+import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
 import com.bluelinelabs.logansquare.internal.JsonMapperLoader;
 import com.bluelinelabs.logansquare.internal.objectmappers.BooleanMapper;
@@ -25,25 +26,42 @@ import com.squareup.javapoet.TypeVariableName;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.lang.model.element.Modifier;
 
 public class JsonMapperLoaderInjector {
 
+    private static final String PARAMETERIZED_MAPPERS_VARIABLE_NAME = "PARAMETERIZED_OBJECT_MAPPERS";
+
     private final Collection<JsonObjectHolder> mJsonObjectHolders;
+    private final Map<Class, Class> mBuiltInMapperMap;
 
     public JsonMapperLoaderInjector(Collection<JsonObjectHolder> jsonObjectHolders) {
         mJsonObjectHolders = jsonObjectHolders;
+
+        mBuiltInMapperMap = new HashMap<>();
+        mBuiltInMapperMap.put(String.class, StringMapper.class);
+        mBuiltInMapperMap.put(Integer.class, IntegerMapper.class);
+        mBuiltInMapperMap.put(Long.class, LongMapper.class);
+        mBuiltInMapperMap.put(Float.class, FloatMapper.class);
+        mBuiltInMapperMap.put(Double.class, DoubleMapper.class);
+        mBuiltInMapperMap.put(Boolean.class, BooleanMapper.class);
+        mBuiltInMapperMap.put(Object.class, ObjectMapper.class);
+        mBuiltInMapperMap.put(List.class, ListMapper.class);
+        mBuiltInMapperMap.put(ArrayList.class, ListMapper.class);
+        mBuiltInMapperMap.put(Map.class, MapMapper.class);
+        mBuiltInMapperMap.put(HashMap.class, MapMapper.class);
     }
 
     public String getJavaClassFile() {
         try {
             return JavaFile.builder(Constants.LOADER_PACKAGE_NAME, getTypeSpec()).build().toString();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -52,10 +70,48 @@ public class JsonMapperLoaderInjector {
         TypeSpec.Builder builder = TypeSpec.classBuilder(Constants.LOADER_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addSuperinterface(ClassName.get(JsonMapperLoader.class));
 
-        addAllBuiltInMappers(builder);
-        builder.addMethod(getPutAllJsonMappersMethod(builder));
+        builder.addField(FieldSpec.builder(ParameterizedTypeName.get(ConcurrentHashMap.class, ParameterizedType.class, JsonMapper.class), PARAMETERIZED_MAPPERS_VARIABLE_NAME)
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                .initializer("new $T()", ParameterizedTypeName.get(ConcurrentHashMap.class, ParameterizedType.class, JsonMapper.class))
+                .build());
 
-        addParameterizedMapperGetters(builder);
+        addAllBuiltInMappers(builder);
+        addAllProjectMappers(builder);
+        builder.addMethod(getPutAllJsonMappersMethod());
+        builder.addMethod(getParameterizedMethodGetterMethod());
+        builder.addMethod(getStaticParameterizedMapperGetterMethod());
+        builder.addMethod(getStaticParameterizedMapperWithPartialGetterMethod());
+        builder.addMethod(getGetClassMapperMethod());
+
+        return builder.build();
+    }
+
+    private MethodSpec getPutAllJsonMappersMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("putAllJsonMappers")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(Class.class), ClassName.get(JsonMapper.class)), "map");
+
+        for (Class cls : mBuiltInMapperMap.keySet()) {
+            builder.addStatement("map.put($T.class, $L)", cls, getMapperVariableName(mBuiltInMapperMap.get(cls)));
+        }
+
+        List<String> createdMappers = new ArrayList<>();
+        for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
+            if (jsonObjectHolder.typeParameters.size() == 0) {
+                String variableName = getMapperVariableName(jsonObjectHolder.packageName + "." + jsonObjectHolder.injectedClassName);
+
+                createdMappers.add(variableName);
+
+                if (!jsonObjectHolder.isAbstractClass) {
+                    builder.addStatement("map.put($T.class, $L)", jsonObjectHolder.objectTypeName, variableName);
+                }
+            }
+        }
+
+        for (String mapper : createdMappers) {
+            builder.addStatement("$L.ensureParent()", mapper);
+        }
 
         return builder.build();
     }
@@ -80,58 +136,79 @@ public class JsonMapperLoaderInjector {
         );
     }
 
-    private MethodSpec getPutAllJsonMappersMethod(TypeSpec.Builder typeSpecBuilder) {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("putAllJsonMappers")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(Class.class), ClassName.get(JsonMapper.class)), "map")
-                .addStatement("map.put($T.class, $L)", String.class, getMapperVariableName(StringMapper.class))
-                .addStatement("map.put($T.class, $L)", Integer.class, getMapperVariableName(IntegerMapper.class))
-                .addStatement("map.put($T.class, $L)", Long.class, getMapperVariableName(LongMapper.class))
-                .addStatement("map.put($T.class, $L)", Float.class, getMapperVariableName(FloatMapper.class))
-                .addStatement("map.put($T.class, $L)", Double.class, getMapperVariableName(DoubleMapper.class))
-                .addStatement("map.put($T.class, $L)", Boolean.class, getMapperVariableName(BooleanMapper.class))
-                .addStatement("map.put($T.class, $L)", Object.class, getMapperVariableName(ObjectMapper.class))
-                .addStatement("map.put($T.class, $L)", List.class, getMapperVariableName(ListMapper.class))
-                .addStatement("map.put($T.class, $L)", ArrayList.class, getMapperVariableName(ListMapper.class))
-                .addStatement("map.put($T.class, $L)", Map.class, getMapperVariableName(MapMapper.class))
-                .addStatement("map.put($T.class, $L)", HashMap.class, getMapperVariableName(MapMapper.class));
+    private void addAllProjectMappers(TypeSpec.Builder typeSpecBuilder) {
+        List<JsonObjectHolder> sortedHolders = new ArrayList<>(mJsonObjectHolders);
+        sortedHolders.sort(new Comparator<JsonObjectHolder>() {
+            @Override
+            public int compare(JsonObjectHolder o1, JsonObjectHolder o2) {
+                if (o2.objectTypeName.equals(o1.parentTypeName)) {
+                    return -1;
+                } else if (o1.objectTypeName.equals(o2.parentTypeName)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
 
-        List<String> createdMappers = new ArrayList<>();
-        for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
+        for (JsonObjectHolder jsonObjectHolder : sortedHolders) {
             if (jsonObjectHolder.typeParameters.size() == 0) {
                 TypeName mapperTypeName = ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName);
                 String variableName = getMapperVariableName(jsonObjectHolder.packageName + "." + jsonObjectHolder.injectedClassName);
 
                 typeSpecBuilder.addField(FieldSpec.builder(mapperTypeName, variableName)
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("new $T()", mapperTypeName)
                         .build()
                 );
-
-                createdMappers.add(variableName);
-                builder.addStatement("$L = new $T()", variableName, mapperTypeName);
-
-                if (!jsonObjectHolder.isAbstractClass) {
-                    builder.addStatement("map.put($T.class, $L)", jsonObjectHolder.objectTypeName, variableName);
-                }
             }
         }
-
-        for (String mapper : createdMappers) {
-            builder.addStatement("$L.ensureParent()", mapper);
-        }
-
-        return builder.build();
     }
 
-    private void addParameterizedMapperGetters(TypeSpec.Builder builder) {
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("mapperFor")
+    private MethodSpec getParameterizedMethodGetterMethod() {
+        return MethodSpec.methodBuilder("mapperFor")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(TypeVariableName.get("T"))
                 .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
                 .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type")
+                .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)), "partialMappers")
+                .addStatement("return _mapperFor(type, partialMappers)")
+                .build();
+    }
+
+    private MethodSpec getStaticParameterizedMapperGetterMethod() {
+        return MethodSpec.methodBuilder("_mapperFor")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addTypeVariable(TypeVariableName.get("T"))
+                .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
+                .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type")
+                .addStatement("return _mapperFor(type, null)")
+                .build();
+
+    }
+
+    private MethodSpec getStaticParameterizedMapperWithPartialGetterMethod() {
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("_mapperFor")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addTypeVariable(TypeVariableName.get("T"))
+                .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
+                .addParameter(ParameterizedTypeName.get(ClassName.get(ParameterizedType.class), TypeVariableName.get("T")), "type")
                 .addParameter(ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)), "partialMappers");
+
+        methodBuilder
+                .beginControlFlow("if (type.typeParameters.size() == 0)")
+                .addStatement("return getMapper((Class<T>)type.rawType)")
+                .endControlFlow()
+                .beginControlFlow("if (partialMappers == null)")
+                .addStatement("partialMappers = new $T()", ParameterizedTypeName.get(ClassName.get(SimpleArrayMap.class), ClassName.get(ParameterizedType.class), ClassName.get(JsonMapper.class)))
+                .endControlFlow()
+                .addStatement("$T mapper", ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
+                .beginControlFlow("if (partialMappers.containsKey(type))")
+                .addStatement("mapper = partialMappers.get(type)")
+                .nextControlFlow("else if ($L.containsKey(type))", PARAMETERIZED_MAPPERS_VARIABLE_NAME)
+                .addStatement("mapper = $L.get(type)", PARAMETERIZED_MAPPERS_VARIABLE_NAME)
+                .nextControlFlow("else");
 
         boolean conditionalStarted = false;
         for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
@@ -150,7 +227,7 @@ public class JsonMapperLoaderInjector {
                 for (int i = 0; i < jsonObjectHolder.typeParameters.size(); i++) {
                     constructorArgs.append(", type.typeParameters.get(").append(i).append(")");
                 }
-                methodBuilder.addStatement("return new $T(type" + constructorArgs.toString() + ", partialMappers)", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
+                methodBuilder.addStatement("mapper = new $T(type" + constructorArgs.toString() + ", partialMappers)", ClassName.get(jsonObjectHolder.packageName, jsonObjectHolder.injectedClassName));
 
                 methodBuilder.nextControlFlow("else");
                 methodBuilder.addStatement(
@@ -162,12 +239,63 @@ public class JsonMapperLoaderInjector {
         }
 
         if (conditionalStarted) {
-            methodBuilder.endControlFlow();
+            methodBuilder.nextControlFlow("else")
+                    .addStatement("mapper = null")
+                    .endControlFlow();
+        } else {
+            methodBuilder.addStatement("mapper = null");
         }
 
-        methodBuilder.addStatement("return null");
+        methodBuilder.beginControlFlow("if (mapper != null)")
+                .addStatement("$L.put(type, mapper)", PARAMETERIZED_MAPPERS_VARIABLE_NAME)
+                .endControlFlow();
+        methodBuilder.endControlFlow();
 
-        builder.addMethod(methodBuilder.build());
+        methodBuilder.addStatement("System.out.println(\"type = \" + type + \"rawType = \" + type.rawType + \"; mapper = \" + mapper)");
+
+        methodBuilder.addStatement("return mapper");
+
+        return methodBuilder.build();
+    }
+
+    private MethodSpec getGetClassMapperMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("getMapper")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                .addTypeVariable(TypeVariableName.get("T"))
+                .returns(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), TypeVariableName.get("T")))
+                .addParameter(ParameterizedTypeName.get(ClassName.get(Class.class), TypeVariableName.get("T")), "cls")
+                .addStatement("$T mapper = $T.getMapper(cls)", JsonMapper.class, LoganSquare.class)
+                .beginControlFlow("if (mapper == null)");
+
+        boolean ifStatementStarted = false;
+        for (Class cls : mBuiltInMapperMap.keySet()) {
+            if (!ifStatementStarted) {
+                builder.beginControlFlow("if (cls == $T.class)", cls);
+                ifStatementStarted = true;
+            } else {
+                builder.nextControlFlow(" else if (cls == $T.class)", cls);
+            }
+            builder.addStatement("mapper = $L", getMapperVariableName(mBuiltInMapperMap.get(cls)));
+        }
+
+        for (JsonObjectHolder jsonObjectHolder : mJsonObjectHolders) {
+            if (jsonObjectHolder.typeParameters.size() == 0) {
+                if (!ifStatementStarted) {
+                    builder.beginControlFlow("if (cls == $T.class)", jsonObjectHolder.objectTypeName);
+                    ifStatementStarted = true;
+                } else {
+                    builder.nextControlFlow("else if (cls == $T.class)", jsonObjectHolder.objectTypeName);
+                }
+                builder.addStatement("mapper = $L", getMapperVariableName(jsonObjectHolder.packageName + "." + jsonObjectHolder.injectedClassName));
+            }
+        }
+
+        builder.endControlFlow();
+        builder.endControlFlow();
+
+        builder.addStatement("return mapper");
+
+        return builder.build();
     }
 
     public static String getMapperVariableName(Class cls) {
