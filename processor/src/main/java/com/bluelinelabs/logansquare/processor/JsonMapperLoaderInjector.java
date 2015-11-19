@@ -26,6 +26,7 @@ import com.squareup.javapoet.TypeVariableName;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +135,7 @@ public class JsonMapperLoaderInjector {
 
     private void addAllProjectMappers(TypeSpec.Builder typeSpecBuilder) {
         List<JsonObjectHolder> sortedHolders = new ArrayList<>(mJsonObjectHolders);
-        sortedHolders.sort(new Comparator<JsonObjectHolder>() {
+        Collections.sort(sortedHolders, new Comparator<JsonObjectHolder>() {
             @Override
             public int compare(JsonObjectHolder o1, JsonObjectHolder o2) {
                 if (o2.objectTypeName.equals(o1.parentTypeName)) {
