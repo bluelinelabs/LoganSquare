@@ -51,7 +51,4 @@ public final class SimpleWrapperModel$$JsonObjectMapper extends JsonMapper<Simpl
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

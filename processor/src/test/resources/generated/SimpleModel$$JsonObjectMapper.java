@@ -128,7 +128,4 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

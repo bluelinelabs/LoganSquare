@@ -151,7 +151,4 @@ public final class WhitespaceFieldNameModel$$JsonObjectMapper extends JsonMapper
       jsonGenerator.writeEndObject();
     }
   }
-
-  public void ensureParent() {
-  }
 }

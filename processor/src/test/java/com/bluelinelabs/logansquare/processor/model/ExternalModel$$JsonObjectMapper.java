@@ -52,7 +52,4 @@ public final class ExternalModel$$JsonObjectMapper extends JsonMapper<ExternalMo
       jsonGenerator.writeEndObject();
     }
   }
-
-  public void ensureParent() {
-  }
 }

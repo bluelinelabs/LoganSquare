@@ -61,7 +61,4 @@ public final class MultipleFieldNamesModel$$JsonObjectMapper extends JsonMapper<
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

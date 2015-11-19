@@ -117,7 +117,4 @@ public final class PrivateFieldModel$$JsonObjectMapper extends JsonMapper<Privat
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

@@ -97,7 +97,4 @@ public final class NonPrivateFieldsAndAccessorsFieldDetectionPolicyModel$$JsonOb
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

@@ -34,7 +34,4 @@ public final class DateModel$$JsonObjectMapper extends JsonMapper<DateModel> {
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

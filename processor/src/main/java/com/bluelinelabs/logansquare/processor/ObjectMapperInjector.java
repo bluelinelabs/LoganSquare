@@ -68,9 +68,8 @@ public class ObjectMapperInjector {
 
             if (mJsonObjectHolder.parentTypeParameters.size() == 0) {
                 parentMapperBuilder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.parentTypeName), PARENT_OBJECT_MAPPER_VARIABLE_NAME)
-                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL);
-
-                parentMapperBuilder.initializer("$L", getJsonMapperVariableNameForClassName((ClassName)mJsonObjectHolder.parentTypeName));
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("$T.$L", JSON_MAPPER_LOADER_CLASSNAME, getJsonMapperVariableNameForClassName((ClassName)mJsonObjectHolder.parentTypeName));
             } else {
                 parentMapperBuilder = FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.getParameterizedParentTypeName()), PARENT_OBJECT_MAPPER_VARIABLE_NAME)
                         .addModifiers(Modifier.PRIVATE);

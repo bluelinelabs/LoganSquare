@@ -34,7 +34,4 @@ public final class EnumModel$$JsonObjectMapper extends JsonMapper<EnumModel> {
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

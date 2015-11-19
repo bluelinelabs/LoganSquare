@@ -47,7 +47,4 @@ public final class ParentModel$$JsonObjectMapper extends JsonMapper<ParentModel>
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }

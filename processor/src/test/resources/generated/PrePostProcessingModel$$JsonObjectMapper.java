@@ -51,7 +51,4 @@ public final class PrePostProcessingModel$$JsonObjectMapper extends JsonMapper<P
             jsonGenerator.writeEndObject();
         }
     }
-
-    public void ensureParent() {
-    }
 }
