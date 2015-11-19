@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
+import com.fasterxml.jackson.core.JsonToken;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
@@ -28,8 +29,8 @@ public class ByteFieldType extends NumberFieldType {
             setter = replaceLastLiteral(setter, "(byte)$L.getValueAsInt()");
             builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
         } else {
-            setter = replaceLastLiteral(setter, "$L.getCurrentToken() == JsonToken.VALUE_NULL ? null : Byte.valueOf((byte)$L.getValueAsInt())");
-            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JSON_PARSER_VARIABLE_NAME));
+            setter = replaceLastLiteral(setter, "$L.getCurrentToken() == $T.VALUE_NULL ? null : Byte.valueOf((byte)$L.getValueAsInt())");
+            builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME, JsonToken.class, JSON_PARSER_VARIABLE_NAME));
         }
     }
 }
