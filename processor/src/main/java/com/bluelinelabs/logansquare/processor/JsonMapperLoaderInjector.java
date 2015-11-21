@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 
 public class JsonMapperLoaderInjector {
@@ -41,9 +42,11 @@ public class JsonMapperLoaderInjector {
 
     private final Collection<JsonObjectHolder> mJsonObjectHolders;
     private final Map<Class, Class> mBuiltInMapperMap;
+    private final ProcessingEnvironment mProcessingEnv;
 
-    public JsonMapperLoaderInjector(Collection<JsonObjectHolder> jsonObjectHolders) {
+    public JsonMapperLoaderInjector(Collection<JsonObjectHolder> jsonObjectHolders, ProcessingEnvironment processingEnv) {
         mJsonObjectHolders = jsonObjectHolders;
+        mProcessingEnv = processingEnv;
 
         mBuiltInMapperMap = new HashMap<>();
         mBuiltInMapperMap.put(String.class, StringMapper.class);
@@ -68,7 +71,7 @@ public class JsonMapperLoaderInjector {
     }
 
     private TypeSpec getTypeSpec() {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(Constants.LOADER_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        TypeSpec.Builder builder = TypeSpec.classBuilder(JsonAnnotationProcessor.getLoaderClassName(mProcessingEnv)).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addSuperinterface(ClassName.get(JsonMapperLoader.class));
 
         builder.addField(FieldSpec.builder(ParameterizedTypeName.get(ConcurrentHashMap.class, ParameterizedType.class, JsonMapper.class), PARAMETERIZED_MAPPERS_VARIABLE_NAME)
@@ -155,7 +158,7 @@ public class JsonMapperLoaderInjector {
 
                 typeSpecBuilder.addField(FieldSpec.builder(mapperTypeName, variableName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer("new $T()", mapperTypeName)
+                        .initializer("$T.INSTANCE", mapperTypeName)
                         .build()
                 );
             }

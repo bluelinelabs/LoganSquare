@@ -180,7 +180,7 @@ public class JsonObjectProcessor extends Processor {
                 objectHolder.fieldMap.put(element.getSimpleName().toString(), fieldHolder);
             }
 
-            String error = fieldHolder.fill(element, elements, types, null, null, objectHolder, shouldParse, shouldSerialize);
+            String error = fieldHolder.fill(element, mProcessingEnv, elements, types, null, null, objectHolder, shouldParse, shouldSerialize);
             if (!TextUtils.isEmpty(error)) {
                 error(element, error);
             }

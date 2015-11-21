@@ -10,23 +10,30 @@ import com.fasterxml.jackson.core.JsonFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /** The point of all interaction with this library. */
 public class LoganSquare {
 
     private static final SimpleArrayMap<Class, JsonMapper> OBJECT_MAPPERS = new SimpleArrayMap<>();
 
-    private static JsonMapperLoader JSON_MAPPER_LOADER;
+    private static CopyOnWriteArrayList<JsonMapperLoader> JSON_MAPPER_LOADERS;
     static {
+        JSON_MAPPER_LOADERS = new CopyOnWriteArrayList<>();
+        for (JsonMapperLoader loader : ServiceLoader.load(JsonMapperLoader.class)) {
+            JSON_MAPPER_LOADERS.add(loader);
+            loader.putAllJsonMappers(OBJECT_MAPPERS);
+        }
         try {
-            JSON_MAPPER_LOADER = (JsonMapperLoader)Class.forName(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME).newInstance();
-            JSON_MAPPER_LOADER.putAllJsonMappers(OBJECT_MAPPERS);
+            JsonMapperLoader loader = (JsonMapperLoader)Class.forName(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME).newInstance();
+            loader.putAllJsonMappers(OBJECT_MAPPERS);
+            JSON_MAPPER_LOADERS.add(loader);
         } catch (Exception e) {
-            throw new RuntimeException("JsonMapperLoaderImpl class not found. Have you included the steps needed for LoganSquare to process your annotations?");
+            // If no JsonMapperLoader service found, and default Loader is not found, throw exception
+            if (JSON_MAPPER_LOADERS.isEmpty()) {
+                throw new RuntimeException("JsonMapperLoaderImpl class not found. Have you included the steps needed for LoganSquare to process your annotations?");
+            }
         }
     }
 
@@ -221,7 +228,11 @@ public class LoganSquare {
 
     @SuppressWarnings("unchecked")
     private static <E> JsonMapper<E> getMapper(ParameterizedType<E> type, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) {
-        return JSON_MAPPER_LOADER.mapperFor(type, partialMappers);
+        for (JsonMapperLoader loader : JSON_MAPPER_LOADERS) {
+            final JsonMapper<E> mapper = loader.mapperFor(type, partialMappers);
+            if (mapper != null) return mapper;
+        }
+        return null;
     }
 
     /**

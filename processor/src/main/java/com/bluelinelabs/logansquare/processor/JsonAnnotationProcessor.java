@@ -59,6 +59,13 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
     }
 
     @Override
+    public Set<String> getSupportedOptions() {
+        Set<String> supportOptions = new LinkedHashSet<>();
+        supportOptions.add("jsonMapperLoaderSuffix");
+        return supportOptions;
+    }
+
+    @Override
     public boolean process(Set<? extends TypeElement> elements, RoundEnvironment env) {
         try {
             for (Processor processor : mProcessors) {
@@ -68,9 +75,9 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             if (!mLoaderWritten) {
                 mLoaderWritten = true;
 
-                final JsonMapperLoaderInjector loaderInjector = new JsonMapperLoaderInjector(mJsonObjectMap.values());
+                final JsonMapperLoaderInjector loaderInjector = new JsonMapperLoaderInjector(mJsonObjectMap.values(), processingEnv);
                 try {
-                    JavaFileObject jfo = mFiler.createSourceFile(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME);
+                    JavaFileObject jfo = mFiler.createSourceFile(Constants.LOADER_PACKAGE_NAME + "." + getLoaderClassName(processingEnv));
                     Writer writer = jfo.openWriter();
                     writer.write(loaderInjector.getJavaClassFile());
                     writer.flush();
@@ -90,7 +97,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
                     try {
                         JavaFileObject jfo = mFiler.createSourceFile(fqcn);
                         Writer writer = jfo.openWriter();
-                        writer.write(new ObjectMapperInjector(jsonObjectHolder).getJavaClassFile());
+                        writer.write(new ObjectMapperInjector(jsonObjectHolder, processingEnv).getJavaClassFile());
                         writer.flush();
                         writer.close();
                     } catch (IOException e) {
@@ -106,6 +113,12 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             error("Exception while processing Json classes. Stack trace incoming:\n%s", stackTrace.toString());
             return false;
         }
+    }
+
+    public static String getLoaderClassName(ProcessingEnvironment env) {
+        final String suffix = env.getOptions().get("jsonMapperLoaderSuffix");
+        if (suffix == null) return Constants.LOADER_CLASS_NAME;
+        return Constants.LOADER_CLASS_NAME + suffix;
     }
 
     private void error(String message, Object... args) {
