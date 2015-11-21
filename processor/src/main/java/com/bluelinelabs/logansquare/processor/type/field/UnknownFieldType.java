@@ -2,11 +2,13 @@ package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.internal.objectmappers.ObjectMapper;
+import com.bluelinelabs.logansquare.processor.JsonAnnotationProcessor;
 import com.bluelinelabs.logansquare.processor.JsonMapperLoaderInjector;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import java.util.List;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
@@ -14,7 +16,11 @@ import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_P
 
 public class UnknownFieldType extends FieldType {
 
-    private final ClassName mLoaderClassName = ClassName.bestGuess(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME);
+    private final ClassName mLoaderClassName;
+
+    public UnknownFieldType(ProcessingEnvironment env) {
+        mLoaderClassName = ClassName.bestGuess(Constants.LOADER_PACKAGE_NAME + "." + JsonAnnotationProcessor.getLoaderClassName(env));
+    }
 
     @Override
     public TypeName getTypeName() {

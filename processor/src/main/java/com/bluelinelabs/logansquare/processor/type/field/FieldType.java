@@ -7,6 +7,7 @@ import com.squareup.javapoet.TypeName;
 
 import java.lang.annotation.Annotation;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -27,7 +28,7 @@ public abstract class FieldType extends Type {
         return new Object[] { getNonPrimitiveTypeName() };
     }
 
-    public static FieldType fieldTypeFor(TypeMirror typeMirror, TypeMirror typeConverterType, Elements elements, Types types) {
+    public static FieldType fieldTypeFor(TypeMirror typeMirror, TypeMirror typeConverterType, ProcessingEnvironment env, Elements elements, Types types) {
         if (typeMirror != null) {
             if (typeConverterType != null && !"void".equals(typeConverterType.toString())) {
                 return new TypeConverterFieldType(TypeName.get(typeMirror), ClassName.bestGuess(typeConverterType.toString()));
@@ -58,11 +59,11 @@ public abstract class FieldType extends Type {
             } else if (String.class.getCanonicalName().equals(typeMirror.toString())) {
                 return new StringFieldType();
             } else if (Object.class.getCanonicalName().equals(typeMirror.toString())) {
-                return new UnknownFieldType();
+                return new UnknownFieldType(env);
             } else if (typeMirror instanceof DeclaredType) {
                 Annotation annotation = ((DeclaredType) typeMirror).asElement().getAnnotation(JsonObject.class);
                 if (annotation != null) {
-                    return new JsonFieldType(ClassName.bestGuess(typeMirror.toString()));
+                    return new JsonFieldType(env, ClassName.bestGuess(typeMirror.toString()));
                 }
             }
 

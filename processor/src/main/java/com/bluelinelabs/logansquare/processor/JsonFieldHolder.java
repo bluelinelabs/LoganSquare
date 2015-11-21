@@ -7,6 +7,7 @@ import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -25,7 +26,7 @@ public class JsonFieldHolder {
     public boolean shouldSerialize;
     public Type type;
 
-    public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
+    public String fill(Element element, ProcessingEnvironment env, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
         if (fieldNames == null || fieldNames.length == 0) {
             String defaultFieldName = element.getSimpleName().toString();
 
@@ -45,7 +46,7 @@ public class JsonFieldHolder {
         setterMethod = getSetter(element, elements);
         getterMethod = getGetter(element, elements);
 
-        type = Type.typeFor(element.asType(), typeConverterType, elements, types);
+        type = Type.typeFor(element.asType(), typeConverterType, env, elements, types);
 
         return ensureValidType(type, element);
     }

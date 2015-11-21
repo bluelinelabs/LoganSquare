@@ -44,7 +44,7 @@ public class JsonFieldProcessor extends Processor {
     public void findAndParseObjects(RoundEnvironment env, Map<String, JsonObjectHolder> jsonObjectMap, Elements elements, Types types) {
         for (Element element : env.getElementsAnnotatedWith(JsonField.class)) {
             try {
-                processJsonFieldAnnotation(element, jsonObjectMap, elements, types);
+                processJsonFieldAnnotation(element, jsonObjectMap, mProcessingEnv, elements, types);
             } catch (Exception e) {
                 StringWriter stackTrace = new StringWriter();
                 e.printStackTrace(new PrintWriter(stackTrace));
@@ -54,7 +54,7 @@ public class JsonFieldProcessor extends Processor {
         }
     }
 
-    private void processJsonFieldAnnotation(Element element, Map<String, JsonObjectHolder> jsonObjectMap, Elements elements, Types types) {
+    private void processJsonFieldAnnotation(Element element, Map<String, JsonObjectHolder> jsonObjectMap, ProcessingEnvironment env, Elements elements, Types types) {
         if (!isJsonFieldFieldAnnotationValid(element, elements)) {
             return;
         }
@@ -84,7 +84,7 @@ public class JsonFieldProcessor extends Processor {
         boolean shouldParse = ignoreAnnotation == null || ignoreAnnotation.ignorePolicy() == IgnorePolicy.SERIALIZE_ONLY;
         boolean shouldSerialize = ignoreAnnotation == null || ignoreAnnotation.ignorePolicy() == IgnorePolicy.PARSE_ONLY;
 
-        String error = fieldHolder.fill(element, elements, types, fieldName, typeConverterType, objectHolder, shouldParse, shouldSerialize);
+        String error = fieldHolder.fill(element, env, elements, types, fieldName, typeConverterType, objectHolder, shouldParse, shouldSerialize);
         if (!TextUtils.isEmpty(error)) {
             error(element, error);
         }

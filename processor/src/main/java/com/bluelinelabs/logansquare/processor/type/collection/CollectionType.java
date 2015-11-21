@@ -4,6 +4,7 @@ import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.bluelinelabs.logansquare.processor.type.Type;
 import com.squareup.javapoet.ClassName;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -12,7 +13,7 @@ public abstract class CollectionType extends Type {
 
     private String mJsonMapperVariableName;
 
-    public static CollectionType collectionTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
+    public static CollectionType collectionTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, ProcessingEnvironment env, Elements elements, Types types) {
         CollectionType collectionType = null;
         switch (genericClassTypeMirror.toString()) {
             case "java.util.List":
@@ -44,7 +45,7 @@ public abstract class CollectionType extends Type {
         }
 
         if (collectionType != null) {
-            collectionType.addParameterTypes(TypeUtils.getParameterizedTypes(typeMirror), elements, types);
+            collectionType.addParameterTypes(TypeUtils.getParameterizedTypes(typeMirror), env, elements, types);
         }
 
         return collectionType;
