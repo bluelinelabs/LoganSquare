@@ -26,7 +26,6 @@ import com.squareup.javapoet.TypeVariableName;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -135,9 +134,26 @@ public class JsonMapperLoaderInjector {
 
     private void addAllProjectMappers(TypeSpec.Builder typeSpecBuilder) {
         List<JsonObjectHolder> sortedHolders = new ArrayList<>(mJsonObjectHolders);
-        Collections.sort(sortedHolders, new Comparator<JsonObjectHolder>() {
+        final Comparator<JsonObjectHolder> comparator = new Comparator<JsonObjectHolder>() {
+
             @Override
             public int compare(JsonObjectHolder o1, JsonObjectHolder o2) {
+                if (o1.parentTypeName == null) {
+                    if (o2.parentTypeName == null) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                }
+
+                if (o2.parentTypeName == null) {
+                    return 1;
+                }
+
+                if (o1.parentTypeName.equals(o2.parentTypeName)) {
+                    return 0;
+                }
+
                 if (o2.objectTypeName.equals(o1.parentTypeName)) {
                     return -1;
                 } else if (o1.objectTypeName.equals(o2.parentTypeName)) {
@@ -145,8 +161,19 @@ public class JsonMapperLoaderInjector {
                 } else {
                     return 0;
                 }
+
             }
-        });
+        };
+
+        for (int i = 0; i < sortedHolders.size(); i++) {
+            for (int j = i + 1; j < sortedHolders.size(); j++) {
+                if (comparator.compare(sortedHolders.get(i), sortedHolders.get(j)) > 0) {
+                    JsonObjectHolder t = sortedHolders.get(i);
+                    sortedHolders.set(i, sortedHolders.get(j));
+                    sortedHolders.set(j, t);
+                }
+            }
+        }
 
         for (JsonObjectHolder jsonObjectHolder : sortedHolders) {
             if (jsonObjectHolder.typeParameters.size() == 0) {
