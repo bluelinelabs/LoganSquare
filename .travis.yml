@@ -3,4 +3,5 @@ language: java
 jdk:
   - oraclejdk8
 
-./gradlew test
+script:
+  - ./gradlew test
