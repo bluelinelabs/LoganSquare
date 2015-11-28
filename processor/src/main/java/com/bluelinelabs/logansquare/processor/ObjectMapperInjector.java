@@ -7,6 +7,7 @@ import com.bluelinelabs.logansquare.processor.type.Type;
 import com.bluelinelabs.logansquare.processor.type.Type.ClassNameObjectMapper;
 import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 import com.bluelinelabs.logansquare.processor.type.field.TypeConverterFieldType;
+import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,6 +18,7 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
@@ -90,7 +92,7 @@ public class ObjectMapperInjector {
             }
         }
         for (ClassName typeConverter : typeConvertersUsed) {
-            builder.addField(FieldSpec.builder(typeConverter, getTypeConverterVariableName(typeConverter))
+            builder.addField(FieldSpec.builder(typeConverter, getStaticFinalTypeConverterVariableName(typeConverter))
                     .addModifiers(Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)
                     .initializer("new $T()", typeConverter)
                     .build());
@@ -161,7 +163,8 @@ public class ObjectMapperInjector {
         builder.addMethod(getParseMethod());
         builder.addMethod(getParseFieldMethod());
         builder.addMethod(getSerializeMethod());
-        addUsedJsonMapperLines(builder);
+        addUsedJsonMapperVariables(builder);
+        addUsedTypeConverterMethods(builder);
 
         return builder.build();
     }
@@ -325,7 +328,7 @@ public class ObjectMapperInjector {
         return entryCount;
     }
 
-    private void addUsedJsonMapperLines(TypeSpec.Builder builder) {
+    private void addUsedJsonMapperVariables(TypeSpec.Builder builder) {
         Set<ClassNameObjectMapper> usedJsonObjectMappers = new HashSet<>();
 
         for (JsonFieldHolder holder : mJsonObjectHolder.fieldMap.values()) {
@@ -341,14 +344,44 @@ public class ObjectMapperInjector {
         }
     }
 
+    private void addUsedTypeConverterMethods(TypeSpec.Builder builder) {
+        Set<TypeName> usedTypeConverters = new HashSet<>();
+
+        for (JsonFieldHolder holder : mJsonObjectHolder.fieldMap.values()) {
+            usedTypeConverters.addAll(holder.type.getUsedTypeConverters());
+        }
+
+        for (TypeName usedTypeConverter : usedTypeConverters) {
+            final String variableName = getTypeConverterVariableName(usedTypeConverter);
+            builder.addField(FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(TypeConverter.class), usedTypeConverter), variableName)
+                    .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                    .build()
+            );
+
+            builder.addMethod(MethodSpec.methodBuilder(getTypeConverterGetter(usedTypeConverter))
+                    .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                    .returns(ParameterizedTypeName.get(ClassName.get(TypeConverter.class), usedTypeConverter))
+                    .beginControlFlow("if ($L == null)", variableName)
+                    .addStatement("$L = $T.typeConverterFor($T.class)", variableName, LoganSquare.class, usedTypeConverter)
+                    .endControlFlow()
+                    .addStatement("return $L", variableName)
+                    .build()
+            );
+        }
+    }
+
     private String getJsonMapperVariableNameForTypeParameter(String typeName) {
         String typeNameHash = "" + typeName.hashCode();
         typeNameHash = typeNameHash.replaceAll("-", "m");
         return "m" + typeNameHash + "ClassJsonMapper";
     }
 
-    public static String getTypeConverterVariableName(ClassName className) {
-        return className.toString().replaceAll("\\.", "_").toUpperCase();
+    public static String getStaticFinalTypeConverterVariableName(TypeName typeName) {
+        return typeName.toString().replaceAll("\\.", "_").replaceAll("\\$", "_").toUpperCase();
+    }
+
+    public static String getTypeConverterVariableName(TypeName typeName) {
+        return typeName.toString().replaceAll("\\.", "_").replaceAll("\\$", "_") + "_type_converter";
     }
 
     private void setFieldHolderJsonMapperVariableName(Type type) {
@@ -366,9 +399,12 @@ public class ObjectMapperInjector {
         return getMapperVariableName(cls.getCanonicalName());
     }
 
-
     public static String getMapperVariableName(String fullyQualifiedClassName) {
         return fullyQualifiedClassName.replaceAll("\\.", "_").replaceAll("\\$", "_").toUpperCase();
+    }
+
+    public static String getTypeConverterGetter(TypeName typeName) {
+        return "get" + getTypeConverterVariableName(typeName);
     }
 
 }

@@ -1,10 +1,11 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.LoganSquare;
+import com.bluelinelabs.logansquare.processor.ObjectMapperInjector;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -29,8 +30,8 @@ public class DynamicFieldType extends FieldType {
 
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
-        setter = replaceLastLiteral(setter, "$T.typeConverterFor($T.class).parse($L)");
-        builder.addStatement(setter, expandStringArgs(setterFormatArgs, LoganSquare.class, mTypeName, JSON_PARSER_VARIABLE_NAME));
+        setter = replaceLastLiteral(setter, ObjectMapperInjector.getTypeConverterGetter(mTypeName) + "().parse($L)");
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class DynamicFieldType extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$T.typeConverterFor($T.class).serialize($L, $S, $L, $L)", LoganSquare.class, mTypeName, getter, isObjectProperty ? fieldName : null, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement(ObjectMapperInjector.getTypeConverterGetter(mTypeName) + "().serialize($L, $S, $L, $L)", getter, isObjectProperty ? fieldName : null, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
 
         if (!mTypeName.isPrimitive() && checkIfNull) {
             if (writeIfNull) {
@@ -54,4 +55,10 @@ public class DynamicFieldType extends FieldType {
         }
     }
 
+    @Override
+    public Set<TypeName> getUsedTypeConverters() {
+        Set<TypeName> set = super.getUsedTypeConverters();
+        set.add(mTypeName);
+        return set;
+    }
 }

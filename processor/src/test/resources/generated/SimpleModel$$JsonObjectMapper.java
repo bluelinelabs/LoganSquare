@@ -2,6 +2,7 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -17,6 +18,8 @@ import java.util.Map;
 @SuppressWarnings("unsafe,unchecked")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
     private static final JsonMapper<Object> COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER = LoganSquare.mapperFor(Object.class);
+
+    private static TypeConverter<Date> java_util_Date_type_converter;
 
     @Override
     public SimpleModel parse(JsonParser jsonParser) throws IOException {
@@ -40,7 +43,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
     @Override
     public void parseField(SimpleModel instance, String fieldName, JsonParser jsonParser) throws IOException {
         if ("date".equals(fieldName)) {
-            instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
+            instance.date = getjava_util_Date_type_converter().parse(jsonParser);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
             instance.intToIgnoreForSerialization = jsonParser.getValueAsInt();
         } else if ("object_map".equals(fieldName)) {
@@ -88,7 +91,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             jsonGenerator.writeStartObject();
         }
         if (object.date != null) {
-            LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
+            getjava_util_Date_type_converter().serialize(object.date, "date", true, jsonGenerator);
         }
         jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
         final Map<String, Object> lslocalobject_map = object.objectMap;
@@ -128,5 +131,12 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
         if (writeStartAndEnd) {
             jsonGenerator.writeEndObject();
         }
+    }
+
+    private static final TypeConverter<Date> getjava_util_Date_type_converter() {
+        if (java_util_Date_type_converter == null) {
+            java_util_Date_type_converter = LoganSquare.typeConverterFor(Date.class);
+        }
+        return java_util_Date_type_converter;
     }
 }

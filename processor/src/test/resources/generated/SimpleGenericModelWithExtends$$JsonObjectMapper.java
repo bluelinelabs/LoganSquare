@@ -3,6 +3,7 @@ package com.bluelinelabs.logansquare.processor;
 import com.bluelinelabs.logansquare.JsonMapper;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
+import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,6 +16,8 @@ import java.util.Date;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends String> extends JsonMapper<SimpleGenericModelWithExtends<T>> {
+  private static TypeConverter<Date> java_util_Date_type_converter;
+
   private final JsonMapper<T> m84ClassJsonMapper;
 
   public SimpleGenericModelWithExtends$$JsonObjectMapper(ParameterizedType type, ParameterizedType TType, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) {
@@ -44,7 +47,7 @@ public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends Str
   @Override
   public void parseField(SimpleGenericModelWithExtends<T> instance, String fieldName, JsonParser jsonParser) throws IOException {
     if ("date".equals(fieldName)) {
-      instance.date = LoganSquare.typeConverterFor(Date.class).parse(jsonParser);
+      instance.date = getjava_util_Date_type_converter().parse(jsonParser);
     } else if ("string".equals(fieldName)) {
       instance.string = jsonParser.getValueAsString(null);
     } else if ("test_double".equals(fieldName)) {
@@ -76,7 +79,7 @@ public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends Str
       jsonGenerator.writeStartObject();
     }
     if (object.date != null) {
-      LoganSquare.typeConverterFor(Date.class).serialize(object.date, "date", true, jsonGenerator);
+      getjava_util_Date_type_converter().serialize(object.date, "date", true, jsonGenerator);
     }
     if (object.string != null) {
       jsonGenerator.writeStringField("string", object.string);
@@ -107,5 +110,12 @@ public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends Str
     if (writeStartAndEnd) {
       jsonGenerator.writeEndObject();
     }
+  }
+
+  private static final TypeConverter<Date> getjava_util_Date_type_converter() {
+    if (java_util_Date_type_converter == null) {
+      java_util_Date_type_converter = LoganSquare.typeConverterFor(Date.class);
+    }
+    return java_util_Date_type_converter;
   }
 }

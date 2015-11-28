@@ -37,11 +37,11 @@ public class TypeConverterFieldType extends FieldType {
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
         setter = replaceLastLiteral(setter, "$L.parse($L)");
-        builder.addStatement(setter, expandStringArgs(setterFormatArgs, ObjectMapperInjector.getTypeConverterVariableName(mTypeConverter), JSON_PARSER_VARIABLE_NAME));
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, ObjectMapperInjector.getStaticFinalTypeConverterVariableName(mTypeConverter), JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
     public void serialize(Builder builder, int depth, String fieldName, List<String> processedFieldNames, String getter, boolean isObjectProperty, boolean checkIfNull, boolean writeIfNull, boolean writeCollectionElementIfNull) {
-        builder.addStatement("$L.serialize($L, $S, $L, $L)", ObjectMapperInjector.getTypeConverterVariableName(mTypeConverter), getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
+        builder.addStatement("$L.serialize($L, $S, $L, $L)", ObjectMapperInjector.getStaticFinalTypeConverterVariableName(mTypeConverter), getter, fieldName, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
     }
 }

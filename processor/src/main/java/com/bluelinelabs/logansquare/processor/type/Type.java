@@ -90,6 +90,14 @@ public abstract class Type {
         return set;
     }
 
+    public Set<TypeName> getUsedTypeConverters() {
+        Set<TypeName> set = new HashSet<>();
+        for (Type parameterType : parameterTypes) {
+            set.addAll(parameterType.getUsedTypeConverters());
+        }
+        return set;
+    }
+
     public static class ClassNameObjectMapper {
         public final ClassName className;
         public final String objectMapper;
