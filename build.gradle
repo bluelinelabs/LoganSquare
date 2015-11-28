@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
     }
 }
 
@@ -79,8 +79,8 @@ subprojects {
     }
 
     bintray {
-        user = bintray_username
-        key = bintray_api_key
+        user = hasProperty('bintray_username') ? bintray_username : ''
+        key = hasProperty('bintray_api_key') ? bintray_api_key : ''
         publications = ['mavenJava']
 
         dryRun = false
