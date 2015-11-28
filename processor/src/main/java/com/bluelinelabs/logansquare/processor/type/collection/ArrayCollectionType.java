@@ -10,6 +10,7 @@ import com.squareup.javapoet.TypeName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -133,5 +134,12 @@ public class ArrayCollectionType extends CollectionType {
                 .endControlFlow()
                 .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME)
                 .endControlFlow();
+    }
+
+    @Override
+    public Set<ClassNameObjectMapper> getUsedJsonObjectMappers() {
+        Set<ClassNameObjectMapper> mappers = super.getUsedJsonObjectMappers();
+        mappers.addAll(arrayType.getUsedJsonObjectMappers());
+        return mappers;
     }
 }

@@ -1,7 +1,6 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
-import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,6 +16,8 @@ import java.util.Map;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel> {
+    private static final JsonMapper<Object> COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER = LoganSquare.mapperFor(Object.class);
+
     @Override
     public SimpleModel parse(JsonParser jsonParser) throws IOException {
         SimpleModel instance = new SimpleModel();
@@ -51,7 +52,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
                     if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                         map1.put(key1, null);
                     } else {
-                        map1.put(key1, JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser));
+                        map1.put(key1, COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser));
                     }
                 }
                 instance.objectMap = map1;
@@ -97,7 +98,7 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             for (Map.Entry<String, Object> entry1 : lslocalobject_map.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
-                    JsonMapperLoaderImpl.COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, false);
+                    COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, false);
                 }
             }
             jsonGenerator.writeEndObject();

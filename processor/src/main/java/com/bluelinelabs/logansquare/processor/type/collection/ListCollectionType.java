@@ -26,4 +26,5 @@ public abstract class ListCollectionType extends SingleParameterCollectionType {
     public Class getGenericClass() {
         return List.class;
     }
+
 }

@@ -1,20 +1,18 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
-import com.bluelinelabs.logansquare.Constants;
 import com.bluelinelabs.logansquare.internal.objectmappers.ObjectMapper;
-import com.bluelinelabs.logansquare.processor.JsonMapperLoaderInjector;
+import com.bluelinelabs.logansquare.processor.ObjectMapperInjector;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
 
 public class UnknownFieldType extends FieldType {
-
-    private final ClassName mLoaderClassName = ClassName.bestGuess(Constants.LOADER_PACKAGE_NAME + "." + Constants.LOADER_CLASS_NAME);
 
     @Override
     public TypeName getTypeName() {
@@ -28,8 +26,8 @@ public class UnknownFieldType extends FieldType {
 
     @Override
     public void parse(Builder builder, int depth, String setter, Object... setterFormatArgs) {
-        setter = replaceLastLiteral(setter, "$T.$L.parse($L)");
-        builder.addStatement(setter, expandStringArgs(setterFormatArgs, mLoaderClassName, JsonMapperLoaderInjector.getMapperVariableName(ObjectMapper.class), JSON_PARSER_VARIABLE_NAME));
+        setter = replaceLastLiteral(setter, "$L.parse($L)");
+        builder.addStatement(setter, expandStringArgs(setterFormatArgs, ObjectMapperInjector.getMapperVariableName(ObjectMapper.class), JSON_PARSER_VARIABLE_NAME));
     }
 
     @Override
@@ -38,7 +36,7 @@ public class UnknownFieldType extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$T.$L.serialize($L, $L, $L)", mLoaderClassName, JsonMapperLoaderInjector.getMapperVariableName(ObjectMapper.class), getter, JSON_GENERATOR_VARIABLE_NAME, isObjectProperty);
+        builder.addStatement("$L.serialize($L, $L, $L)", ObjectMapperInjector.getMapperVariableName(ObjectMapper.class), getter, JSON_GENERATOR_VARIABLE_NAME, isObjectProperty);
 
         if (checkIfNull) {
             if (writeIfNull) {
@@ -52,5 +50,12 @@ public class UnknownFieldType extends FieldType {
 
             builder.endControlFlow();
         }
+    }
+
+    @Override
+    public Set<ClassNameObjectMapper> getUsedJsonObjectMappers() {
+        Set<ClassNameObjectMapper> set = super.getUsedJsonObjectMappers();
+        set.add(new ClassNameObjectMapper(ClassName.get(Object.class), ObjectMapper.class.getCanonicalName()));
+        return set;
     }
 }

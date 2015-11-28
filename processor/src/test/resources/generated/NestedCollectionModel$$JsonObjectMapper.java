@@ -1,7 +1,7 @@
 package model.good;
 
 import com.bluelinelabs.logansquare.JsonMapper;
-import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
+import com.bluelinelabs.logansquare.LoganSquare;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -20,6 +20,8 @@ import java.util.Set;
 
 @SuppressWarnings("unsafe,unchecked")
 public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<NestedCollectionModel> {
+    private static final JsonMapper<NestedCollectionModel.ModelForCollection> MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER = LoganSquare.mapperFor(NestedCollectionModel.ModelForCollection.class);
+
     @Override
     public NestedCollectionModel parse(JsonParser jsonParser) throws IOException {
         NestedCollectionModel instance = new NestedCollectionModel();
@@ -85,7 +87,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                             if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                                                 map4.put(key4, null);
                                             } else{
-                                                map4.put(key4, JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));                                            }
+                                                map4.put(key4, MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));                                            }
                                         }
                                         value3 = map4;
                                     } else{
@@ -135,7 +137,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                     List<NestedCollectionModel.ModelForCollection> collection5 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                                                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                                         NestedCollectionModel.ModelForCollection value5;
-                                                        value5 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                                                        value5 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                                                         collection5.add(value5);
                                                     }
                                                     NestedCollectionModel.ModelForCollection[] array = collection5.toArray(new NestedCollectionModel.ModelForCollection[collection5.size()]);
@@ -185,7 +187,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                         ArrayList<NestedCollectionModel.ModelForCollection> collection4 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                             NestedCollectionModel.ModelForCollection value4;
-                                            value4 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                                            value4 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                                             collection4.add(value4);
                                         }
                                         value3 = collection4;
@@ -243,7 +245,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                             if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
                                                                 map5.put(key5, null);
                                                             } else{
-                                                                map5.put(key5, JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
+                                                                map5.put(key5, MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser));
                                                             }
                                                         }
                                                         value4 = map5;
@@ -283,7 +285,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         ArrayList<NestedCollectionModel.ModelForCollection> collection2 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
-                            value2 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                            value2 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                             collection2.add(value2);
                         }
                         value1 = collection2;
@@ -305,7 +307,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         ArrayList<NestedCollectionModel.ModelForCollection> collection2 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
-                            value2 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                            value2 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                             collection2.add(value2);
                         }
                         value1 = collection2;
@@ -331,7 +333,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                             ArrayList<NestedCollectionModel.ModelForCollection> collection2 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                             while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                 NestedCollectionModel.ModelForCollection value2;
-                                value2 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                                value2 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                                 collection2.add(value2);
                             }
                             map1.put(key1, collection2);
@@ -353,7 +355,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         ArrayList<NestedCollectionModel.ModelForCollection> collection2 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
-                            value2 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                            value2 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                             collection2.add(value2);
                         }
                         value1 = collection2;
@@ -375,7 +377,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         ArrayList<NestedCollectionModel.ModelForCollection> collection2 = new ArrayList<NestedCollectionModel.ModelForCollection>();
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                             NestedCollectionModel.ModelForCollection value2;
-                            value2 = JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
+                            value2 = MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.parse(jsonParser);
                             collection2.add(value2);
                         }
                         value1 = collection2;
@@ -438,7 +440,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                 for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry4 : lslocallslocallslocallslocalcomplexArrayElementElementElement.entrySet()) {
                                                     jsonGenerator.writeFieldName(entry4.getKey().toString());
                                                     if (entry4.getValue() != null) {
-                                                        JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry4.getValue(), jsonGenerator, true);
+                                                        MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry4.getValue(), jsonGenerator, true);
                                                     }
                                                 }
                                                 jsonGenerator.writeEndObject();
@@ -482,7 +484,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                             jsonGenerator.writeStartArray();
                                                             for (NestedCollectionModel.ModelForCollection element5 : lslocallslocallslocallslocallslocalcomplexerArrayElementElementElementElement) {
                                                                 if (element5 != null) {
-                                                                    JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element5, jsonGenerator, true);
+                                                                    MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element5, jsonGenerator, true);
                                                                 }
                                                             }
                                                             jsonGenerator.writeEndArray();
@@ -524,7 +526,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                 jsonGenerator.writeStartArray();
                                                 for (NestedCollectionModel.ModelForCollection element4 : lslocallslocallslocallslocaldontKnowWhatImDoingListElementElementElement) {
                                                     if (element4 != null) {
-                                                        JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element4, jsonGenerator, true);
+                                                        MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element4, jsonGenerator, true);
                                                     }
                                                 }
                                                 jsonGenerator.writeEndArray();
@@ -570,7 +572,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                                                             for (Map.Entry<String, NestedCollectionModel.ModelForCollection> entry5 : lslocallslocallslocallslocallslocaldontKnowWhatImDoingMapElementElementElementElement.entrySet()) {
                                                                 jsonGenerator.writeFieldName(entry5.getKey().toString());
                                                                 if (entry5.getValue() != null) {
-                                                                    JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry5.getValue(), jsonGenerator, true);
+                                                                    MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(entry5.getValue(), jsonGenerator, true);
                                                                 }
                                                             }
                                                             jsonGenerator.writeEndObject();
@@ -602,7 +604,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         jsonGenerator.writeStartArray();
                         for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_dequeElement) {
                             if (element2 != null) {
-                                JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
+                                MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
                             }
                         }
                         jsonGenerator.writeEndArray();
@@ -622,7 +624,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         jsonGenerator.writeStartArray();
                         for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_listElement) {
                             if (element2 != null) {
-                                JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
+                                MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
                             }
                         }
                         jsonGenerator.writeEndArray();
@@ -643,7 +645,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         jsonGenerator.writeStartArray();
                         for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_mapElement) {
                             if (element2 != null) {
-                                JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
+                                MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
                             }
                         }
                         jsonGenerator.writeEndArray();
@@ -663,7 +665,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         jsonGenerator.writeStartArray();
                         for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_queueElement) {
                             if (element2 != null) {
-                                JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
+                                MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
                             }
                         }
                         jsonGenerator.writeEndArray();
@@ -683,7 +685,7 @@ public final class NestedCollectionModel$$JsonObjectMapper extends JsonMapper<Ne
                         jsonGenerator.writeStartArray();
                         for (NestedCollectionModel.ModelForCollection element2 : lslocallslocalmodel_setElement) {
                             if (element2 != null) {
-                                JsonMapperLoaderImpl.MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
+                                MODEL_GOOD_NESTEDCOLLECTIONMODEL_MODELFORCOLLECTION__JSONOBJECTMAPPER.serialize(element2, jsonGenerator, true);
                             }
                         }
                         jsonGenerator.writeEndArray();

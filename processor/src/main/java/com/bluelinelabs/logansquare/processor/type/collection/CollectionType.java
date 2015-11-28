@@ -10,8 +10,6 @@ import javax.lang.model.util.Types;
 
 public abstract class CollectionType extends Type {
 
-    private String mJsonMapperVariableName;
-
     public static CollectionType collectionTypeFor(TypeMirror typeMirror, TypeMirror genericClassTypeMirror, Elements elements, Types types) {
         CollectionType collectionType = null;
         switch (genericClassTypeMirror.toString()) {
@@ -48,10 +46,6 @@ public abstract class CollectionType extends Type {
         }
 
         return collectionType;
-    }
-
-    public void setJsonMapperVariableName(String jsonMapperVariableName) {
-        mJsonMapperVariableName = jsonMapperVariableName;
     }
 
 }

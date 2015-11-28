@@ -1,7 +1,6 @@
 package com.bluelinelabs.logansquare.processor;
 
 import com.bluelinelabs.logansquare.JsonMapper;
-import com.bluelinelabs.logansquare.JsonMapperLoaderImpl;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bluelinelabs.logansquare.ParameterizedType;
 import com.bluelinelabs.logansquare.util.SimpleArrayMap;
@@ -20,7 +19,7 @@ public final class SimpleGenericModelWithExtends$$JsonObjectMapper<T extends Str
 
   public SimpleGenericModelWithExtends$$JsonObjectMapper(ParameterizedType type, ParameterizedType TType, SimpleArrayMap<ParameterizedType, JsonMapper> partialMappers) {
     partialMappers.put(type, this);
-    m84ClassJsonMapper = JsonMapperLoaderImpl._mapperFor(TType, partialMappers);
+    m84ClassJsonMapper = LoganSquare.mapperFor(TType, partialMappers);
   }
 
   @Override
