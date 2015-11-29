@@ -101,12 +101,12 @@ subprojects {
                 name = project.version
                 gpg {
                     sign = true
-                    passphrase = bintray_gpg_passphrase
+                    passphrase = hasProperty('bintray_gpg_passphrase') ? bintray_gpg_passphrase : ''
                 }
                 mavenCentralSync {
                     sync = false
-                    user = maven_central_username
-                    password = maven_central_password
+                    user = hasProperty('maven_central_username') ? maven_central_username : ''
+                    password = hasProperty('maven_central_password') ? maven_central_password : ''
                     close = '1'
                 }
             }
@@ -115,5 +115,5 @@ subprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.9'
 }
