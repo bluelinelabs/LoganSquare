@@ -11,8 +11,10 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unsafe,unchecked")
@@ -46,6 +48,31 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             instance.date = getjava_util_Date_type_converter().parse(jsonParser);
         } else if ("intToIgnoreForSerialization".equals(fieldName)){
             instance.intToIgnoreForSerialization = jsonParser.getValueAsInt();
+        } else if ("object-array-with-dashes".equals(fieldName)) {
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                List<Object> collection1 = new ArrayList<Object>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    Object value1;
+                    value1 = COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser);
+                    collection1.add(value1);
+                }
+                Object[] array = collection1.toArray(new Object[collection1.size()]);
+                instance.objectArrayWithDashes = array;
+            } else {
+                instance.objectArrayWithDashes = null;
+            }
+        } else if ("object-list-with-dashes".equals(fieldName)) {
+            if (jsonParser.getCurrentToken() == JsonToken.START_ARRAY) {
+                ArrayList<Object> collection1 = new ArrayList<Object>();
+                while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                    Object value1;
+                    value1 = COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser);
+                    collection1.add(value1);
+                }
+                instance.objectListWithDashes = collection1;
+            } else {
+                instance.objectListWithDashes = null;
+            }
         } else if ("object_map".equals(fieldName)) {
             if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
                 HashMap<String, Object> map1 = new HashMap<String, Object>();
@@ -61,6 +88,22 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
                 instance.objectMap = map1;
             } else {
                 instance.objectMap = null;
+            }
+        } else if ("object-map-with-dashes".equals(fieldName)) {
+            if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+                HashMap<String, Object> map1 = new HashMap<String, Object>();
+                while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    String key1 = jsonParser.getText();
+                    jsonParser.nextToken();
+                    if (jsonParser.getCurrentToken() == JsonToken.VALUE_NULL) {
+                        map1.put(key1, null);
+                    } else {
+                        map1.put(key1, COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.parse(jsonParser));
+                    }
+                }
+                instance.objectMapWithDashes = map1;
+            } else {
+                instance.objectMapWithDashes = null;
             }
         } else if ("string".equals(fieldName)){
             instance.string = jsonParser.getValueAsString(null);
@@ -94,11 +137,45 @@ public final class SimpleModel$$JsonObjectMapper extends JsonMapper<SimpleModel>
             getjava_util_Date_type_converter().serialize(object.date, "date", true, jsonGenerator);
         }
         jsonGenerator.writeNumberField("intToIgnoreForParse", object.intToIgnoreForParse);
+        final Object[] lslocalobject_array_with_dashes = object.objectArrayWithDashes;
+        if (lslocalobject_array_with_dashes != null) {
+            jsonGenerator.writeFieldName("object-array-with-dashes");
+            jsonGenerator.writeStartArray();
+            for (Object element1 : lslocalobject_array_with_dashes) {
+                if (element1 != null) {
+                    COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(element1, jsonGenerator, false);
+                }
+            }
+            jsonGenerator.writeEndArray();
+        }
+        final List<Object> lslocalobject_list_with_dashes = object.objectListWithDashes;
+        if (lslocalobject_list_with_dashes != null) {
+            jsonGenerator.writeFieldName("object-list-with-dashes");
+            jsonGenerator.writeStartArray();
+            for (Object element1 : lslocalobject_list_with_dashes) {
+                if (element1 != null) {
+                    COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(element1, jsonGenerator, false);
+                }
+            }
+            jsonGenerator.writeEndArray();
+        }
         final Map<String, Object> lslocalobject_map = object.objectMap;
         if (lslocalobject_map != null) {
             jsonGenerator.writeFieldName("object_map");
             jsonGenerator.writeStartObject();
             for (Map.Entry<String, Object> entry1 : lslocalobject_map.entrySet()) {
+                jsonGenerator.writeFieldName(entry1.getKey().toString());
+                if (entry1.getValue() != null) {
+                    COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, false);
+                }
+            }
+            jsonGenerator.writeEndObject();
+        }
+        final Map<String, Object> lslocalobject_map_with_dashes = object.objectMapWithDashes;
+        if (lslocalobject_map_with_dashes != null) {
+            jsonGenerator.writeFieldName("object-map-with-dashes");
+            jsonGenerator.writeStartObject();
+            for (Map.Entry<String, Object> entry1 : lslocalobject_map_with_dashes.entrySet()) {
                 jsonGenerator.writeFieldName(entry1.getKey().toString());
                 if (entry1.getValue() != null) {
                     COM_BLUELINELABS_LOGANSQUARE_INTERNAL_OBJECTMAPPERS_OBJECTMAPPER.serialize(entry1.getValue(), jsonGenerator, false);

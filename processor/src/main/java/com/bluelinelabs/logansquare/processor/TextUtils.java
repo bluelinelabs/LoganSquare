@@ -10,7 +10,7 @@ public class TextUtils {
     }
 
     public static String toUniqueFieldNameVariable(String fieldName, List<String> processedFieldNames) {
-        fieldName = fieldName.replaceAll(" ", "");
+        fieldName = fieldName.replaceAll(" ", "").replaceAll("-", "_");
         int frequency = Collections.frequency(processedFieldNames, fieldName);
         processedFieldNames.add(fieldName);
         return (frequency > 0) ? fieldName + frequency : fieldName;

@@ -6,6 +6,7 @@ import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @JsonObject
@@ -62,4 +63,13 @@ public class SimpleModel {
 
     @JsonField(name = "object_map")
     public Map<String, Object> objectMap;
+
+    @JsonField(name = "object-map-with-dashes")
+    public Map<String, Object> objectMapWithDashes;
+
+    @JsonField(name = "object-list-with-dashes")
+    public List<Object> objectListWithDashes;
+
+    @JsonField(name = "object-array-with-dashes")
+    public Object[] objectArrayWithDashes;
 }

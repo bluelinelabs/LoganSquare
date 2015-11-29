@@ -46,7 +46,6 @@ public class JsonFieldHolder {
         getterMethod = getGetter(element, elements);
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
-
         return ensureValidType(type, element);
     }
 

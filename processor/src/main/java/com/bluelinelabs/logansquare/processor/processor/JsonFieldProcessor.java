@@ -10,6 +10,12 @@ import com.bluelinelabs.logansquare.processor.TextUtils;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -21,11 +27,6 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Map;
 
 import static javax.lang.model.element.Modifier.PRIVATE;
 
