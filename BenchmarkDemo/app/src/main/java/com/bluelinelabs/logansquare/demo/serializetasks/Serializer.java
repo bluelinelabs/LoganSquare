@@ -24,7 +24,8 @@ public abstract class Serializer extends AsyncTask<Void, Void, SerializeResult> 
     protected SerializeResult doInBackground(Void... params) {
         System.gc();
         long startTime = System.nanoTime();
-        serialize(mResponse);
+        String result = serialize(mResponse);
+        if (result == null) return null;
         long endTime = System.nanoTime();
         long duration = TimeUnit.NANOSECONDS.toMicros(endTime - startTime);
 

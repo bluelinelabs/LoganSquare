@@ -5,3 +5,7 @@
 
 # Jackson
 -dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
+
+# DSL-JSON
+-keep class dsl_json.json.** { *; }
+-keep @com.dslplatform.json.CompiledJson class *

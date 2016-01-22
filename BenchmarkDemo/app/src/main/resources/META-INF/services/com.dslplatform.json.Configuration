@@ -1,0 +1,2 @@
+#not sure why this is required. Jackson META-INF files are saves, but not the ones created during annotation processing
+dsl_json.json.ExternalSerialization
