@@ -18,7 +18,7 @@ public class WhitespaceFieldNameModel {
     @JsonField(name = "Pet Names")
     public String[] petNames;
 
-    @JsonField(name = "AddressLines")
+    @JsonField(name = "Address-Lines")
     public List<String> addressLinesDuplicate;
 
     @JsonField(name = "All Contacts")
