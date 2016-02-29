@@ -79,8 +79,8 @@ subprojects {
     }
 
     bintray {
-        user = bintray_username
-        key = bintray_api_key
+        user = project.hasProperty('bintray_username') ? bintray_username : ''
+        key = project.hasProperty('bintray_api_key') ? bintray_api_key : ''
         publications = ['mavenJava']
 
         dryRun = false
@@ -101,12 +101,12 @@ subprojects {
                 name = project.version
                 gpg {
                     sign = true
-                    passphrase = bintray_gpg_passphrase
+                    passphrase = project.hasProperty('bintray_gpg_passphrase') ? bintray_gpg_passphrase : ''
                 }
                 mavenCentralSync {
                     sync = false
-                    user = maven_central_username
-                    password = maven_central_password
+                    user = project.hasProperty('maven_central_username') ? maven_central_username : ''
+                    password = project.hasProperty('maven_central_password') ? maven_central_password : ''
                     close = '1'
                 }
             }
