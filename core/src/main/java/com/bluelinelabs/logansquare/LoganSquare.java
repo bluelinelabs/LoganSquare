@@ -234,13 +234,7 @@ public class LoganSquare {
                 Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
                 mapper = (JsonMapper<E>)mapperClass.newInstance();
                 OBJECT_MAPPERS.put(cls, mapper);
-            } catch (NoSuchMapperException nsme) {
-                throw nsme;
-            } catch (Exception e) {
-                NoSuchMapperException nsme = findNoSuchMapperCause(e);
-                if (nsme != null) throw nsme;
-                return null;
-            }
+            } catch (Exception ignored) { }
         }
         return mapper;
     }
@@ -272,11 +266,7 @@ public class LoganSquare {
                 JsonMapper<E> mapper = (JsonMapper<E>)constructor.newInstance(args);
                 PARAMETERIZED_OBJECT_MAPPERS.put(type, mapper);
                 return mapper;
-            } catch (NoSuchMapperException nsme) {
-                throw nsme;
-            } catch (Exception e) {
-                NoSuchMapperException nsme = findNoSuchMapperCause(e);
-                if (nsme != null) throw nsme;
+            } catch (Exception ignored) {
                 return null;
             }
         }
@@ -358,13 +348,5 @@ public class LoganSquare {
      */
     public static <E> void registerTypeConverter(Class<E> cls, TypeConverter<E> converter) {
         TYPE_CONVERTERS.put(cls, converter);
-    }
-
-    private static NoSuchMapperException findNoSuchMapperCause(Throwable t) {
-        if (t == null || t.getCause() == t) return null;
-        if (t instanceof NoSuchMapperException) {
-            return (NoSuchMapperException) t;
-        }
-        return findNoSuchMapperCause(t.getCause());
     }
 }
