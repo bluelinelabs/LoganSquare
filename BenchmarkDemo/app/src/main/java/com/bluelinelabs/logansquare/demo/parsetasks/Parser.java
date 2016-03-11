@@ -23,6 +23,7 @@ public abstract class Parser extends AsyncTask<Void, Void, ParseResult> {
         System.gc();
         long startTime = System.nanoTime();
         int objectCount = parse(mJsonString);
+        if (objectCount == 0) return null;
         long endTime = System.nanoTime();
         long duration = TimeUnit.NANOSECONDS.toMicros(endTime - startTime);
 

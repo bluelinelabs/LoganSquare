@@ -52,4 +52,13 @@ dependencies {
 
     // Moshi library for camparison
     compile 'com.squareup.moshi:moshi:1.0.0'
+
+    // DSL-JSON library for camparison
+    compile 'com.dslplatform:dsl-json:0.9.5'
+    apt 'com.dslplatform:dsl-json-processor:0.4'
+}
+
+apt {
+    processor 'com.bluelinelabs.logansquare.processor.JsonAnnotationProcessor'
+    processor 'com.dslplatform.json.CompiledJsonProcessor'
 }
