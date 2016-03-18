@@ -1,14 +1,6 @@
 package com.bluelinelabs.logansquare;
 
-import com.bluelinelabs.logansquare.internal.objectmappers.BooleanMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.DoubleMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.FloatMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.IntegerMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.ListMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.LongMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.MapMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.ObjectMapper;
-import com.bluelinelabs.logansquare.internal.objectmappers.StringMapper;
+import com.bluelinelabs.logansquare.internal.objectmappers.*;
 import com.bluelinelabs.logansquare.typeconverters.DefaultCalendarConverter;
 import com.bluelinelabs.logansquare.typeconverters.DefaultDateConverter;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
@@ -231,9 +223,14 @@ public class LoganSquare {
         if (mapper == null) {
             // The only way the mapper wouldn't already be loaded into OBJECT_MAPPERS is if it was compiled separately, but let's handle it anyway
             try {
-                Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
-                mapper = (JsonMapper<E>)mapperClass.newInstance();
-                OBJECT_MAPPERS.put(cls, mapper);
+                if (cls.isEnum()) {
+                    mapper = new EnumMapper(cls);
+                    OBJECT_MAPPERS.put(cls, mapper);
+                } else {
+                    Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
+                    mapper = (JsonMapper<E>) mapperClass.newInstance();
+                    OBJECT_MAPPERS.put(cls, mapper);
+                }
             } catch (Exception ignored) { }
         }
         return mapper;
