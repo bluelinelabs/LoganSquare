@@ -102,7 +102,7 @@ public enum TestEnum {
 public class EnumConverter extends StringBasedTypeConverter<TestEnum> {
     @Override
     public TestEnum getFromString(String s) {
-        TestEnum.valueOf(s);
+        return TestEnum.valueOf(s);
     }
     
     public String convertToString(TestEnum object) {
