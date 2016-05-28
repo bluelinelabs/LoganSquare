@@ -43,7 +43,7 @@ task clean(type: Delete) {
 }
 ```
 
-Apply apt plugin and add the dependencies to the app's module.
+Apply apt plugin and add the dependencies to your app's module.
 
 ```groovy
 apply plugin: 'com.neenbedankt.android-apt'
