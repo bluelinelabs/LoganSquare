@@ -12,6 +12,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /** Hacked together barchart view for this demo. Please do not take this as an example of a good way to do things. */
 public class BarChart extends View {
@@ -181,7 +182,7 @@ public class BarChart extends View {
                 float medianTime = timings.get(timings.size() / 2);
                 float maxTime = timings.get(timings.size() - 1);
 
-                return String.format("%s (median: %.2fms, min: %.2fms, max: %.2fms", title, medianTime, minTime, maxTime);
+                return String.format(Locale.getDefault(), "%s (median: %.2fms, min: %.2fms, max: %.2fms", title, medianTime, minTime, maxTime);
             } else {
                 return title;
             }
