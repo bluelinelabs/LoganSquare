@@ -29,8 +29,8 @@ buildscript {
 apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
-    apt 'com.bluelinelabs:logansquare-compiler:1.3.6'
-    compile 'com.bluelinelabs:logansquare:1.3.6'
+    apt 'com.bluelinelabs:logansquare-compiler:1.3.7'
+    compile 'com.bluelinelabs:logansquare:1.3.7'
 }
 
 ```
