@@ -23,11 +23,7 @@ import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -66,6 +62,22 @@ public class JsonObjectProcessor extends Processor {
 
         if (element.getModifiers().contains(PRIVATE)) {
             error(element, "%s: %s annotation can't be used on private classes.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
+        }
+
+        boolean hasDefaultConstructor = false;
+        for (Element member : elements.getAllMembers(typeElement)) {
+            if (member.getKind() != ElementKind.CONSTRUCTOR) {
+                continue;
+            }
+
+            ExecutableElement methodElement = (ExecutableElement) member;
+            if (methodElement.getParameters().isEmpty() && !methodElement.getModifiers().contains(PRIVATE)) {
+                hasDefaultConstructor = true;
+            }
+        }
+
+        if (!hasDefaultConstructor) {
+            error(element, "%s: %s annotation requires a non-private empty constructor on this class.", typeElement.getQualifiedName(), JsonObject.class.getSimpleName());
         }
 
         JsonObjectHolder holder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(typeElement, elements));
