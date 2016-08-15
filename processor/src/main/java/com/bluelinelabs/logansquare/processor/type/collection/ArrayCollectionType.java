@@ -21,6 +21,7 @@ public class ArrayCollectionType extends CollectionType {
 
     public ArrayCollectionType(Type arrayType) {
         this.arrayType = arrayType;
+        addParameterType(arrayType);
     }
 
     @Override

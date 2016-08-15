@@ -61,4 +61,22 @@ public class NegativeTests {
                 .failsToCompile()
                 .withErrorContaining("There can only be one @OnJsonParseComplete method per class");
     }
+
+    @Test
+    public void noDefaultConstructor() {
+        ASSERT.about(javaSource())
+                .that(JavaFileObjects.forResource("model/bad/NoConstructorModel.java"))
+                .processedWith(new JsonAnnotationProcessor())
+                .failsToCompile()
+                .withErrorContaining("JsonObject annotation requires a non-private empty constructor on this class");
+    }
+
+    @Test
+    public void privateEmptyConstructor() {
+        ASSERT.about(javaSource())
+                .that(JavaFileObjects.forResource("model/bad/PrivateConstructorModel.java"))
+                .processedWith(new JsonAnnotationProcessor())
+                .failsToCompile()
+                .withErrorContaining("JsonObject annotation requires a non-private empty constructor on this class");
+    }
 }
