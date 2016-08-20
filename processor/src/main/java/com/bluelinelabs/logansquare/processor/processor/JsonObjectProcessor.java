@@ -98,8 +98,7 @@ public class JsonObjectProcessor extends Processor {
                 TypeElement superclassElement = (TypeElement)types.asElement(superclass);
 
                 if (superclassElement.getAnnotation(JsonObject.class) != null) {
-                    String superclassPackageName = elements.getPackageOf(superclassElement).getQualifiedName().toString();
-                    parentClassName = ClassName.get(superclassPackageName, TypeUtils.getSimpleClassName(superclassElement, superclassPackageName));
+                    parentClassName = ClassName.get(superclassElement);
                     break;
                 }
 
