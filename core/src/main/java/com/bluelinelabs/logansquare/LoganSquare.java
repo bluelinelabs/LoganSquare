@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class LoganSquare {
         OBJECT_MAPPERS.put(Object.class, new ObjectMapper());
         OBJECT_MAPPERS.put(List.class, LIST_MAPPER);
         OBJECT_MAPPERS.put(ArrayList.class, LIST_MAPPER);
+        OBJECT_MAPPERS.put(LinkedList.class, LIST_MAPPER);
         OBJECT_MAPPERS.put(Map.class, MAP_MAPPER);
         OBJECT_MAPPERS.put(HashMap.class, MAP_MAPPER);
     }
