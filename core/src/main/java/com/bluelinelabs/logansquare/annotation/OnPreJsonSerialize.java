@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -15,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * }
  * </code></pre>
  */
+@Documented
 @Target(METHOD)
 @Retention(CLASS)
 public @interface OnPreJsonSerialize { }
