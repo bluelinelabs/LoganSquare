@@ -1,5 +1,6 @@
 package com.bluelinelabs.logansquare.annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -14,6 +15,7 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * public String variableIDontWantParsedOrSerialized;
  * </code></pre>
  */
+@Documented
 @Target(FIELD)
 @Retention(CLASS)
 public @interface JsonIgnore {
