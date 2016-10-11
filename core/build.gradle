@@ -5,3 +5,9 @@ ext.artifactId = 'logansquare'
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.5.1'
 }
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
