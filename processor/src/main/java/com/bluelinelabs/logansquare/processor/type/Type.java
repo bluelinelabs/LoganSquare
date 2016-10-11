@@ -78,6 +78,10 @@ public abstract class Type {
         }
     }
 
+    public void addParameterType(Type type) {
+        parameterTypes.add(type);
+    }
+
     public void addParameterType(TypeMirror parameterType, Elements elements, Types types) {
         parameterTypes.add(Type.typeFor(parameterType, null, elements, types));
     }
