@@ -3,7 +3,7 @@ apply plugin: 'java'
 ext.artifactId = 'logansquare'
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-core:2.5.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0'
 }
 
 jar {
