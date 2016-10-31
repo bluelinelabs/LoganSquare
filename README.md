@@ -18,18 +18,8 @@ Don't believe it could improve upon Jackson Databind's or GSON's performance tha
 Note that Gradle is the only supported build configuration for LoganSquare. To add the library to your app's build.gradle file.
 
 ```groovy
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    }
-}
-apply plugin: 'com.neenbedankt.android-apt'
-
 dependencies {
-    apt 'com.bluelinelabs:logansquare-compiler:1.3.6'
+    annotationProcessor 'com.bluelinelabs:logansquare-compiler:1.3.6'
     compile 'com.bluelinelabs:logansquare:1.3.6'
 }
 
