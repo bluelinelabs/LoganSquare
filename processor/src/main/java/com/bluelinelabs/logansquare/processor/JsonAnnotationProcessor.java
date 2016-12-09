@@ -107,7 +107,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             //start creating JsonMapperIndex
             String indexPath = processingEnv.getOptions().get("loganSquareIndex");
 
-            if (!generatedIndex.contains(indexPath)) {
+            if (!TextUtils.isEmpty(indexPath) && !generatedIndex.contains(indexPath)) {
                 generatedIndex.add(indexPath);
 
                 CodeBlock.Builder staticImportBlockBuilder = CodeBlock.builder();
