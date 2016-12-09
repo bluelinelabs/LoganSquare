@@ -44,11 +44,7 @@ public class LoganSquare {
 
     private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<Class, TypeConverter>();
 
-    private static final List<JsonMapperIndex> jsonMapperIndexes = new ArrayList<>();
-
-    private static final Map<String, Long> tstses = new ConcurrentHashMap<>(8, 0.9f, 1);
-
-    private static volatile boolean debugMode = false;
+    private static final List<JsonMapperIndex> jsonMapperIndexes = new ArrayList<JsonMapperIndex>();
 
     static {
         OBJECT_MAPPERS.put(String.class, new StringMapper());
@@ -246,23 +242,17 @@ public class LoganSquare {
 
                 if (mapper != null) {
                     OBJECT_MAPPERS.put(cls, mapper);
-
-                    tsts(cls, tsts);
                     break;
                 }
             }
         }
 
         if (mapper == null) {
-            long tsts = System.currentTimeMillis();
-
 //             The only way the mapper wouldn't already be loaded into OBJECT_MAPPERS is if it was compiled separately, but let's handle it anyway
             try {
                 Class<?> mapperClass = Class.forName(cls.getName() + Constants.MAPPER_CLASS_SUFFIX);
                 mapper = (JsonMapper<E>) mapperClass.newInstance();
                 OBJECT_MAPPERS.put(cls, mapper);
-
-                tsts(cls, tsts);
             } catch (Exception ignored) {
             }
         }
@@ -388,24 +378,6 @@ public class LoganSquare {
         if (!jsonMapperIndexes.contains(jsonMapperIndex)) {
             jsonMapperIndexes.add(jsonMapperIndex);
         }
-    }
-
-    public static void enableDebugMode(boolean value) {
-        debugMode = value;
-    }
-
-    public static Map<String, Long> getMapperStatistic() {
-        return tstses;
-    }
-
-    private static void tsts(Class cls, long tsts) {
-        if (!debugMode) {
-            return;
-        }
-
-        long tsts2 = System.currentTimeMillis() - tsts;
-
-        tstses.put(cls.getName(), tsts2);
     }
 
     public interface JsonMapperIndex {
