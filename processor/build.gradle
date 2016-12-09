@@ -15,3 +15,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.testing.compile:compile-testing:0.6'
 }
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
