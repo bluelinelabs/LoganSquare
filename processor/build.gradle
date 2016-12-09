@@ -16,8 +16,5 @@ dependencies {
     testCompile 'com.google.testing.compile:compile-testing:0.6'
 }
 
-jar {
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
