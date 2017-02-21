@@ -1,8 +1,13 @@
 package com.bluelinelabs.logansquare.processor.processor;
 
 import com.bluelinelabs.logansquare.annotation.OnPreJsonSerialize;
+import com.bluelinelabs.logansquare.processor.JsonEnumHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
 import com.bluelinelabs.logansquare.processor.TypeUtils;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Map;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -11,9 +16,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map;
 
 public class OnPreSerializeProcessor extends MethodProcessor {
 
@@ -27,7 +29,7 @@ public class OnPreSerializeProcessor extends MethodProcessor {
     }
 
     @Override
-    public void findAndParseObjects(RoundEnvironment env, Map<String, JsonObjectHolder> jsonObjectMap, Elements elements, Types types) {
+    public void findAndParseObjects(RoundEnvironment env, Map<String, JsonObjectHolder> jsonObjectMap, Map<String, JsonEnumHolder> jsonEnumMap, Elements elements, Types types) {
         for (Element element : env.getElementsAnnotatedWith(OnPreJsonSerialize.class)) {
             try {
                 processOnPreJsonSerializeMethodAnnotation(element, jsonObjectMap, elements);

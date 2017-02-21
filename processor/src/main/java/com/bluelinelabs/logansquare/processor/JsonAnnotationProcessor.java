@@ -30,6 +30,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
     private Filer mFiler;
     private List<Processor> mProcessors;
     private Map<String, JsonObjectHolder> mJsonObjectMap;
+    private Map<String, JsonEnumHolder> mJsonEnumMap;
 
     @Override
     public synchronized void init(ProcessingEnvironment env) {
@@ -60,7 +61,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> elements, RoundEnvironment env) {
         try {
             for (Processor processor : mProcessors) {
-                processor.findAndParseObjects(env, mJsonObjectMap, mElementUtils, mTypeUtils);
+                processor.findAndParseObjects(env, mJsonObjectMap, mJsonEnumMap, mElementUtils, mTypeUtils);
             }
 
             for (Map.Entry<String, JsonObjectHolder> entry : mJsonObjectMap.entrySet()) {

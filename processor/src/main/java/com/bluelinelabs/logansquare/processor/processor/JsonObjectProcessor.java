@@ -5,6 +5,7 @@ import com.bluelinelabs.logansquare.annotation.JsonIgnore;
 import com.bluelinelabs.logansquare.annotation.JsonIgnore.IgnorePolicy;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.bluelinelabs.logansquare.annotation.JsonObject.FieldDetectionPolicy;
+import com.bluelinelabs.logansquare.processor.JsonEnumHolder;
 import com.bluelinelabs.logansquare.processor.JsonFieldHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder.JsonObjectHolderBuilder;
@@ -48,7 +49,7 @@ public class JsonObjectProcessor extends Processor {
     }
 
     @Override
-    public void findAndParseObjects(RoundEnvironment env, Map<String, JsonObjectHolder> jsonObjectMap, Elements elements, Types types) {
+    public void findAndParseObjects(RoundEnvironment env, Map<String, JsonObjectHolder> jsonObjectMap, Map<String, JsonEnumHolder> jsonEnumMap, Elements elements, Types types) {
         for (Element element : env.getElementsAnnotatedWith(JsonObject.class)) {
             try {
                 processJsonObjectAnnotation(element, jsonObjectMap, elements, types);
