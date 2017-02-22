@@ -33,7 +33,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeVariable;
 
-public class ObjectMapperInjector {
+public class ObjectMapperInjector implements Injector {
 
     public static final String PARENT_OBJECT_MAPPER_VARIABLE_NAME = "parentObjectMapper";
     public static final String JSON_PARSER_VARIABLE_NAME = "jsonParser";
@@ -45,6 +45,7 @@ public class ObjectMapperInjector {
         mJsonObjectHolder = jsonObjectHolder;
     }
 
+    @Override
     public String getJavaClassFile() {
         try {
             return JavaFile.builder(mJsonObjectHolder.packageName, getTypeSpec()).build().toString();

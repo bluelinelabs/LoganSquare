@@ -40,6 +40,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
         mTypeUtils = env.getTypeUtils();
         mFiler = env.getFiler();
         mJsonObjectMap = new HashMap<>();
+        mJsonEnumMap = new HashMap<>();
         mProcessors = Processor.allProcessors(processingEnv);
     }
 
@@ -70,16 +71,17 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
 
                 if (!jsonObjectHolder.fileCreated) {
                     jsonObjectHolder.fileCreated = true;
+                    writeFile(fqcn, new ObjectMapperInjector(jsonObjectHolder));
+                }
+            }
 
-                    try {
-                        JavaFileObject jfo = mFiler.createSourceFile(fqcn);
-                        Writer writer = jfo.openWriter();
-                        writer.write(new ObjectMapperInjector(jsonObjectHolder).getJavaClassFile());
-                        writer.flush();
-                        writer.close();
-                    } catch (IOException e) {
-                        error(fqcn, "Exception occurred while attempting to write injector for type %s. Exception message: %s", fqcn, e.getMessage());
-                    }
+            for (Map.Entry<String, JsonEnumHolder> entry : mJsonEnumMap.entrySet()) {
+                String fqcn = entry.getKey();
+                JsonEnumHolder jsonEnumHolder = entry.getValue();
+
+                if (!jsonEnumHolder.fileCreated) {
+                    jsonEnumHolder.fileCreated = true;
+                    writeFile(fqcn, new EnumConverterInjector(jsonEnumHolder));
                 }
             }
 
@@ -89,6 +91,18 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             e.printStackTrace(new PrintWriter(stackTrace));
             error("Exception while processing Json classes. Stack trace incoming:\n%s", stackTrace.toString());
             return false;
+        }
+    }
+
+    private void writeFile(String fqcn, Injector injector) {
+        try {
+            JavaFileObject jfo = mFiler.createSourceFile(fqcn);
+            Writer writer = jfo.openWriter();
+            writer.write(injector.getJavaClassFile());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            error(fqcn, "Exception occurred while attempting to write converter for enum %s. Exception message: %s", fqcn, e.getMessage());
         }
     }
 

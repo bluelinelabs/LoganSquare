@@ -3,8 +3,11 @@ package com.bluelinelabs.logansquare.processor;
 import com.bluelinelabs.logansquare.Constants;
 import com.squareup.javapoet.ClassName;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
@@ -19,6 +22,11 @@ public class TypeUtils {
     public static String getInjectedFQCN(TypeElement type, Elements elements) {
         String packageName = elements.getPackageOf(type).getQualifiedName().toString();
         return packageName + "." + getSimpleClassName(type, packageName) + Constants.MAPPER_CLASS_SUFFIX;
+    }
+
+    public static String getInjectedConverterFQCN(TypeElement type, Elements elements) {
+        String packageName = elements.getPackageOf(type).getQualifiedName().toString();
+        return packageName + "." + getSimpleClassName(type, packageName) + Constants.CONVERTER_CLASS_SUFFIX;
     }
 
     public static String getInjectedFQCN(ClassName className) {
@@ -41,4 +49,15 @@ public class TypeUtils {
         DeclaredType declaredType = (DeclaredType)typeMirror;
         return (List<TypeMirror>)declaredType.getTypeArguments();
     }
+
+    public static List<Element> getEnumValues(Element type) {
+        final List<Element> result = new ArrayList<>();
+        for (Element enclosedElement : type.getEnclosedElements()) {
+            if (enclosedElement.getKind() == ElementKind.ENUM_CONSTANT) {
+                result.add(enclosedElement);
+            }
+        }
+        return result;
+    }
+
 }
