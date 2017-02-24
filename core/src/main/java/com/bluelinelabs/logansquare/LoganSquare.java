@@ -14,6 +14,8 @@ import com.bluelinelabs.logansquare.typeconverters.DefaultDateConverter;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,9 @@ public class LoganSquare {
     private static final MapMapper MAP_MAPPER = new MapMapper();
 
     private static final Map<Class, JsonMapper> OBJECT_MAPPERS = new ConcurrentHashMap<Class, JsonMapper>();
+
+    private static final Map<Class, TypeConverter> ENUM_CONVERTERS = new ConcurrentHashMap<Class, TypeConverter>();
+
     static {
         OBJECT_MAPPERS.put(String.class, new StringMapper());
         OBJECT_MAPPERS.put(Integer.class, new IntegerMapper());
@@ -51,6 +56,19 @@ public class LoganSquare {
     private static final ConcurrentHashMap<ParameterizedType, JsonMapper> PARAMETERIZED_OBJECT_MAPPERS = new ConcurrentHashMap<ParameterizedType, JsonMapper>();
 
     private static final SimpleArrayMap<Class, TypeConverter> TYPE_CONVERTERS = new SimpleArrayMap<>();
+
+    private static final TypeConverter NULL_CONVERTER = new TypeConverter() {
+        @Override
+        public Object parse(final JsonParser jsonParser) throws IOException {
+            throw new IllegalStateException();
+        }
+
+        @Override
+        public void serialize(final Object object, final String fieldName, final boolean writeFieldNameForObject, final JsonGenerator jsonGenerator) throws IOException {
+            throw new IllegalStateException();
+        }
+    };
+
     static {
         registerTypeConverter(Date.class, new DefaultDateConverter());
         registerTypeConverter(Calendar.class, new DefaultCalendarConverter());
@@ -326,6 +344,27 @@ public class LoganSquare {
         }
     }
 
+    private static <E> TypeConverter<E> findGeneratedEnumConverterFor(Class<E> cls) {
+        if (cls.getSuperclass() == Enum.class) {
+            if (!ENUM_CONVERTERS.containsKey(cls)) {
+                // The only way the converter wouldn't already be loaded into OBJECT_MAPPERS is if it was compiled separately, but let's handle it anyway
+                try {
+                    Class<?> enumConverterClass = Class.forName(cls.getName() + Constants.CONVERTER_CLASS_SUFFIX);
+                    if (enumConverterClass != null) {
+                        ENUM_CONVERTERS.put(cls, (TypeConverter<E>) enumConverterClass.newInstance());
+                    } else {
+                        ENUM_CONVERTERS.put(cls, NULL_CONVERTER);
+                    }
+                } catch (Exception ignored) {
+                    ENUM_CONVERTERS.put(cls, NULL_CONVERTER);
+                }
+            }
+            TypeConverter typeConverter = ENUM_CONVERTERS.get(cls);
+            return typeConverter != NULL_CONVERTER ? typeConverter : null;
+        }
+        return null;
+    }
+
     /**
      * Returns a TypeConverter for a given class.
      *
@@ -334,6 +373,9 @@ public class LoganSquare {
     @SuppressWarnings("unchecked")
     public static <E> TypeConverter<E> typeConverterFor(Class<E> cls) throws NoSuchTypeConverterException {
         TypeConverter<E> typeConverter = TYPE_CONVERTERS.get(cls);
+        if (typeConverter == null) {
+            typeConverter = findGeneratedEnumConverterFor(cls);
+        }
         if (typeConverter == null) {
             throw new NoSuchTypeConverterException(cls);
         }

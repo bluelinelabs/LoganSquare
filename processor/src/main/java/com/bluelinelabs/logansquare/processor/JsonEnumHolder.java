@@ -2,7 +2,6 @@ package com.bluelinelabs.logansquare.processor;
 
 import com.squareup.javapoet.TypeName;
 
-import java.util.Collections;
 import java.util.Map;
 
 public class JsonEnumHolder {
@@ -10,7 +9,8 @@ public class JsonEnumHolder {
     public final String packageName;
     public final String injectedClassName;
     public final TypeName objectTypeName;
-    public final Map<String, String> valuesMap;
+    public final ValueType valuesType;
+    public final Map<String, Object> valuesMap;
 
     public boolean fileCreated;
 
@@ -18,18 +18,36 @@ public class JsonEnumHolder {
         this.packageName = builder.packageName;
         this.injectedClassName = builder.injectedClassName;
         this.objectTypeName = builder.objectTypeName;
+        this.valuesType = builder.valuesType;
         this.valuesMap = builder.valuesMap;
     }
 
-    public Map<String, String> getValuesMap() {
-        return Collections.unmodifiableMap(valuesMap);
+    public enum ValueType {
+
+        STRING(String.class, "getValueAsString", "writeStringField", "writeString"),
+        NUMBER(long.class, "getValueAsLong", "writeNumberField", "writeNumber"),
+        BOOLEAN(boolean.class, "getValueAsBoolean", "writeBooleanField", "writeBoolean");
+
+        public final Class enumValueClass;
+        public final String getFromMethodName;
+        public final String writeToFieldMethodName;
+        public final String writeMethodName;
+
+        ValueType(Class enumValueClass, String getFromMethodName, String writeToFieldMethodName, String writeMethodName) {
+            this.enumValueClass = enumValueClass;
+            this.getFromMethodName = getFromMethodName;
+            this.writeToFieldMethodName = writeToFieldMethodName;
+            this.writeMethodName = writeMethodName;
+        }
+
     }
 
     public static class JsonEnumHolderBuilder {
         private String packageName;
         private String injectedClassName;
         private TypeName objectTypeName;
-        private Map<String, String> valuesMap;
+        private ValueType valuesType;
+        private Map<String, Object> valuesMap;
 
         public JsonEnumHolderBuilder setPackageName(String packageName) {
             this.packageName = packageName;
@@ -46,7 +64,8 @@ public class JsonEnumHolder {
             return this;
         }
 
-        public JsonEnumHolderBuilder setValuesMap(Map<String, String> valuesMap) {
+        public JsonEnumHolderBuilder setValuesMap(ValueType valuesType, Map<String, Object> valuesMap) {
+            this.valuesType = valuesType;
             this.valuesMap = valuesMap;
             return this;
         }

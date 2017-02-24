@@ -1,5 +1,9 @@
 package com.bluelinelabs.logansquare.processor.processor;
 
+import com.bluelinelabs.logansquare.annotation.JsonBooleanValue;
+import com.bluelinelabs.logansquare.annotation.JsonNullValue;
+import com.bluelinelabs.logansquare.annotation.JsonNumberValue;
+import com.bluelinelabs.logansquare.annotation.JsonStringValue;
 import com.bluelinelabs.logansquare.processor.JsonEnumHolder;
 import com.bluelinelabs.logansquare.processor.JsonObjectHolder;
 
@@ -28,11 +32,18 @@ public abstract class Processor {
 
     public static List<Processor> allProcessors(ProcessingEnvironment processingEnvironment) {
         List<Processor> list = new ArrayList<>();
+
         list.add(new JsonEnumProcessor(processingEnvironment));
+        list.add(new JsonEnumValueProcessor<>(JsonStringValue.class, processingEnvironment));
+        list.add(new JsonEnumValueProcessor<>(JsonNumberValue.class, processingEnvironment));
+        list.add(new JsonEnumValueProcessor<>(JsonBooleanValue.class, processingEnvironment));
+        list.add(new JsonEnumValueProcessor<>(JsonNullValue.class, processingEnvironment));
+
         list.add(new JsonObjectProcessor(processingEnvironment));
         list.add(new OnJsonParseCompleteProcessor(processingEnvironment));
         list.add(new OnPreSerializeProcessor(processingEnvironment));
         list.add(new JsonFieldProcessor(processingEnvironment));
+
         return list;
     }
 

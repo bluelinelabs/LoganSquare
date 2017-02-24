@@ -12,14 +12,14 @@ public abstract class LongBasedTypeConverter<T> implements TypeConverter<T> {
      *
      * @param l The long parsed from JSON.
      */
-    public abstract T getFromLong(long l);
+    public abstract T getFromLong(Long l);
 
     /**
      * Called to convert a an object of type T into a long.
      *
      * @param object The object being converted.
      */
-    public abstract long convertToLong(T object);
+    public abstract Long convertToLong(T object);
 
     @Override
     public T parse(JsonParser jsonParser) throws IOException {
