@@ -102,7 +102,7 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            error(fqcn, "Exception occurred while attempting to write converter for enum %s. Exception message: %s", fqcn, e.getMessage());
+            error(fqcn, "Exception occurred while attempting to write code for %s. Exception message: %s", fqcn, e.getMessage());
         }
     }
 
