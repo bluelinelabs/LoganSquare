@@ -42,7 +42,7 @@ LoganSquare.registerTypeConverter(Date.class, new YourConverter());
 
 #### For `TypeConverter`s that should only be used for certain variables
 
-Hint: This method is especially useful for handling multiple Date formats!
+Hint: This method is especially useful for handling multiple `Date` formats!
 
 ```java
 @JsonObject
@@ -72,7 +72,7 @@ public class TimeOnlyDateConverter extends DateTypeConverter {
 }
 ```
 
-#### `TypeConverter` for an enum, where the JSON contains an int
+#### `TypeConverter` for an `enum`, where the JSON contains an int
 
 ```java
 public enum TestEnum {
@@ -92,7 +92,7 @@ public class TimeOnlyDateConverter extends IntBasedTypeConverter<TestEnum> {
 }
 ```
 
-#### `TypeConverter` for an enum, where the JSON contains a String
+#### `TypeConverter` for an `enum`, where the JSON contains a String
 
 ```java
 public enum TestEnum {
