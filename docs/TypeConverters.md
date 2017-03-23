@@ -1,6 +1,6 @@
-##Type Support
+## Type Support
 
-###Types with Built-in Support
+### Types with Built-in Support
 
 By default, the following types are supported by LoganSquare:
 
@@ -30,7 +30,7 @@ Additionally, the following collections are supported:
  * LinkedHashMap 
 * Array (Not technically a Collection, but still supported. Note that Lists are preferred to arrays when possible.)
 
-###Support for Additional Types
+### Support for Additional Types
 
 Any Java object can be supported by LoganSquare, even if they don't fall into the above categories. To add support for your own types, you'll need to extend one of the built-in `TypeConverter` classes. You can register your custom type converters using one of the two following ways:
 
@@ -52,9 +52,9 @@ public class ModelObject {
 }
 ```
 
-###Example `TypeConverter`s
+### Example `TypeConverter`s
 
-####`TypeConverter` for a custom date format
+#### `TypeConverter` for a custom date format
 
 ```java
 public class TimeOnlyDateConverter extends DateTypeConverter {
@@ -72,7 +72,7 @@ public class TimeOnlyDateConverter extends DateTypeConverter {
 }
 ```
 
-####`TypeConverter` for an enum, where the JSON contains an int
+#### `TypeConverter` for an enum, where the JSON contains an int
 
 ```java
 public enum TestEnum {
@@ -92,7 +92,7 @@ public class TimeOnlyDateConverter extends IntBasedTypeConverter<TestEnum> {
 }
 ```
 
-####`TypeConverter` for an enum, where the JSON contains a String
+#### `TypeConverter` for an enum, where the JSON contains a String
 
 ```java
 public enum TestEnum {
