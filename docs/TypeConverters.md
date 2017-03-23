@@ -5,30 +5,30 @@
 By default, the following types are supported by LoganSquare:
 
 * any object using the `@JsonObject` annotation
-* int and Integer
-* long and Long
-* float and Float
-* double and Double
-* boolean and Boolean
-* String
-* Date (if formatted using the ISO 8601 standard: `yyyy-MM-dd'T'HH:mm:ss.SSSZ`)
+* `int` and `Integer`
+* `long` and `Long`
+* `float` and `Float`
+* `double` and `Double`
+* `boolean` and `Boolean`
+* `String`
+* `Date` (if formatted using the ISO 8601 standard: `yyyy-MM-dd'T'HH:mm:ss.SSSZ`)
 
 Additionally, the following collections are supported:
 
-* Lists
- * ArrayList
- * LinkedList
-* Sets
- * HashSet 
-* Queues
- * ArrayDeque
-* Deques
- * ArrayDeque
-* Maps (with Strings as keys)
- * HashMap
- * TreeMap
- * LinkedHashMap 
-* Array (Not technically a Collection, but still supported. Note that Lists are preferred to arrays when possible.)
+* `List`s
+ * `ArrayList`
+ * `LinkedList`
+* `Set`s
+ * `HashSet` 
+* `Queue`s
+ * `ArrayDeque`
+* `Deque`s
+ * `ArrayDeque`
+* `Map`s (with `String`s as keys)
+ * `HashMap`
+ * `TreeMap`
+ * `LinkedHashMap` 
+* `Array` (Not technically a `Collection`, but still supported. Note that `List`s are preferred to arrays when possible.)
 
 ### Support for Additional Types
 
