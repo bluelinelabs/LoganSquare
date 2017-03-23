@@ -1,6 +1,6 @@
-##Annotating Every Field (Recommended)
+## Annotating Every Field (Recommended)
 
-###Sample Model
+### Sample Model
 
 ```java
 @JsonObject
