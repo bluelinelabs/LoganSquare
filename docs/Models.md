@@ -1,6 +1,6 @@
-##Model Creation
+## Model Creation
 
-###Sample Models
+### Sample Models
 
 LoganSquare provides a few robust ways to create your models. Sample models for each strategy are provided below:
 
@@ -11,12 +11,12 @@ LoganSquare provides a few robust ways to create your models. Sample models for 
  * [Include all public and package-local field AND accessors](PrivateFieldsAndAccessorsModel.md)
   * This uses the same concept as the above stretegy, but also includes any private fields that have both a getter and a setter.
 
-###Field Naming Policies
+### Field Naming Policies
 
 By default, LoganSquare assumes that the JSON field name will match your Java variable's name unless the `name` parameter has been used in the field's `@JsonField` annotation. This can be changed by passing another value into the `@JsonObject` annotation's `fieldNamingPolicy` variable. 
 
 Currently the only options are `FIELD_NAME`, which is the default described above, and `LOWER_CASE_WITH_UNDERSCORES`, which will cause LoganSquare to assume that your JSON fields are named the same as your java variable names, except converted to lower case with undercore notation instead of camel case.
 
-###Serializing Null Values
+### Serializing Null Values
 
 By default, LoganSquare will not serialize `null` values or collection elements into your JSON object. To change this, set the `@JsonObject` annotation's `serializeNullObjects` and/or `serializeNullCollectionElements` to `true`.

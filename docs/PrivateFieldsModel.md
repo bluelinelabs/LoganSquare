@@ -1,6 +1,6 @@
-##Non-private Field Detection Policy
+## Non-private Field Detection Policy
 
-###Sample Model
+### Sample Model
 
 ```java
 /*
