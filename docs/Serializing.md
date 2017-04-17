@@ -1,4 +1,4 @@
-##Serializing JSON
+## Serializing JSON
 
 LoganSquare can serialize objects to an `OutputStream` or a `String`. Here's a sample:
 
