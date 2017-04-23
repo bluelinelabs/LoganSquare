@@ -109,24 +109,24 @@ public class JsonEnumProcessor extends Processor {
     private Pair<ValueType, Object> extractObjectFromEnumValue(Element enumValue, JsonEnum.ValueNamingPolicy valueNamingPolicy) {
         JsonStringValue stringAnnotation = enumValue.getAnnotation(JsonStringValue.class);
         if (stringAnnotation != null) {
-            return new Pair<>(ValueType.STRING, stringAnnotation.value());
+            return new Pair<ValueType, Object>(ValueType.STRING, stringAnnotation.value());
         }
         JsonNumberValue numberAnnotation = enumValue.getAnnotation(JsonNumberValue.class);
         if (numberAnnotation != null) {
-            return new Pair<>(ValueType.NUMBER, numberAnnotation.value());
+            return new Pair<ValueType, Object>(ValueType.NUMBER, numberAnnotation.value());
         }
         JsonBooleanValue booleanAnnotation = enumValue.getAnnotation(JsonBooleanValue.class);
         if (booleanAnnotation != null) {
-            return new Pair<>(ValueType.BOOLEAN, booleanAnnotation.value());
+            return new Pair<ValueType, Object>(ValueType.BOOLEAN, booleanAnnotation.value());
         }
         if (enumValue.getAnnotation(JsonNullValue.class) != null) {
-            return new Pair<>(null, null);
+            return new Pair<ValueType, Object>(null, null);
         }
         switch (valueNamingPolicy){
             case VALUE_NAME:
-                return new Pair<>(ValueType.STRING, enumValue.getSimpleName().toString());
+                return new Pair<ValueType, Object>(ValueType.STRING, enumValue.getSimpleName().toString());
             case LOWER_CASE_WITH_UNDERSCORES:
-                return new Pair<>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(enumValue.getSimpleName().toString()));
+                return new Pair<ValueType, Object>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(enumValue.getSimpleName().toString()));
             default:
                 throw new IllegalStateException("Unknown valueNamingPolicy: " + valueNamingPolicy);
         }
