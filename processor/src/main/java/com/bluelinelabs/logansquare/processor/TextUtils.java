@@ -29,6 +29,15 @@ public class TextUtils {
         return sb.toString();
     }
 
+    public static boolean containsLowerCaseSymbols(String string) {
+        for (char c : string.toCharArray()) {
+            if (c >= 'a' && c <= 'z') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String toLowerCaseWithUnderscores(String className) {
         StringBuilder sb = new StringBuilder();
         for (char c : className.toCharArray()) {

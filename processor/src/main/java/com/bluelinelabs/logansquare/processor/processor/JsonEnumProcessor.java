@@ -122,11 +122,16 @@ public class JsonEnumProcessor extends Processor {
         if (enumValue.getAnnotation(JsonNullValue.class) != null) {
             return new Pair<ValueType, Object>(null, null);
         }
-        switch (valueNamingPolicy){
+        String valueString = enumValue.getSimpleName().toString();
+        switch (valueNamingPolicy) {
             case VALUE_NAME:
-                return new Pair<ValueType, Object>(ValueType.STRING, enumValue.getSimpleName().toString());
+                return new Pair<ValueType, Object>(ValueType.STRING, valueString);
             case LOWER_CASE_WITH_UNDERSCORES:
-                return new Pair<ValueType, Object>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(enumValue.getSimpleName().toString()));
+                if (TextUtils.containsLowerCaseSymbols(valueString)) {
+                    return new Pair<>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(valueString));
+                } else {
+                    return new Pair<>(ValueType.STRING, valueString.toLowerCase());
+                }
             default:
                 throw new IllegalStateException("Unknown valueNamingPolicy: " + valueNamingPolicy);
         }
