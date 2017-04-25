@@ -130,6 +130,7 @@ public class EnumConverterInjector implements Injector {
         } else {
             builder.addStatement("$L.writeNull()", CONVERTER_JSON_GENERATOR_PARAMETER_NAME);
         }
+        builder.addStatement("return");
         builder.endControlFlow();
 
         builder.beginControlFlow("switch ($L)", CONVERTER_VALUE_PARAMETER_NAME);
