@@ -128,9 +128,9 @@ public class JsonEnumProcessor extends Processor {
                 return new Pair<ValueType, Object>(ValueType.STRING, valueString);
             case LOWER_CASE_WITH_UNDERSCORES:
                 if (TextUtils.containsLowerCaseSymbols(valueString)) {
-                    return new Pair<>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(valueString));
+                    return new Pair<ValueType, Object>(ValueType.STRING, TextUtils.toLowerCaseWithUnderscores(valueString));
                 } else {
-                    return new Pair<>(ValueType.STRING, valueString.toLowerCase());
+                    return new Pair<ValueType, Object>(ValueType.STRING, valueString.toLowerCase());
                 }
             default:
                 throw new IllegalStateException("Unknown valueNamingPolicy: " + valueNamingPolicy);
