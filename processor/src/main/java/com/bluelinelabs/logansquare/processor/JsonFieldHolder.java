@@ -77,8 +77,8 @@ public class JsonFieldHolder {
         List<String> possibleMethodNames = new ArrayList<>();
         possibleMethodNames.add("get" + elementNameLowerCase);
         if (elementTypeKind == TypeKind.BOOLEAN) {
-            possibleMethodNames.add("is" + elementNameLowerCase);
-            possibleMethodNames.add("has" + elementNameLowerCase);
+            possibleMethodNames.add("is" + elementName);
+            possibleMethodNames.add("has" + elementName);
             possibleMethodNames.add(elementNameLowerCase);
         }
 
@@ -119,7 +119,7 @@ public class JsonFieldHolder {
         String elementNameLowerCase = elementName.toLowerCase();
 
         List<String> possibleMethodNames = new ArrayList<>();
-        possibleMethodNames.add("set" + elementNameLowerCase);
+        possibleMethodNames.add("set" + elementName);
 
         // Handle the case where variables are named in the form mVariableName instead of just variableName
         if (elementName.length() > 1 && elementName.charAt(0) == 'm' && (elementName.charAt(1) >= 'A' && elementName.charAt(1) <= 'Z')) {
