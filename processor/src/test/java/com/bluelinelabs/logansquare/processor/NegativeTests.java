@@ -3,8 +3,12 @@ package com.bluelinelabs.logansquare.processor;
 import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
+import javax.tools.JavaFileObject;
+import java.util.Arrays;
+
 import static com.google.common.truth.Truth.ASSERT;
 import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
+import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 
 public class NegativeTests {
 
@@ -23,7 +27,7 @@ public class NegativeTests {
                 .that(JavaFileObjects.forResource("model/bad/PrivateFieldModelWithoutAccessors.java"))
                 .processedWith(new JsonAnnotationProcessor())
                 .failsToCompile()
-                .withErrorContaining("@JsonField annotation can only be used on private fields if both getter and setter are present.");
+                .withErrorContaining("@JsonField annotation can only be used on private fields if a getter is present.");
     }
 
     @Test
@@ -33,6 +37,19 @@ public class NegativeTests {
                 .processedWith(new JsonAnnotationProcessor())
                 .failsToCompile()
                 .withErrorContaining("TypeConverter elements must implement the TypeConverter interface or extend from one of the convenience helpers");
+    }
+
+    @Test
+    public void inheritFromModelWithConstructorInjection() {
+        JavaFileObject badDescendant = JavaFileObjects.forResource("model/bad/ImmutableFieldsInheritanceModel.java");
+        JavaFileObject okParent = JavaFileObjects.forResource("model/good/ImmutableFieldsModel.java");
+
+        ASSERT.about(javaSources())
+                .that(Arrays.asList(okParent, badDescendant))
+                .processedWith(new JsonAnnotationProcessor())
+                .failsToCompile()
+                .withErrorContaining("Subclassing from models with constructor injection is not supported")
+                .in(badDescendant);
     }
 
     @Test

@@ -6,15 +6,20 @@ import com.bluelinelabs.logansquare.processor.type.field.ParameterizedTypeField;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+
+import static javax.lang.model.element.Modifier.FINAL;
+import static javax.lang.model.element.Modifier.PRIVATE;
 
 public class JsonFieldHolder {
 
@@ -23,9 +28,15 @@ public class JsonFieldHolder {
     public String getterMethod;
     public boolean shouldParse;
     public boolean shouldSerialize;
+    public boolean needConstructorArg;
     public Type type;
 
     public String fill(Element element, Elements elements, Types types, String[] fieldNames, TypeMirror typeConverterType, JsonObjectHolder objectHolder, boolean shouldParse, boolean shouldSerialize) {
+        if (shouldParse && hasNoMatchingSetter(element, elements)) {
+            this.needConstructorArg = true;
+            objectHolder.needConstructorInjection = true;
+        }
+
         if (fieldNames == null || fieldNames.length == 0) {
             String defaultFieldName = element.getSimpleName().toString();
 
@@ -47,6 +58,12 @@ public class JsonFieldHolder {
 
         type = Type.typeFor(element.asType(), typeConverterType, elements, types);
         return ensureValidType(type, element);
+    }
+
+    private static boolean hasNoMatchingSetter(Element element, Elements elements) {
+        final Set<Modifier> modifiers = element.getModifiers();
+
+        return modifiers.contains(FINAL) || modifiers.contains(PRIVATE) && TextUtils.isEmpty(JsonFieldHolder.getSetter(element, elements));
     }
 
     private String ensureValidType(Type type, Element element) {

@@ -63,11 +63,14 @@ public class JsonFieldProcessor extends Processor {
         TypeElement enclosingElement = (TypeElement)element.getEnclosingElement();
 
         JsonObjectHolder objectHolder = jsonObjectMap.get(TypeUtils.getInjectedFQCN(enclosingElement, elements));
-        JsonFieldHolder fieldHolder = objectHolder.fieldMap.get(element.getSimpleName().toString());
+
+        String propertyName = element.getSimpleName().toString();
+
+        JsonFieldHolder fieldHolder = objectHolder.fieldMap.get(propertyName);
 
         if (fieldHolder == null) {
             fieldHolder = new JsonFieldHolder();
-            objectHolder.fieldMap.put(element.getSimpleName().toString(), fieldHolder);
+            objectHolder.fieldMap.put(propertyName, fieldHolder);
         }
 
         JsonField annotation = element.getAnnotation(JsonField.class);
@@ -102,8 +105,8 @@ public class JsonFieldProcessor extends Processor {
             return false;
         }
 
-        if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(JsonFieldHolder.getGetter(element, elements)) || TextUtils.isEmpty(JsonFieldHolder.getSetter(element, elements)))) {
-            error(element, "@%s annotation can only be used on private fields if both getter and setter are present.", JsonField.class.getSimpleName());
+        if (element.getModifiers().contains(PRIVATE) && (TextUtils.isEmpty(JsonFieldHolder.getGetter(element, elements)))) {
+            error(element, "@%s annotation can only be used on private fields if a getter is present.", JsonField.class.getSimpleName());
             return false;
         }
 
