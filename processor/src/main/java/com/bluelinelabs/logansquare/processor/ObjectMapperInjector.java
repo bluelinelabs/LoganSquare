@@ -12,26 +12,15 @@ import com.bluelinelabs.logansquare.util.SimpleArrayMap;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeVariable;
+import javax.lang.model.util.ElementFilter;
+import javax.lang.model.util.Elements;
 
 public class ObjectMapperInjector {
 
@@ -177,7 +166,77 @@ public class ObjectMapperInjector {
                 .addParameter(JsonParser.class, JSON_PARSER_VARIABLE_NAME)
                 .addException(IOException.class);
 
-        if (!mJsonObjectHolder.isAbstractClass) {
+        if (mJsonObjectHolder.isAbstractClass) {
+            builder.addStatement("return null");
+
+            return builder.build();
+        }
+
+        CodeBlock.Builder onCompleteCall = CodeBlock.builder();
+
+        if (!TextUtils.isEmpty(mJsonObjectHolder.onCompleteCallback)) {
+            onCompleteCall.addStatement("instance.$L()", mJsonObjectHolder.onCompleteCallback);
+        }
+
+        if (mJsonObjectHolder.needConstructorInjection) {
+            for (Map.Entry<String, JsonFieldHolder> field : mJsonObjectHolder.fieldMap.entrySet()) {
+                JsonFieldHolder fieldInfo = field.getValue();
+
+                if (!fieldInfo.shouldParse) {
+                    continue;
+                }
+
+                TypeName fieldType = fieldInfo.type.getTypeName();
+
+                if (fieldType.isPrimitive()) {
+                    builder.addStatement("$T $N = null", fieldType.box(), field.getKey());
+                } else {
+                    builder.addStatement("$T $N = null", fieldType, field.getKey());
+                }
+            }
+
+            builder.beginControlFlow("if ($L.getCurrentToken() == null)", JSON_PARSER_VARIABLE_NAME)
+                    .addStatement("$L.nextToken()", JSON_PARSER_VARIABLE_NAME)
+                    .endControlFlow()
+                    .beginControlFlow("if ($L.getCurrentToken() != $T.START_OBJECT)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
+                    .addStatement("$L.skipChildren()", JSON_PARSER_VARIABLE_NAME)
+                    .addStatement("return null")
+                    .endControlFlow()
+                    .beginControlFlow("while ($L.nextToken() != $T.END_OBJECT)", JSON_PARSER_VARIABLE_NAME, JsonToken.class)
+                    .addStatement("String fieldName = $L.getCurrentName()", JSON_PARSER_VARIABLE_NAME)
+                    .addStatement("$L.nextToken()", JSON_PARSER_VARIABLE_NAME);
+
+            int entryCount = 0;
+
+            final StringBuilder argsLiteral = new StringBuilder();
+
+            for (Map.Entry<String, JsonFieldHolder> field : mJsonObjectHolder.fieldMap.entrySet()) {
+
+                JsonFieldHolder fieldInfo = field.getValue();
+
+                if (fieldInfo.shouldParse) {
+                    if (entryCount == 0) {
+                        argsLiteral.append(field.getKey());
+                    } else {
+                        argsLiteral.append(", ").append(field.getKey());
+                    }
+
+                    emitFieldSetter(builder, fieldInfo, entryCount == 0, "$L = $L", field.getKey());
+
+                    ++entryCount;
+                }
+            }
+
+            if (entryCount > 0) {
+                builder.endControlFlow();
+            }
+
+            builder.addStatement("$L.skipChildren()", JSON_PARSER_VARIABLE_NAME)
+                    .endControlFlow();
+
+            builder.addCode(onCompleteCall.build())
+                    .addStatement("return new $T($L)", mJsonObjectHolder.objectTypeName, argsLiteral);
+        } else {
             builder.addStatement("$T instance = new $T()", mJsonObjectHolder.objectTypeName, mJsonObjectHolder.objectTypeName)
                     .beginControlFlow("if ($L.getCurrentToken() == null)", JSON_PARSER_VARIABLE_NAME)
                     .addStatement("$L.nextToken()", JSON_PARSER_VARIABLE_NAME)
@@ -193,13 +252,8 @@ public class ObjectMapperInjector {
                     .addStatement("$L.skipChildren()", JSON_PARSER_VARIABLE_NAME)
                     .endControlFlow();
 
-            if (!TextUtils.isEmpty(mJsonObjectHolder.onCompleteCallback)) {
-                builder.addStatement("instance.$L()", mJsonObjectHolder.onCompleteCallback);
-            }
-
-            builder.addStatement("return instance");
-        } else {
-            builder.addStatement("return null");
+            builder.addCode(onCompleteCall.build())
+                    .addStatement("return instance");
         }
 
         return builder.build();
@@ -213,6 +267,11 @@ public class ObjectMapperInjector {
                 .addParameter(String.class, "fieldName")
                 .addParameter(JsonParser.class, JSON_PARSER_VARIABLE_NAME)
                 .addException(IOException.class);
+
+        if (mJsonObjectHolder.needConstructorInjection) {
+            builder.addStatement("throw new $T($S)", UnsupportedOperationException.class, "The class is using constructor injection, individual fields can not be parsed");
+            return builder.build();
+        }
 
         int parseFieldLines = addParseFieldLines(builder);
 
@@ -288,44 +347,46 @@ public class ObjectMapperInjector {
             JsonFieldHolder fieldHolder = entry.getValue();
 
             if (fieldHolder.shouldParse) {
-                List<Object> args = new ArrayList<>();
-                StringBuilder ifStatement = new StringBuilder();
-                boolean isFirst = true;
-                for (String fieldName : fieldHolder.fieldName) {
-                    if (isFirst) {
-                        isFirst = false;
-                    } else {
-                        ifStatement.append(" || ");
-                    }
-                    ifStatement.append("$S.equals(fieldName)");
-                    args.add(fieldName);
-                }
-
-                if (entryCount == 0) {
-                    builder.beginControlFlow("if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
-                } else {
-                    builder.nextControlFlow("else if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
-                }
-
-                String setter;
-                Object[] stringFormatArgs;
                 if (fieldHolder.hasSetter()) {
-                    setter = "instance.$L($L)";
-                    stringFormatArgs = new Object[] { fieldHolder.setterMethod };
+                    emitFieldSetter(builder, fieldHolder, entryCount == 0, "instance.$L($L)", fieldHolder.setterMethod);
                 } else {
-                    setter = "instance.$L = $L";
-                    stringFormatArgs = new Object[] { entry.getKey() };
-                }
-
-                if (fieldHolder.type != null) {
-                    setFieldHolderJsonMapperVariableName(fieldHolder.type);
-                    fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
+                    emitFieldSetter(builder, fieldHolder, entryCount == 0, "instance.$L = $L", entry.getKey());
                 }
 
                 entryCount++;
             }
         }
         return entryCount;
+    }
+
+    private void emitFieldSetter(MethodSpec.Builder builder,
+                                 JsonFieldHolder fieldHolder,
+                                 boolean first,
+                                 String setter,
+                                 Object... stringFormatArgs) {
+        List<Object> args = new ArrayList<>();
+        StringBuilder ifStatement = new StringBuilder();
+        boolean isFirst = true;
+        for (String fieldName : fieldHolder.fieldName) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                ifStatement.append(" || ");
+            }
+            ifStatement.append("$S.equals(fieldName)");
+            args.add(fieldName);
+        }
+
+        if (first) {
+            builder.beginControlFlow("if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
+        } else {
+            builder.nextControlFlow("else if (" + ifStatement.toString() + ")", args.toArray(new Object[args.size()]));
+        }
+
+        if (fieldHolder.type != null) {
+            setFieldHolderJsonMapperVariableName(fieldHolder.type);
+            fieldHolder.type.parse(builder, 1, setter, stringFormatArgs);
+        }
     }
 
     private void addUsedJsonMapperVariables(TypeSpec.Builder builder) {

@@ -1,16 +1,16 @@
 package com.bluelinelabs.logansquare.processor;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.processor.processor.Processor;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -18,8 +18,11 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -70,6 +73,18 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
                 if (!jsonObjectHolder.fileCreated) {
                     jsonObjectHolder.fileCreated = true;
 
+                    if (jsonObjectHolder.hasParentClass() && hasUnsupportedInheritance(jsonObjectHolder)) {
+                        // The interactions between models with constructor injection and
+                        // and their subclasses can get really weird. For now let's simply
+                        // disallow inheritance from them
+                        continue;
+                    }
+
+                    if (jsonObjectHolder.needConstructorInjection) {
+                        // our constructor injection requires proper argument order, ensure it here
+                        sortAccordingToFieldOrder(jsonObjectHolder);
+                    }
+
                     try {
                         JavaFileObject jfo = mFiler.createSourceFile(fqcn);
                         Writer writer = jfo.openWriter();
@@ -89,6 +104,64 @@ public class JsonAnnotationProcessor extends AbstractProcessor {
             error("Exception while processing Json classes. Stack trace incoming:\n%s", stackTrace.toString());
             return false;
         }
+    }
+
+    @SuppressWarnings("all")
+    private void sortAccordingToFieldOrder(JsonObjectHolder jsonObjectHolder) {
+        TypeName jsonModel = jsonObjectHolder.objectTypeName;
+
+        TypeName jsonModelType = jsonModel instanceof ClassName
+                ? (ClassName) jsonModel
+                : ((ParameterizedTypeName) jsonModel).rawType;
+
+        TypeElement jsonModelElement = mElementUtils.getTypeElement(jsonModelType.toString());
+
+        final List<VariableElement> fields = ElementFilter.fieldsIn(jsonModelElement.getEnclosedElements());
+
+        for (int i = 0; i < fields.size(); ++i) {
+            ((List) fields).set(i, fields.get(i).getSimpleName().toString());
+        }
+
+        final Map<String, JsonFieldHolder> oldMap = jsonObjectHolder.fieldMap;
+
+        final TreeMap<String, JsonFieldHolder> newMap = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Integer.compare(fields.indexOf(o1), fields.indexOf(o2));
+            }
+        });
+
+        newMap.putAll(oldMap);
+
+        jsonObjectHolder.fieldMap = newMap;
+    }
+
+    private boolean hasUnsupportedInheritance(JsonObjectHolder objectHolder) {
+        TypeName parentType = objectHolder.parentTypeName;
+
+        ClassName parentClass = parentType instanceof ClassName
+                        ? (ClassName) parentType
+                        : ((ParameterizedTypeName) parentType).rawType;
+
+        JsonObjectHolder parentHolder =
+                mJsonObjectMap.get(TypeUtils.getInjectedFQCN(parentClass));
+
+        if (parentHolder == null || !parentHolder.needConstructorInjection) {
+            return false;
+        }
+
+        TypeName badType = objectHolder.objectTypeName;
+
+        TypeName perpetratorType = badType instanceof ClassName
+                ? (ClassName) badType
+                : ((ParameterizedTypeName) badType).rawType;
+
+        TypeElement badTypeElement = mElementUtils.getTypeElement(perpetratorType.toString());
+
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                "Subclassing from models with constructor injection is not supported", badTypeElement);
+
+        return true;
     }
 
     private void error(String message, Object... args) {

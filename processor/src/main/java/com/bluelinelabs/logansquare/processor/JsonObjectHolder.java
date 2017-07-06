@@ -31,9 +31,12 @@ public class JsonObjectHolder {
     public String onCompleteCallback;
     public String preSerializeCallback;
 
+    public boolean needConstructorInjection;
+
     // Using a TreeMap now to keep the entries sorted. This ensures that code is
     // always written the exact same way, no matter which JDK you're using.
-    public final Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
+    public Map<String, JsonFieldHolder> fieldMap = new TreeMap<>();
+
     public boolean fileCreated;
 
     public boolean hasParentClass() {
