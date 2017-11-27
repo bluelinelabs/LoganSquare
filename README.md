@@ -1,6 +1,6 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-LoganSquare-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1550) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-141-blue.svg?style=flat)](http://androidweekly.net/issues/issue-141) [![Travis Build](https://travis-ci.org/bluelinelabs/LoganSquare.svg)](https://travis-ci.org/bluelinelabs/LoganSquare)
 
-#LoganSquare
+# LoganSquare
 
 The fastest JSON parsing and serializing library available for Android. Based on Jackson's streaming API, LoganSquare is able to consistently outperform GSON and Jackson's Databind library by 400% or more<sup>[1](#1)</sup>. By relying on compile-time annotation processing to generate code, you know that your JSON will parse and serialize faster than any other method available.
 
@@ -13,7 +13,7 @@ Don't believe it could improve upon Jackson Databind's or GSON's performance tha
 
 ![Benchmarks](docs/benchmarks.jpg)
 
-##Download
+## Download
 
 Note that Gradle is the only supported build configuration for LoganSquare. To add the library to your app's build.gradle file.
 
@@ -36,7 +36,7 @@ dependencies {
 ```
 For the curious, the buildscript and apply plugin lines add the [apt plugin](https://bitbucket.org/hvisser/android-apt), which is what allows us to do compile-time annotation processing. The first dependency is what tells Gradle to process your JSON annotations, and the second dependency is our tiny 19kb runtime library that interfaces with the generated code for you.
 
-##Usage
+## Usage
 
 Using LoganSquare is about as easy as it gets. Here are a few docs to get you started:
 
@@ -45,7 +45,7 @@ Using LoganSquare is about as easy as it gets. Here are a few docs to get you st
  * [Serializing to JSON](docs/Serializing.md)
  * [Supporting custom types](docs/TypeConverters.md)
 
-##Proguard
+## Proguard
 Like all libraries that generate dynamic code, Proguard might think some classes are unused and remove them. To prevent this, the following lines can be added to your proguard config file.
 
 ```
@@ -54,17 +54,17 @@ Like all libraries that generate dynamic code, Proguard might think some classes
 -keep class **$$JsonObjectMapper { *; }
 ```
 
-##Why LoganSquare?
+## Why LoganSquare?
 
 We're BlueLine Labs, a mobile app development company based in Chicago. We love this city so much that we named our company after the blue line of the iconic 'L.' And what's one of the most popular stops on the blue line? Well, that would be Logan Square of course. Does it have anything to do with JSON? Nope, but we're okay with that.
 
-##Props
+## Props
 
  * [Jackson's streaming API](https://github.com/FasterXML/jackson-core) for being a super-fast, awesome base for this project.
  * [Instagram's ig-json-parser](https://github.com/Instagram/ig-json-parser) for giving us the idea for this project.
  * [Jake Wharton's Butterknife](https://github.com/JakeWharton/butterknife) for being a great reference for annotation processing and code generation.
 
-##License
+## License
 
     Copyright 2015 BlueLine Labs, Inc.
 
