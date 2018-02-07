@@ -1,6 +1,7 @@
 package com.bluelinelabs.logansquare.processor.type.field;
 
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.bluelinelabs.logansquare.processor.ObjectMapperInjector;
 import com.squareup.javapoet.MethodSpec.Builder;
 import com.squareup.javapoet.TypeName;
 
@@ -40,7 +41,7 @@ public class DynamicFieldType extends FieldType {
             builder.beginControlFlow("if ($L != null)", getter);
         }
 
-        builder.addStatement("$T.typeConverterFor($T.class).serialize($L, $S, $L, $L)", LoganSquare.class, mTypeName, getter, isObjectProperty
+        builder.addStatement("$L().serialize($L, $S, $L, $L)", ObjectMapperInjector.getTypeConverterGetter(mTypeName), getter, isObjectProperty
                 ? fieldName : null, isObjectProperty, JSON_GENERATOR_VARIABLE_NAME);
 
         if (!mTypeName.isPrimitive() && checkIfNull) {
