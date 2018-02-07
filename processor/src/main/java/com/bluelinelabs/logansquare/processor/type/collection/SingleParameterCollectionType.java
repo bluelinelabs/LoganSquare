@@ -7,7 +7,6 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_GENERATOR_VARIABLE_NAME;
 import static com.bluelinelabs.logansquare.processor.ObjectMapperInjector.JSON_PARSER_VARIABLE_NAME;
@@ -78,11 +77,21 @@ public abstract class SingleParameterCollectionType extends CollectionType {
                     .addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
         }
 
-            builder
+        builder
                 .endControlFlow()
                 .endControlFlow()
-                .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME)
-                .endControlFlow();
+                .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME);
+
+        if (writeIfNull) {
+            builder.nextControlFlow("else");
+
+            if (isObjectProperty) {
+                builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+            }
+            builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+        }
+
+        builder.endControlFlow();
     }
 
 }
