@@ -58,7 +58,7 @@ public class ObjectMapperInjector implements Injector {
     private TypeSpec getTypeSpec() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(mJsonObjectHolder.injectedClassName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-        builder.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "\"unsafe,unchecked\"").build());
+        builder.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "{\"unsafe\", \"unchecked\"}").build());
 
         builder.superclass(ParameterizedTypeName.get(ClassName.get(JsonMapper.class), mJsonObjectHolder.objectTypeName));
 

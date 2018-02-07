@@ -133,8 +133,18 @@ public class ArrayCollectionType extends CollectionType {
 
         builder
                 .endControlFlow()
-                .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME)
-                .endControlFlow();
+                .addStatement("$L.writeEndArray()", JSON_GENERATOR_VARIABLE_NAME);
+
+        if (writeIfNull) {
+            builder.nextControlFlow("else");
+
+            if (isObjectProperty) {
+                builder.addStatement("$L.writeFieldName($S)", JSON_GENERATOR_VARIABLE_NAME, fieldName);
+            }
+            builder.addStatement("$L.writeNull()", JSON_GENERATOR_VARIABLE_NAME);
+        }
+
+        builder.endControlFlow();
     }
 
     @Override
