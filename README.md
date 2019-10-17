@@ -1,4 +1,4 @@
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-LoganSquare-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1550) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-141-blue.svg?style=flat)](http://androidweekly.net/issues/issue-141) [![Travis Build](https://travis-ci.org/bluelinelabs/LoganSquare.svg)](https://travis-ci.org/bluelinelabs/LoganSquare)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-LoganSquare-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1550) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-141-blue.svg?style=flat)](http://androidweekly.net/issues/issue-141) [![Travis Build](https://travis-ci.org/bluelinelabs/LoganSquare.svg)](https://travis-ci.org/bluelinelabs/LoganSquare)  
 
 #LoganSquare
 
