@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeParameterElement;
 
 public class JsonObjectHolder {
@@ -23,6 +24,7 @@ public class JsonObjectHolder {
     public final TypeName parentTypeName;
     public final List<? extends TypeParameterElement> parentTypeParameters;
     public final List<String> parentUsedTypeParameters;
+    public final Element enclosingElement;
     public final FieldDetectionPolicy fieldDetectionPolicy;
     public final FieldNamingPolicy fieldNamingPolicy;
     public final boolean serializeNullObjects;
@@ -64,6 +66,7 @@ public class JsonObjectHolder {
         parentTypeName = builder.parentTypeName;
         parentTypeParameters = builder.parentTypeParameters;
         parentUsedTypeParameters = builder.parentUsedTypeParameters;
+        enclosingElement = builder.enclosingElement;
         fieldDetectionPolicy = builder.fieldDetectionPolicy;
         fieldNamingPolicy = builder.fieldNamingPolicy;
         serializeNullObjects = builder.serializeNullObjects;
@@ -79,6 +82,7 @@ public class JsonObjectHolder {
         private TypeName parentTypeName;
         private List<? extends TypeParameterElement> parentTypeParameters;
         private List<String> parentUsedTypeParameters;
+        private Element enclosingElement;
         private FieldDetectionPolicy fieldDetectionPolicy;
         private FieldNamingPolicy fieldNamingPolicy;
         private boolean serializeNullObjects;
@@ -117,6 +121,11 @@ public class JsonObjectHolder {
 
         public JsonObjectHolderBuilder setParentUsedTypeParameters(List<String> parentUsedTypeParameters) {
             this.parentUsedTypeParameters = parentUsedTypeParameters;
+            return this;
+        }
+
+        public JsonObjectHolderBuilder setEnclosingElement(Element enclosingElement) {
+            this.enclosingElement = enclosingElement;
             return this;
         }
 

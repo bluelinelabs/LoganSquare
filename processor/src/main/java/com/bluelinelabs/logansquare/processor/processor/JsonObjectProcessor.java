@@ -77,6 +77,7 @@ public class JsonObjectProcessor extends Processor {
             List<? extends TypeParameterElement> parentTypeParameters = new ArrayList<>();
             List<String> parentUsedTypeParameters = new ArrayList<>();
             TypeName parentClassName = null;
+            Element enclosingElement = element.getEnclosingElement();
 
             TypeMirror superclass = typeElement.getSuperclass();
             if (superclass.getKind() != TypeKind.NONE) {
@@ -116,6 +117,7 @@ public class JsonObjectProcessor extends Processor {
                     .setParentTypeName(parentClassName)
                     .setParentTypeParameters(parentTypeParameters)
                     .setParentUsedTypeParameters(parentUsedTypeParameters)
+                    .setEnclosingElement(enclosingElement)
                     .setFieldDetectionPolicy(annotation.fieldDetectionPolicy())
                     .setFieldNamingPolicy(annotation.fieldNamingPolicy())
                     .setSerializeNullObjects(annotation.serializeNullObjects())
